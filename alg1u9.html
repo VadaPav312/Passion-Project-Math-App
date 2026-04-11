@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U9-A-101",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "In an arithmetic sequence, the difference between terms is \_\_\_.", a: "constant", d: "easy" },
+            { q: "Find the next term: 2, 5, 8, 11...", a: "14", d: "easy" },
+            { q: "Is the sequence 2, 4, 8, 16 geometric?", a: "yes", d: "easy" },
+            { q: "What is the common difference in: 10, 7, 4, 1?", a: "-3", d: "easy" },
+            { q: "In the formula $a_n = a_1 + (n-1)d$, what does $d$ represent?", a: "common difference", d: "easy" },
+            { q: "Find the common ratio for: 3, 6, 12, 24.", a: "2", d: "moderate" },
+            { q: "Find the 10th term of $a_n = 2n + 5$.", a: "25", d: "moderate" },
+            { q: "Write the first three terms of $a_n = 5n$.", a: "5, 10, 15", d: "moderate" },
+            { q: "Is 1, 1, 2, 3, 5 an arithmetic sequence?", a: "no", d: "moderate" },
+            { q: "Find the missing term: 4, \_\_\_, 12 (arithmetic).", a: "8", d: "moderate" },
+            { q: "A sequence that adds the same value is \_\_\_.", a: "arithmetic", d: "moderate" },
+            { q: "A sequence that multiplies by the same value is \_\_\_.", a: "geometric", d: "moderate" },
+            { q: "Find the 5th term of 100, 50, 25...", a: "6.25", d: "moderate" },
+            { q: "If $a_1 = 3$ and $d = 4$, find $a_2$.", a: "7", d: "moderate" },
+            { q: "Recursive formula $a_n = a_{n-1} + 2$. If $a_1 = 5$, find $a_2$.", a: "7", d: "moderate" },
+            { q: "Find the 50th term of the arithmetic sequence: $a_n = 3n - 1$.", a: "149", d: "hard" },
+            { q: "Find the explicit formula for: 5, 8, 11...", a: "an=3n+2", d: "hard" },
+            { q: "In a geometric sequence $a_1=2, r=3$. Find $a_4$.", a: "54", d: "hard" },
+            { q: "Find the common ratio if $a_1 = 5$ and $a_2 = 1$.", a: "0.2", d: "hard" },
+            { q: "Convert $a_n = a_{n-1} \times 2, a_1 = 3$ to explicit form.", a: "an=3(2)^(n-1)", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-B-202",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Find the next term: 10, 20, 30...", a: "40", d: "easy" },
+            { q: "What is the common ratio: 100, 10, 1, 0.1?", a: "0.1", d: "easy" },
+            { q: "Arithmetic sequences are similar to \_\_\_ functions.", a: "linear", d: "easy" },
+            { q: "If $a_n = a_{n-1} - 5$, is it arithmetic or geometric?", a: "arithmetic", d: "easy" },
+            { q: "What is $a_1$ in the sequence: 7, 14, 21?", a: "7", d: "easy" },
+            { q: "Find the 4th term: $a_n = 2^{n-1}$.", a: "8", d: "moderate" },
+            { q: "Common difference for: -5, -2, 1, 4.", a: "3", d: "moderate" },
+            { q: "Common ratio for: 1, -2, 4, -8.", a: "-2", d: "moderate" },
+            { q: "Find the 6th term of $a_n = 10 - 2n$.", a: "-2", d: "moderate" },
+            { q: "Find the missing term: 2, \_\_\_, 18 (geometric, positive).", a: "6", d: "moderate" },
+            { q: "If $a_1 = 10$ and $r = 0.5$, find $a_3$.", a: "2.5", d: "moderate" },
+            { q: "True or False: $a_n = 3n^2$ is an arithmetic sequence.", a: "false", d: "moderate" },
+            { q: "Find $a_2$ if $a_n = 3a_{n-1}$ and $a_1 = 4$.", a: "12", d: "moderate" },
+            { q: "The 'n' in $a_n$ represents the \_\_\_ number.", a: "term", d: "moderate" },
+            { q: "Explicit formula for 10, 20, 40...?", a: "an=10(2)^(n-1)", d: "moderate" },
+            { q: "Find $a_{100}$ for $a_n = 5n + 10$.", a: "510", d: "hard" },
+            { q: "Find the common difference if $a_1 = 10$ and $a_{11} = 30$.", a: "2", d: "hard" },
+            { q: "Find the sum of the first 3 terms of $a_n = 2^n$.", a: "14", d: "hard" },
+            { q: "Geometric sequences are similar to \_\_\_ functions.", a: "exponential", d: "hard" },
+            { q: "Find $a_1$ if $a_4 = 24$ and $r = 2$.", a: "3", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-C-303",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Is 5, 10, 15 arithmetic?", a: "yes", d: "easy" },
+            { q: "Common difference of 1, 3, 5, 7.", a: "2", d: "easy" },
+            { q: "Common ratio of 5, 25, 125.", a: "5", d: "easy" },
+            { q: "First term of $a_n = 4n - 1$.", a: "3", d: "easy" },
+            { q: "Next term: 81, 27, 9...", a: "3", d: "easy" },
+            { q: "Evaluate $a_3$ for $a_n = (1/2)^n$.", a: "0.125", d: "moderate" },
+            { q: "Find $d$ for: 1/2, 1, 3/2, 2.", a: "0.5", d: "moderate" },
+            { q: "Find the 5th term: 2, 6, 18...", a: "162", d: "moderate" },
+            { q: "Write $a_n = a_{n-1} + 10, a_1 = 5$ as an explicit formula.", a: "an=10n-5", d: "moderate" },
+            { q: "Is 10, 5, 2.5 geometric?", a: "yes", d: "moderate" },
+            { q: "What is $a_1$ in $a_n = 3(4)^{n-1}$?", a: "3", d: "moderate" },
+            { q: "Find $a_4$ if $a_n = -3n + 20$.", a: "8", d: "moderate" },
+            { q: "Common ratio of 1/3, 1/9, 1/27.", a: "1/3", d: "moderate" },
+            { q: "Difference between $a_5$ and $a_4$ in an arithmetic sequence with $d=7$.", a: "7", d: "moderate" },
+            { q: "Find the 20th term of $a_n = 100 - n$.", a: "80", d: "moderate" },
+            { q: "Find $a_{10}$ for $a_1 = 7, d = -2$.", a: "-11", d: "hard" },
+            { q: "Find $r$ if $a_1 = 2$ and $a_3 = 32$ (positive).", a: "4", d: "hard" },
+            { q: "Arithmetic sequence: $a_1 = 12, a_2 = 17$. Find explicit formula.", a: "an=5n+7", d: "hard" },
+            { q: "Recursive formula for 3, 6, 12...?", a: "an=2an-1", d: "hard" },
+            { q: "Find the 1st term if $a_5 = 15$ and $d = 3$.", a: "3", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-D-404",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Find $d$: 2, 4, 6, 8.", a: "2", d: "easy" },
+            { q: "Find $r$: 2, 4, 8, 16.", a: "2", d: "easy" },
+            { q: "Next term: 50, 45, 40...", a: "35", d: "easy" },
+            { q: "Is 1, 2, 4, 7 arithmetic?", a: "no", d: "easy" },
+            { q: "Formula for geometric sequence: $a_n = a_1 \times r^{n-1}$. What is $r$?", a: "common ratio", d: "easy" },
+            { q: "Find $a_3$ if $a_n = 10n$.", a: "30", d: "moderate" },
+            { q: "Common difference: 0.2, 0.4, 0.6.", a: "0.2", d: "moderate" },
+            { q: "Common ratio: 1/2, 1/4, 1/8.", a: "0.5", d: "moderate" },
+            { q: "Find the 4th term: $a_1 = 5, r = -2$.", a: "-40", d: "moderate" },
+            { q: "Find the missing term: 10, \_\_\_, 30 (arithmetic).", a: "20", d: "moderate" },
+            { q: "Is $a_n = 2n + 1$ arithmetic?", a: "yes", d: "moderate" },
+            { q: "Find $a_2$ if $a_n = (a_{n-1})^2$ and $a_1 = 3$.", a: "9", d: "moderate" },
+            { q: "Find the 5th term: 1, 3, 5, 7...", a: "9", d: "moderate" },
+            { q: "If $a_n = 5(2)^{n-1}$, find $a_3$.", a: "20", d: "moderate" },
+            { q: "Recursive formula for 10, 7, 4...?", a: "an=an-1-3", d: "moderate" },
+            { q: "Find $a_{10}$ for $a_1 = 1, d = 0.5$.", a: "5.5", d: "hard" },
+            { q: "Find $r$ if $a_1 = 100$ and $a_2 = 120$.", a: "1.2", d: "hard" },
+            { q: "Arithmetic sequence: $a_3 = 10, a_4 = 14$. Find $a_1$.", a: "2", d: "hard" },
+            { q: "Find explicit formula for 1, 4, 16...?", a: "an=1(4)^(n-1)", d: "hard" },
+            { q: "Find $a_6$ for $a_n = 3n^2 - 1$.", a: "107", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-E-505",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Common difference: 5, 10, 15.", a: "5", d: "easy" },
+            { q: "Common ratio: 3, 9, 27.", a: "3", d: "easy" },
+            { q: "Next term: 1, 0, -1...", a: "-2", d: "easy" },
+            { q: "What is $a_1$ in $a_n = 5n + 2$?", a: "7", d: "easy" },
+            { q: "Is 1, 4, 9, 16 arithmetic?", a: "no", d: "easy" },
+            { q: "Find $a_2$ if $a_n = a_{n-1} + 4, a_1 = 10$.", a: "14", d: "moderate" },
+            { q: "Common ratio: -2, -4, -8.", a: "2", d: "moderate" },
+            { q: "Find the 4th term of $a_n = 3n$.", a: "12", d: "moderate" },
+            { q: "Is 8, 4, 2 geometric?", a: "yes", d: "moderate" },
+            { q: "Find the 10th term of $a_n = n + 10$.", a: "20", d: "moderate" },
+            { q: "Find $d$: -10, -20, -30.", a: "-10", d: "moderate" },
+            { q: "Find $a_3$ if $a_n = 2^{n+1}$.", a: "16", d: "moderate" },
+            { q: "If $a_1 = 5, d = 2$, find $a_4$.", a: "11", d: "moderate" },
+            { q: "Recursive form of 2, 4, 6...?", a: "an=an-1+2", d: "moderate" },
+            { q: "Explicit form of 3, 6, 12...?", a: "an=3(2)^(n-1)", d: "moderate" },
+            { q: "Find $a_{50}$ for $a_1 = 0, d = 2$.", a: "98", d: "hard" },
+            { q: "Find $r$ if $a_1 = 81$ and $a_4 = 3$.", a: "1/3", d: "hard" },
+            { q: "Arithmetic sequence: $a_1 = 5, a_{10} = 23$. Find $d$.", a: "2", d: "hard" },
+            { q: "Explicit formula for 100, 90, 80...?", a: "an=-10n+110", d: "hard" },
+            { q: "Find $a_5$ for $a_n = a_{n-1} \times (-1), a_1 = 5$.", a: "5", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-F-606",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Next term: 1, 3, 5...", a: "7", d: "easy" },
+            { q: "Common ratio: 2, 20, 200.", a: "10", d: "easy" },
+            { q: "Is 10, 8, 6 arithmetic?", a: "yes", d: "easy" },
+            { q: "First term of $a_n = 2(3)^{n-1}$.", a: "2", d: "easy" },
+            { q: "Common difference: 10, 20, 30.", a: "10", d: "easy" },
+            { q: "Find $a_4$ if $a_n = 5n - 5$.", a: "15", d: "moderate" },
+            { q: "Common ratio: 64, 32, 16.", a: "0.5", d: "moderate" },
+            { q: "Next term: 1, -1, 1, -1...", a: "1", d: "moderate" },
+            { q: "Find $a_3$ for $a_1=1, d=10$.", a: "21", d: "moderate" },
+            { q: "Is $a_n = n^2$ geometric?", a: "no", d: "moderate" },
+            { q: "Find $d$: 1, 1.1, 1.2.", a: "0.1", d: "moderate" },
+            { q: "Find $a_2$ if $a_n = 5a_{n-1}, a_1 = 2$.", a: "10", d: "moderate" },
+            { q: "Formula for $a_n$ if 4, 8, 12...?", a: "an=4n", d: "moderate" },
+            { q: "If $r = 1$, is the sequence constant?", a: "yes", d: "moderate" },
+            { q: "Find the 5th term of 2, 4, 8...", a: "32", d: "moderate" },
+            { q: "Find $a_{10}$ for $a_n = 2n^2$.", a: "200", d: "hard" },
+            { q: "Find $d$ if $a_1 = 4$ and $a_2 = 3.5$.", a: "-0.5", d: "hard" },
+            { q: "Geometric: $a_1 = 3, a_3 = 12$. Find positive $r$.", a: "2", d: "hard" },
+            { q: "Recursive for 5, 10, 20...?", a: "an=2an-1", d: "hard" },
+            { q: "Arithmetic: $a_5 = 20, d = 4$. Find $a_1$.", a: "4", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-G-707",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Common difference: 7, 14, 21.", a: "7", d: "easy" },
+            { q: "Common ratio: 4, 8, 16.", a: "2", d: "easy" },
+            { q: "Next term: 100, 90, 80...", a: "70", d: "easy" },
+            { q: "First term of $a_n = n/2$.", a: "0.5", d: "easy" },
+            { q: "Is 2, 4, 6, 10 arithmetic?", a: "no", d: "easy" },
+            { q: "Find $a_3$ if $a_n = 3n + 1$.", a: "10", d: "moderate" },
+            { q: "Common ratio: 9, 3, 1.", a: "1/3", d: "moderate" },
+            { q: "Find $d$: 0, -5, -10.", a: "-5", d: "moderate" },
+            { q: "Is 1, -2, 4 geometric?", a: "yes", d: "moderate" },
+            { q: "Find the 4th term of 5, 10, 15...", a: "20", d: "moderate" },
+            { q: "Recursive formula $a_n = a_{n-1} \times 3, a_1 = 2$. Find $a_2$.", a: "6", d: "moderate" },
+            { q: "Explicit formula for 2, 4, 6...?", a: "an=2n", d: "moderate" },
+            { q: "Find $a_5$ for $a_n = 2^{n-1}$.", a: "16", d: "moderate" },
+            { q: "What is $r$ for 10, 10, 10?", a: "1", d: "moderate" },
+            { q: "Find $a_2$ if $a_1 = 100, d = -15$.", a: "85", d: "moderate" },
+            { q: "Find $a_{11}$ for $a_1 = 5, d = 5$.", a: "55", d: "hard" },
+            { q: "Geometric: $a_1 = 5, a_2 = 15$. Find $a_4$.", a: "135", d: "hard" },
+            { q: "Arithmetic: $a_1 = 10, a_3 = 20$. Find $d$.", a: "5", d: "hard" },
+            { q: "Find explicit formula for 1/2, 1/4, 1/8...?", a: "an=(1/2)^n", d: "hard" },
+            { q: "Find $a_5$ if $a_n = n^2 + n$.", a: "30", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-H-808",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Find $d$: 1, 2, 3.", a: "1", d: "easy" },
+            { q: "Find $r$: 1, 2, 4.", a: "2", d: "easy" },
+            { q: "Is 5, 10, 20 geometric?", a: "yes", d: "easy" },
+            { q: "Next term: 11, 22, 33...", a: "44", d: "easy" },
+            { q: "First term of $a_n = 10-n$.", a: "9", d: "easy" },
+            { q: "Find $a_4$ if $a_n = 2n + 10$.", a: "18", d: "moderate" },
+            { q: "Common ratio: 1/3, 1, 3.", a: "3", d: "moderate" },
+            { q: "Find $d$: -1, -2, -3.", a: "-1", d: "moderate" },
+            { q: "Is 2, 4, 8, 10 geometric?", a: "no", d: "moderate" },
+            { q: "Find $a_2$ if $a_1=7, r=0.1$.", a: "0.7", d: "moderate" },
+            { q: "Recursive formula for 1, 2, 3...?", a: "an=an-1+1", d: "moderate" },
+            { q: "Find $a_3$ if $a_n = n^3$.", a: "27", d: "moderate" },
+            { q: "Common difference: 1/4, 2/4, 3/4.", a: "0.25", d: "moderate" },
+            { q: "If $a_n = 3(2)^{n-1}$, find $a_2$.", a: "6", d: "moderate" },
+            { q: "Next term: 1, 0.5, 0.25...", a: "0.125", d: "moderate" },
+            { q: "Find $a_{25}$ for $a_n = 4n - 3$.", a: "97", d: "hard" },
+            { q: "Geometric: $a_1=10, r=0.2$. Find $a_3$.", a: "0.4", d: "hard" },
+            { q: "Arithmetic: $a_1=100, a_2=98$. Find $a_{10}$.", a: "82", d: "hard" },
+            { q: "Find explicit formula for 7, 14, 28...?", a: "an=7(2)^(n-1)", d: "hard" },
+            { q: "Find $a_1$ if $a_3=12$ and $r=2$.", a: "3", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-I-909",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Next term: 5, 10, 15...", a: "20", d: "easy" },
+            { q: "Common ratio: 1, 5, 25.", a: "5", d: "easy" },
+            { q: "Is 10, 20, 40 geometric?", a: "yes", d: "easy" },
+            { q: "Common difference: 4, 2, 0.", a: "-2", d: "easy" },
+            { q: "First term of $a_n = 3n$.", a: "3", d: "easy" },
+            { q: "Find $a_3$ if $a_n = 2n - 5$.", a: "1", d: "moderate" },
+            { q: "Common ratio: 100, 20, 4.", a: "0.2", d: "moderate" },
+            { q: "Find $d$: 12, 15, 18.", a: "3", d: "moderate" },
+            { q: "Next term: 1/2, 1/4, 1/8...", a: "1/16", d: "moderate" },
+            { q: "Is $a_n = 3^n$ arithmetic?", a: "no", d: "moderate" },
+            { q: "Find $a_2$ if $a_1=5, d=5$.", a: "10", d: "moderate" },
+            { q: "Recursive formula for 10, 20, 40...?", a: "an=2an-1", d: "moderate" },
+            { q: "Find $a_4$ for $a_n = n^2 - 1$.", a: "15", d: "moderate" },
+            { q: "Explicit formula for 5, 10, 15...?", a: "an=5n", d: "moderate" },
+            { q: "If $a_1=2, r=10$, find $a_3$.", a: "200", d: "moderate" },
+            { q: "Find $a_{100}$ for $a_n = 2n + 1$.", a: "201", d: "hard" },
+            { q: "Geometric: $a_1=1, a_4=27$. Find $r$.", a: "3", d: "hard" },
+            { q: "Arithmetic: $a_1=10, a_2=7$. Find $a_{11}$.", a: "-20", d: "hard" },
+            { q: "Find explicit formula for 12, 6, 3...?", a: "an=12(0.5)^(n-1)", d: "hard" },
+            { q: "Find $a_5$ for $a_n = a_{n-1} + n, a_1 = 1$.", a: "15", d: "hard" }
+        ]
+    },
+    {
+        id: "U9-J-010",
+        title: "Unit 9: Sequences",
+        questions: [
+            { q: "Common difference: 2, 5, 8.", a: "3", d: "easy" },
+            { q: "Common ratio: 10, 50, 250.", a: "5", d: "easy" },
+            { q: "Next term: 10, 9, 8...", a: "7", d: "easy" },
+            { q: "Is 3, 6, 9 arithmetic?", a: "yes", d: "easy" },
+            { q: "First term of $a_n = 2^n$.", a: "2", d: "easy" },
+            { q: "Find $a_4$ if $a_n = 10-2n$.", a: "2", d: "moderate" },
+            { q: "Common ratio: 8, 4, 2.", a: "0.5", d: "moderate" },
+            { q: "Find $d$: 1, 1.5, 2.", a: "0.5", d: "moderate" },
+            { q: "Is 1, -1, 1, -1 geometric?", a: "yes", d: "moderate" },
+            { q: "Find $a_3$ if $a_1=10, d=-10$.", a: "-10", d: "moderate" },
+            { q: "Recursive formula for 5, 10, 15...?", a: "an=an-1+5", d: "moderate" },
+            { q: "Find $a_2$ if $a_1=3, r=4$.", a: "12", d: "moderate" },
+            { q: "Explicit formula for 10, 20, 30...?", a: "an=10n", d: "moderate" },
+            { q: "Find $a_5$ for $a_n = 3n-2$.", a: "13", d: "moderate" },
+            { q: "Next term: 1/3, 1, 3...", a: "9", d: "moderate" },
+            { q: "Find $a_{20}$ for $a_1 = 1, d = 4$.", a: "77", d: "hard" },
+            { q: "Geometric: $a_1=2, a_2=1$. Find $a_5$.", a: "0.125", d: "hard" },
+            { q: "Arithmetic: $a_1=5, a_3=15$. Find $a_{10}$.", a: "50", d: "hard" },
+            { q: "Find explicit formula for 10, 5, 2.5...?", a: "an=10(0.5)^(n-1)", d: "hard" },
+            { q: "Find $a_4$ for $a_n = a_{n-1} + a_{n-2}, a_1=1, a_2=1$.", a: "3", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

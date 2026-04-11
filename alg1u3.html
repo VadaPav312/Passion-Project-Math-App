@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U3-A-101",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "Convert 2 minutes to seconds.", a: "120", d: "easy" },
+            { q: "If a car travels 60 miles in 1 hour, how many miles does it travel in 2 hours?", a: "120", d: "easy" },
+            { q: "How many centimeters are in 1 meter?", a: "100", d: "easy" },
+            { q: "Which unit is best for measuring the length of a pencil: meters or centimeters?", a: "centimeters", d: "easy" },
+            { q: "True or False: To convert km/h to m/s, you need more than one conversion factor.", a: "true", d: "easy" },
+            { q: "Convert 5 kilometers to meters.", a: "5000", d: "moderate" },
+            { q: "A faucet leaks 2 liters per hour. How many liters leak in one day (24 hours)?", a: "48", d: "moderate" },
+            { q: "Convert 180 seconds to minutes.", a: "3", d: "moderate" },
+            { q: "If 1 inch = 2.54 cm, how many cm are in 10 inches?", a: "25.4", d: "moderate" },
+            { q: "A runner's speed is 10 meters per second. What is this in meters per minute?", a: "600", d: "moderate" },
+            { q: "Which is a larger unit of area: square inches or square feet?", a: "square feet", d: "moderate" },
+            { q: "Convert $15/hour to dollars per day (8-hour workday).", a: "120", d: "moderate" },
+            { q: "How many grams are in 0.5 kilograms?", a: "500", d: "moderate" },
+            { q: "A map scale is 1 unit = 5 miles. If two cities are 4 units apart, what is the distance in miles?", a: "20", d: "moderate" },
+            { q: "If a pool fills at 5 gallons per minute, how many gallons are added in 1 hour?", a: "300", d: "moderate" },
+            { q: "Convert 60 miles per hour to feet per second (1 mile = 5280 ft).", a: "88", d: "hard" },
+            { q: "A density is given as 5 g/cm³. Convert this to kg/m³ (Note: $10^6$ cm³ in 1 m³).", a: "5000", d: "hard" },
+            { q: "If a lightbulb uses 60 watts (Joules per second), how many Joules does it use in 1 minute?", a: "3600", d: "hard" },
+            { q: "A rectangle has dimensions 2m by 50cm. What is its area in square meters?", a: "1", d: "hard" },
+            { q: "Convert 100 meters per minute to kilometers per hour.", a: "6", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-B-202",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "How many hours are in 3 days?", a: "72", d: "easy" },
+            { q: "Convert 300 centimeters to meters.", a: "3", d: "easy" },
+            { q: "If a plant grows 1 inch per week, how many inches in 4 weeks?", a: "4", d: "easy" },
+            { q: "Which is heavier: 1 gram or 1 kilogram?", a: "1 kilogram", d: "easy" },
+            { q: "Convert 1 foot to inches.", a: "12", d: "easy" },
+            { q: "A car uses 1 gallon of gas every 25 miles. How many gallons for 100 miles?", a: "4", d: "moderate" },
+            { q: "Convert 48 hours to days.", a: "2", d: "moderate" },
+            { q: "How many milliliters are in 2 liters?", a: "2000", d: "moderate" },
+            { q: "A snail moves at 5 cm per minute. How many cm in 1 hour?", a: "300", d: "moderate" },
+            { q: "If 1 kg = 2.2 lbs, how many lbs is 10 kg?", a: "22", d: "moderate" },
+            { q: "Convert 120 minutes to hours.", a: "2", d: "moderate" },
+            { q: "A phone downloads at 10 MB per second. How many MB in 1 minute?", a: "600", d: "moderate" },
+            { q: "Convert 2 square feet to square inches (1 ft = 12 in).", a: "288", d: "moderate" },
+            { q: "Which unit is best for the distance between cities: meters or kilometers?", a: "kilometers", d: "moderate" },
+            { q: "How many seconds are in 1 hour?", a: "3600", d: "moderate" },
+            { q: "Convert 10 m/s to km/h.", a: "36", d: "hard" },
+            { q: "A dose is 5 mg per kg of body weight. For a 70 kg person, what is the dose in mg?", a: "350", d: "hard" },
+            { q: "Convert 1 cubic meter to cubic centimeters ($100 \times 100 \times 100$).", a: "1000000", d: "hard" },
+            { q: "If gold costs $50 per gram, what is the cost of 1 kilogram?", a: "50000", d: "hard" },
+            { q: "A pump moves 10 gallons in 40 seconds. What is the rate in gallons per minute?", a: "15", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-C-303",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "Convert 1 week to days.", a: "7", d: "easy" },
+            { q: "How many mm are in 1 cm?", a: "10", d: "easy" },
+            { q: "If a heart beats 70 times a minute, how many beats in 2 minutes?", a: "140", d: "easy" },
+            { q: "What unit measures volume: Liters or Meters?", a: "Liters", d: "easy" },
+            { q: "Convert 5000 meters to kilometers.", a: "5", d: "easy" },
+            { q: "A printer prints 10 pages per minute. How many pages in 15 minutes?", a: "150", d: "moderate" },
+            { q: "Convert 2.5 kg to grams.", a: "2500", d: "moderate" },
+            { q: "If a boat travels 20 knots, and 1 knot = 1.15 mph, what is its speed in mph?", a: "23", d: "moderate" },
+            { q: "How many minutes are in 1.5 hours?", a: "90", d: "moderate" },
+            { q: "A battery lasts 20 hours. How many days is this (rounded to two decimals)?", a: "0.83", d: "moderate" },
+            { q: "Convert 36 inches to feet.", a: "3", d: "moderate" },
+            { q: "If 1 yard = 3 feet, how many feet are in 10 yards?", a: "30", d: "moderate" },
+            { q: "A light travels 300,000 km per second. How many km in 2 seconds?", a: "600000", d: "moderate" },
+            { q: "Which unit describes speed: m/s or kg/m?", a: "m/s", d: "moderate" },
+            { q: "How many square centimeters are in a 10cm by 10cm square?", a: "100", d: "moderate" },
+            { q: "Convert 15 m/s to feet per second (1m ≈ 3.28ft).", a: "49.2", d: "hard" },
+            { q: "Water flows at 2 cubic feet per second. How many cubic feet per hour?", a: "7200", d: "hard" },
+            { q: "If a car gets 30 miles per gallon, how many kilometers per liter? (1 gal ≈ 3.78L, 1 mi ≈ 1.61km)", a: "12.78", d: "hard" },
+            { q: "A fabric costs $12 per square yard. What is the cost per square foot?", a: "1.33", d: "hard" },
+            { q: "Convert 100 km/h to meters per second.", a: "27.78", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-D-404",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "How many months are in 2 years?", a: "24", d: "easy" },
+            { q: "Convert 1 liter to milliliters.", a: "1000", d: "easy" },
+            { q: "If you walk 3 miles per hour, how far in 3 hours?", a: "9", d: "easy" },
+            { q: "True or False: Grams measure mass.", a: "true", d: "easy" },
+            { q: "How many feet are in 2 yards?", a: "6", d: "easy" },
+            { q: "Convert 0.75 hours to minutes.", a: "45", d: "moderate" },
+            { q: "A jogger runs 8 km in 1 hour. What is their speed in meters per hour?", a: "8000", d: "moderate" },
+            { q: "If 1 cup = 8 ounces, how many ounces in 4 cups?", a: "32", d: "moderate" },
+            { q: "Convert 500 mg to grams.", a: "0.5", d: "moderate" },
+            { q: "How many seconds are in 10 minutes?", a: "600", d: "moderate" },
+            { q: "A worker makes $200 in 5 hours. What is the rate in $/hour?", a: "40", d: "moderate" },
+            { q: "Convert 2 miles to feet (1 mi = 5280 ft).", a: "10560", d: "moderate" },
+            { q: "If a plane flies 500 mph, how far does it go in 30 minutes?", a: "250", d: "moderate" },
+            { q: "Which unit is best for the mass of an elephant: grams or tonnes?", a: "tonnes", d: "moderate" },
+            { q: "Convert 4000 ml to liters.", a: "4", d: "moderate" },
+            { q: "A car travels 100 meters in 5 seconds. What is its speed in km/h?", a: "72", d: "hard" },
+            { q: "If a pipe leaks 1 cup every 15 minutes, how many gallons per day? (16 cups = 1 gal)", a: "6", d: "hard" },
+            { q: "Convert 100 square meters to square centimeters.", a: "1000000", d: "hard" },
+            { q: "A computer processes 2 Terabytes in 4 hours. What is the rate in GB per hour? (1TB = 1000GB)", a: "500", d: "hard" },
+            { q: "Convert 55 mph to m/s (1 mi = 1609 meters).", a: "24.58", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-E-505",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "How many minutes in 1/2 hour?", a: "30", d: "easy" },
+            { q: "Convert 10 meters to centimeters.", a: "1000", d: "easy" },
+            { q: "If you save $5 a day, how much in 10 days?", a: "50", d: "easy" },
+            { q: "Which unit is for time: Newton or Second?", a: "Second", d: "easy" },
+            { q: "How many quarters are in 5 dollars?", a: "20", d: "easy" },
+            { q: "Convert 3.5 liters to milliliters.", a: "3500", d: "moderate" },
+            { q: "If a car travels 50 miles in 1 hour, what is its speed in miles per minute?", a: "0.83", d: "moderate" },
+            { q: "How many grams in 2.2 kilograms?", a: "2200", d: "moderate" },
+            { q: "A swimmer does 4 laps in 2 minutes. What is the rate of laps per minute?", a: "2", d: "moderate" },
+            { q: "Convert 1 day to minutes.", a: "1440", d: "moderate" },
+            { q: "If 1 euro = 1.10 dollars, how many dollars is 20 euros?", a: "22", d: "moderate" },
+            { q: "Convert 72 inches to yards.", a: "2", d: "moderate" },
+            { q: "How many milliliters in a half-liter bottle?", a: "500", d: "moderate" },
+            { q: "Which is more: 1 mile or 1 kilometer?", a: "1 mile", d: "moderate" },
+            { q: "If a light travels 300 meters in 1 microsecond, how many meters in 1 second?", a: "300000000", d: "moderate" },
+            { q: "Convert 1.2 kg/m³ to g/cm³.", a: "0.0012", d: "hard" },
+            { q: "A satellite orbits at 7000 m/s. What is this in km/h?", a: "25200", d: "hard" },
+            { q: "If an athlete runs a 4-minute mile, what is their speed in mph?", a: "15", d: "hard" },
+            { q: "A container holds 5 gallons. If it leaks 1 pint every hour, how long to empty? (8 pints = 1 gal)", a: "40", d: "hard" },
+            { q: "Convert 100 Watts to kwh per day (kilowatt-hours).", a: "2.4", d: "hard" }
+        ]
+},
+// Note: To keep the response concise and functional, I have provided the first 5 tests.  // Versions F-J follow the same mathematical logic and conversion patterns
+{
+        id: "U3-F-606",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "How many centimeters are in 5 meters?", a: "500", d: "easy" },
+            { q: "Convert 4 minutes to seconds.", a: "240", d: "easy" },
+            { q: "If a car travels 40 miles in 1 hour, how far in 3 hours?", a: "120", d: "easy" },
+            { q: "Which unit is larger: a millimeter or a centimeter?", a: "centimeter", d: "easy" },
+            { q: "How many eggs are in 2 dozen?", a: "24", d: "easy" },
+            { q: "Convert 2.5 kilometers to meters.", a: "2500", d: "moderate" },
+            { q: "If 1 gallon = 4 quarts, how many quarts are in 3.5 gallons?", a: "14", d: "moderate" },
+            { q: "A runner covers 400 meters in 1 minute. What is their speed in meters per second? (Round to 2 decimals)", a: "6.67", d: "moderate" },
+            { q: "How many hours are in 150 minutes?", a: "2.5", d: "moderate" },
+            { q: "Convert 5000 grams to kilograms.", a: "5", d: "moderate" },
+            { q: "If 1 yard = 3 feet, how many yards is 21 feet?", a: "7", d: "moderate" },
+            { q: "A pool drains at 10 liters per minute. How many liters in 1 hour?", a: "600", d: "moderate" },
+            { q: "Convert 1.5 days to hours.", a: "36", d: "moderate" },
+            { q: "Which is a faster speed: 10 m/s or 10 km/h?", a: "10 m/s", d: "moderate" },
+            { q: "How many milliliters are in 0.25 liters?", a: "250", d: "moderate" },
+            { q: "Convert 25 m/s to km/h.", a: "90", d: "hard" },
+            { q: "An area is 9 square feet. What is this in square inches?", a: "1296", d: "hard" },
+            { q: "If a light travels at $3 \times 10^8$ m/s, how many km does it travel in 1 second?", a: "300000", d: "hard" },
+            { q: "A price is $2.00 per pound. What is the price per ounce? (16 oz = 1 lb)", a: "0.125", d: "hard" },
+            { q: "Convert 50 miles per hour to meters per second (1 mi = 1609 m).", a: "22.35", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-G-707",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "How many inches are in 3 feet?", a: "36", d: "easy" },
+            { q: "Convert 180 minutes to hours.", a: "3", d: "easy" },
+            { q: "If you buy 5 apples for $2.00, what is the cost per apple?", a: "0.40", d: "easy" },
+            { q: "What unit measures mass in the metric system: Liter or Gram?", a: "Gram", d: "easy" },
+            { q: "How many meters are in 1 kilometer?", a: "1000", d: "easy" },
+            { q: "Convert 0.5 kilograms to grams.", a: "500", d: "moderate" },
+            { q: "A faucet drips 50ml per minute. How many liters in 1 hour?", a: "3", d: "moderate" },
+            { q: "If 1 meter = 3.28 feet, how many feet is 10 meters?", a: "32.8", d: "moderate" },
+            { q: "How many seconds are in 5 minutes?", a: "300", d: "moderate" },
+            { q: "Convert 48 ounces to pounds (16 oz = 1 lb).", a: "3", d: "moderate" },
+            { q: "A car gets 25 miles per gallon. How many gallons for 200 miles?", a: "8", d: "moderate" },
+            { q: "Convert 72 hours to days.", a: "3", d: "moderate" },
+            { q: "How many square centimeters are in a square with 5cm sides?", a: "25", d: "moderate" },
+            { q: "Which is a unit of volume: $cm^2$ or $cm^3$?", a: "cm^3", d: "moderate" },
+            { q: "Convert 1.25 hours to minutes.", a: "75", d: "moderate" },
+            { q: "Convert 120 km/h to meters per minute.", a: "2000", d: "hard" },
+            { q: "If a pipe leaks 1 gallon every 2 hours, how many cups per hour? (16 cups = 1 gal)", a: "8", d: "hard" },
+            { q: "A cube has a volume of 1 cubic meter. How many cubic centimeters is this?", a: "1000000", d: "hard" },
+            { q: "Convert $60 per day to cents per minute (8-hour day).", a: "12.5", d: "hard" },
+            { q: "A plane flies 900 km/h. What is its speed in meters per second?", a: "250", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-H-808",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "How many days are in 2 weeks?", a: "14", d: "easy" },
+            { q: "Convert 2000ml to Liters.", a: "2", d: "easy" },
+            { q: "If 1 foot = 12 inches, how many inches in 0.5 feet?", a: "6", d: "easy" },
+            { q: "What unit measures temperature: Celsius or Meter?", a: "Celsius", d: "easy" },
+            { q: "How many cents are in 4 dollars?", a: "400", d: "easy" },
+            { q: "Convert 4.2 kilometers to meters.", a: "4200", d: "moderate" },
+            { q: "If a person walks 5 km/h, how many meters do they walk in 1 hour?", a: "5000", d: "moderate" },
+            { q: "How many minutes in 3.5 hours?", a: "210", d: "moderate" },
+            { q: "Convert 250 milligrams to grams.", a: "0.25", d: "moderate" },
+            { q: "A printer does 20 pages per minute. How many pages in 4.5 minutes?", a: "90", d: "moderate" },
+            { q: "If 1 kg = 2.2 lbs, how many kg is 11 lbs?", a: "5", d: "moderate" },
+            { q: "Convert 10 yards to feet.", a: "30", d: "moderate" },
+            { q: "Which is a unit of density: kg/m or kg/m³?", a: "kg/m³", d: "moderate" },
+            { q: "How many seconds in 1/10th of a minute?", a: "6", d: "moderate" },
+            { q: "Convert 0.8 liters to milliliters.", a: "800", d: "moderate" },
+            { q: "Convert 15 miles per gallon to kilometers per liter (1 mi = 1.61km, 1 gal = 3.78L).", a: "6.39", d: "hard" },
+            { q: "A speed is 50 feet per second. What is this in miles per hour?", a: "34.09", d: "hard" },
+            { q: "If a pump moves 500 gallons per hour, how many quarts per minute?", a: "33.33", d: "hard" },
+            { q: "Convert 2 square meters to square centimeters.", a: "20000", d: "hard" },
+            { q: "A worker makes $25/hour. How much do they make in a 40-hour week?", a: "1000", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-I-909",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "How many millimeters in 1 centimeter?", a: "10", d: "easy" },
+            { q: "Convert 1 hour to seconds.", a: "3600", d: "easy" },
+            { q: "If 1 pound = 16 ounces, how many ounces in 2 lbs?", a: "32", d: "easy" },
+            { q: "Which unit is used for liquid volume: Kilogram or Liter?", a: "Liter", d: "easy" },
+            { q: "How many quarters in 2 dollars?", a: "8", d: "easy" },
+            { q: "Convert 7.5 meters to centimeters.", a: "750", d: "moderate" },
+            { q: "A car travels 300 miles on 10 gallons. What is the miles per gallon (mpg)?", a: "30", d: "moderate" },
+            { q: "How many grams are in 1.25 kilograms?", a: "1250", d: "moderate" },
+            { q: "Convert 45 minutes to hours.", a: "0.75", d: "moderate" },
+            { q: "If 1 inch = 2.54 cm, how many inches is 5.08 cm?", a: "2", d: "moderate" },
+            { q: "A heart beats 60 times a minute. How many times in 1 hour?", a: "3600", d: "moderate" },
+            { q: "Convert 2 miles to yards (1 mi = 1760 yards).", a: "3520", d: "moderate" },
+            { q: "Which unit is better for a person's height: Meters or Kilometers?", a: "Meters", d: "moderate" },
+            { q: "How many ml in 3/4 of a Liter?", a: "750", d: "moderate" },
+            { q: "Convert 10000 meters to kilometers.", a: "10", d: "moderate" },
+            { q: "A car moves at 20 meters per second. What is this in km/h?", a: "72", d: "hard" },
+            { q: "If a lightbulb uses 100 Watts, how many kilowatt-hours (kWh) in 10 hours?", a: "1", d: "hard" },
+            { q: "Convert 1 cubic foot to cubic inches.", a: "1728", d: "hard" },
+            { q: "A medication dose is 2mg per 10kg. How much for an 80kg person?", a: "16", d: "hard" },
+            { q: "Convert 40 km/h to feet per second (1 km = 3280.84 ft).", a: "36.45", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-J-010",
+        title: "Unit 3: Working with Units",
+        questions: [
+            { q: "How many months in 5 years?", a: "60", d: "easy" },
+            { q: "Convert 500cm to meters.", a: "5", d: "easy" },
+            { q: "If a pen costs $1.50, how much for 10 pens?", a: "15", d: "easy" },
+            { q: "Which unit is for length: Gram or Meter?", a: "Meter", d: "easy" },
+            { q: "How many minutes in 2.5 hours?", a: "150", d: "easy" },
+            { q: "Convert 0.2 kilograms to grams.", a: "200", d: "moderate" },
+            { q: "If a snail moves 2 meters in 1 hour, how many centimeters per hour?", a: "200", d: "moderate" },
+            { q: "How many cups in 2 gallons? (16 cups = 1 gallon)", a: "32", d: "moderate" },
+            { q: "Convert 90 seconds to minutes.", a: "1.5", d: "moderate" },
+            { q: "A data plan gives 5GB. How many MB is this? (1GB = 1000MB)", a: "5000", d: "moderate" },
+            { q: "If 1 euro = 1.1 dollars, how many euros is 11 dollars?", a: "10", d: "moderate" },
+            { q: "Convert 15 feet to yards.", a: "5", d: "moderate" },
+            { q: "Which is a unit of area: $m^2$ or $m^3$?", a: "m^2", d: "moderate" },
+            { q: "How many grams in a milligram?", a: "0.001", d: "moderate" },
+            { q: "Convert 10 liters to milliliters.", a: "10000", d: "moderate" },
+            { q: "A sprinkler uses 50 gallons in 20 minutes. What is the rate in gallons per hour?", a: "150", d: "hard" },
+            { q: "Convert 30 m/s to mph (1 m/s $\approx$ 2.237 mph).", a: "67.11", d: "hard" },
+            { q: "If a lawn is 10m by 10m, what is its area in square centimeters?", a: "1000000", d: "hard" },
+            { q: "A car travels 15 km on 1 Liter. How many miles per gallon? (1 km $\approx$ 0.62 mi, 1 gal $\approx$ 3.78L)", a: "35.15", d: "hard" },
+            { q: "Convert 1 Terabyte to Megabytes ($10^6$ MB).", a: "1000000", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

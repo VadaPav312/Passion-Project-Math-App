@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U7-A-101",
+        title: "Unit 7: Circles",
+        note: "For answers with pi, type 'pi' (e.g., 10*pi). For degrees, just type the number.",
+        questions: [
+            { q: "A line that touches a circle at exactly one point is a \_\_\_.", a: "tangent", d: "easy" },
+            { q: "The distance from the center to the edge of a circle is the \_\_\_.", a: "radius", d: "easy" },
+            { q: "An arc that measures exactly 180 degrees is a \_\_\_.", a: "semicircle", d: "easy" },
+            { q: "A segment whose endpoints both lie on the circle is a \_\_\_.", a: "chord", d: "easy" },
+            { q: "Formula for the circumference of a circle?", a: "2*pi*r", d: "easy" },
+            { q: "An inscribed angle is \_\_\_ the measure of its intercepted arc.", a: "1/2", d: "moderate" },
+            { q: "A central angle is \_\_\_ to the measure of its intercepted arc.", a: "equal", d: "moderate" },
+            { q: "The measure of a full circle in degrees is \_\_\_.", a: "360", d: "moderate" },
+            { q: "A tangent line is \_\_\_ to the radius at the point of tangency.", a: "perpendicular", d: "moderate" },
+            { q: "Formula for the area of a sector with central angle 'n'?", a: "(n/360)*pi*r^2", d: "moderate" },
+            { q: "If a radius is 5, what is the area of the circle?", a: "25*pi", d: "moderate" },
+            { q: "Two chords are congruent if they are \_\_\_ from the center.", a: "equidistant", d: "moderate" },
+            { q: "Formula for arc length with central angle 'n'?", a: "(n/360)*2*pi*r", d: "moderate" },
+            { q: "A quadrilateral inscribed in a circle has \_\_\_ opposite angles.", a: "supplementary", d: "moderate" },
+            { q: "Find the diameter if the radius is 12.5.", a: "25", d: "moderate" },
+            { q: "An angle formed by two tangents is 1/2 the \_\_\_ of the intercepted arcs.", a: "difference", d: "hard" },
+            { q: "If an inscribed angle intercepts a semicircle, its measure is \_\_\_.", a: "90", d: "hard" },
+            { q: "The Power of a Point theorem for two chords: a * b = \_\_\_.", a: "c * d", d: "hard" },
+            { q: "Find the area of a sector with r=6 and n=60.", a: "6*pi", d: "hard" },
+            { q: "A line that intersects a circle at two points is a \_\_\_.", a: "secant", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-B-202",
+        title: "Unit 7: Circles",
+        note: "For answers with pi, type 'pi'. For degrees, just type the number.",
+        questions: [
+            { q: "The longest chord in a circle is the \_\_\_.", a: "diameter", d: "easy" },
+            { q: "Area of a circle formula?", a: "pi*r^2", d: "easy" },
+            { q: "Part of the circumference of a circle is an \_\_\_.", a: "arc", d: "easy" },
+            { q: "A 'slice' of a circle bounded by two radii and an arc is a \_\_\_.", a: "sector", d: "easy" },
+            { q: "A minor arc is less than \_\_\_ degrees.", a: "180", d: "easy" },
+            { q: "If an intercepted arc is 80, the inscribed angle is \_\_\_.", a: "40", d: "moderate" },
+            { q: "If an inscribed angle is 30, the intercepted arc is \_\_\_.", a: "60", d: "moderate" },
+            { q: "Tangents from the same exterior point to a circle are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "A central angle has its vertex at the \_\_\_.", a: "center", d: "moderate" },
+            { q: "If a chord is 8 units from a center of radius 10, the chord length is \_\_\_.", a: "12", d: "moderate" },
+            { q: "Measure of a semicircle in degrees?", a: "180", d: "moderate" },
+            { q: "Find circumference if diameter is 10.", a: "10*pi", d: "moderate" },
+            { q: "The region between a chord and its arc is a \_\_\_.", a: "segment", d: "moderate" },
+            { q: "An angle outside a circle is 1/2(Major Arc \_\_\_ Minor Arc).", a: "minus", d: "moderate" },
+            { q: "External Secant Segment Theorem: whole * outside = \_\_\_.", a: "whole * outside", d: "moderate" },
+            { q: "Find arc length of a 90 degree arc in a circle with r=4.", a: "2*pi", d: "hard" },
+            { q: "In a circle, congruent arcs have congruent \_\_\_.", a: "chords", d: "hard" },
+            { q: "A radius perpendicular to a chord \_\_\_ the chord.", a: "bisects", d: "hard" },
+            { q: "Find area of circle if circumference is 16*pi.", a: "64*pi", d: "hard" },
+            { q: "Angle formed by a tangent and a chord is \_\_\_ the intercepted arc.", a: "1/2", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-C-303",
+        title: "Unit 7: Circles",
+        note: "Standard Circle Geometry properties.",
+        questions: [
+            { q: "Formula for diameter in terms of radius?", a: "2r", d: "easy" },
+            { q: "A major arc is greater than \_\_\_ degrees.", a: "180", d: "easy" },
+            { q: "Points on the circle are \_\_\_ from the center.", a: "equidistant", d: "easy" },
+            { q: "A circle is named by its \_\_\_ point.", a: "center", d: "easy" },
+            { q: "Is a diameter a chord?", a: "yes", d: "easy" },
+            { q: "Measure of arc intercepted by a 45 degree central angle?", a: "45", d: "moderate" },
+            { q: "Measure of arc intercepted by a 45 degree inscribed angle?", a: "90", d: "moderate" },
+            { q: "If two inscribed angles intercept the same arc, they are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "Circumference of a circle with r=7?", a: "14*pi", d: "moderate" },
+            { q: "A line perpendicular to a tangent at the point of tangency passes through the \_\_\_.", a: "center", d: "moderate" },
+            { q: "Area of a circle with diameter 20?", a: "100*pi", d: "moderate" },
+            { q: "Inscribed angle of a semicircle is \_\_\_ degrees.", a: "90", d: "moderate" },
+            { q: "Formula for area of a circle?", a: "pi*r^2", d: "moderate" },
+            { q: "Number of tangents that can be drawn from an exterior point?", a: "2", d: "moderate" },
+            { q: "Angle inside a circle is 1/2 the \_\_\_ of intercepted arcs.", a: "sum", d: "moderate" },
+            { q: "Find sector area: r=10, n=36.", a: "10*pi", d: "hard" },
+            { q: "Find radius if area is 49*pi.", a: "7", d: "hard" },
+            { q: "Tangent squared = outside * \_\_\_.", a: "whole", d: "hard" },
+            { q: "All radii of the same circle are \_\_\_.", a: "congruent", d: "hard" },
+            { q: "Length of arc with r=5, n=72.", a: "2*pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-D-404",
+        title: "Unit 7: Circles",
+        note: "Focus on Angles and Arcs.",
+        questions: [
+            { q: "Vertex of an inscribed angle is \_\_\_ the circle.", a: "on", d: "easy" },
+            { q: "Vertex of a central angle is \_\_\_ the circle.", a: "at the center of", d: "easy" },
+            { q: "A chord is a \_\_\_ segment.", a: "straight", d: "easy" },
+            { q: "Distance around a circle?", a: "circumference", d: "easy" },
+            { q: "Half a circle is a \_\_\_.", a: "semicircle", d: "easy" },
+            { q: "Central angle is 100. Intercepted arc?", a: "100", d: "moderate" },
+            { q: "Inscribed angle is 50. Intercepted arc?", a: "100", d: "moderate" },
+            { q: "Opposite angles of an inscribed quadrilateral sum to \_\_\_.", a: "180", d: "moderate" },
+            { q: "Two circles with the same center are \_\_\_.", a: "concentric", d: "moderate" },
+            { q: "Area of circle with r=1?", a: "pi", d: "moderate" },
+            { q: "Circumference of circle with r=1?", a: "2*pi", d: "moderate" },
+            { q: "Tangent-Radius angle measure?", a: "90", d: "moderate" },
+            { q: "Are all circles similar?", a: "yes", d: "moderate" },
+            { q: "If an arc is 120, the central angle is \_\_\_.", a: "120", d: "moderate" },
+            { q: "Chord-Chord Power Theorem uses \_\_\_ segments.", a: "intercepted", d: "moderate" },
+            { q: "Find diameter if area is 64*pi.", a: "16", d: "hard" },
+            { q: "A 60 degree arc in a circle with r=12 has length \_\_\_.", a: "4*pi", d: "hard" },
+            { q: "Area of sector: r=2, n=180.", a: "2*pi", d: "hard" },
+            { q: "If two arcs are congruent, their central angles are \_\_\_.", a: "congruent", d: "hard" },
+            { q: "Measure of arc formed by two perpendicular diameters?", a: "90", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-E-505",
+        title: "Unit 7: Circles",
+        note: "Sector and Arc calculations.",
+        questions: [
+            { q: "Area of sector depends on radius and \_\_\_.", a: "angle", d: "easy" },
+            { q: "Arc length is a portion of \_\_\_.", a: "circumference", d: "easy" },
+            { q: "Radius of a circle with diameter 10?", a: "5", d: "easy" },
+            { q: "Sum of degrees in a circle?", a: "360", d: "easy" },
+            { q: "Can a tangent be a chord?", a: "no", d: "easy" },
+            { q: "Sector area formula: (n/360) * \_\_\_.", a: "pi*r^2", d: "moderate" },
+            { q: "Arc length formula: (n/360) * \_\_\_.", a: "2*pi*r", d: "moderate" },
+            { q: "Area of a circle with r=sqrt(7)?", a: "7*pi", d: "moderate" },
+            { q: "An angle formed by a chord and tangent is \_\_\_ arc.", a: "half the", d: "moderate" },
+            { q: "If radius doubles, area is multiplied by \_\_\_.", a: "4", d: "moderate" },
+            { q: "If radius doubles, circumference is multiplied by \_\_\_.", a: "2", d: "moderate" },
+            { q: "Measure of major arc if minor arc is 100?", a: "260", d: "moderate" },
+            { q: "Is pi a rational number?", a: "no", d: "moderate" },
+            { q: "Arc of 270 degrees is a \_\_\_ arc.", a: "major", d: "moderate" },
+            { q: "Area of circle with d=2?", a: "pi", d: "moderate" },
+            { q: "Sector area for n=90 and r=4.", a: "4*pi", d: "hard" },
+            { q: "Radius of circle with area 100*pi.", a: "10", d: "hard" },
+            { q: "Length of 180 degree arc in circle with r=10.", a: "10*pi", d: "hard" },
+            { q: "Circumference of circle with area 4*pi.", a: "4*pi", d: "hard" },
+            { q: "Two tangent segments from the same point are \_\_\_.", a: "equal", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-F-606",
+        title: "Unit 7: Circles",
+        note: "Theorems review.",
+        questions: [
+            { q: "A chord that passes through the center?", a: "diameter", d: "easy" },
+            { q: "A line that intersects in two points?", a: "secant", d: "easy" },
+            { q: "Points on a circle are \_\_\_ from the center.", a: "equidistant", d: "easy" },
+            { q: "Central angle vertex location?", a: "center", d: "easy" },
+            { q: "Symbol for a circle?", a: "circle", d: "easy" },
+            { q: "Exterior angle = 1/2(arc1 - arc2). True/False?", a: "true", d: "moderate" },
+            { q: "Interior angle = 1/2(arc1 + arc2). True/False?", a: "true", d: "moderate" },
+            { q: "Inscribed angle is \_\_\_ its arc.", a: "half", d: "moderate" },
+            { q: "Tangents from external point P to circle O are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "Diameter perpendicular to a chord \_\_\_ the arc.", a: "bisects", d: "moderate" },
+            { q: "Measure of inscribed angle intercepting arc of 110?", a: "55", d: "moderate" },
+            { q: "Radius of circle with circumference 20*pi.", a: "10", d: "moderate" },
+            { q: "Area of circle with radius 3.", a: "9*pi", d: "moderate" },
+            { q: "Angle between tangent and radius?", a: "90", d: "moderate" },
+            { q: "Measure of arc if central angle is 75?", a: "75", d: "moderate" },
+            { q: "Find x: chord segments 3, 4 and 2, x.", a: "6", d: "hard" },
+            { q: "Secant-Tangent: tangent^2 = outside * \_\_\_.", a: "whole", d: "hard" },
+            { q: "Angle formed by two secants outside circle is \_\_\_.", a: "1/2(arc1-arc2)", d: "hard" },
+            { q: "Find area: r=5.", a: "25*pi", d: "hard" },
+            { q: "Measure of arc for a 1/4 circle?", a: "90", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-G-707",
+        title: "Unit 7: Circles",
+        note: "Mixed properties.",
+        questions: [
+            { q: "Is a radius a chord?", a: "no", d: "easy" },
+            { q: "Distance from center to circle?", a: "radius", d: "easy" },
+            { q: "A 360 degree arc is a \_\_\_.", a: "circle", d: "easy" },
+            { q: "Tangent intersects circle \_\_\_ times.", a: "1", d: "easy" },
+            { q: "C = 2 * pi * \_\_\_.", a: "r", d: "easy" },
+            { q: "Circumference with diameter 8?", a: "8*pi", d: "moderate" },
+            { q: "Area with radius 4?", a: "16*pi", d: "moderate" },
+            { q: "Inscribed angle intercepting 200 degree arc?", a: "100", d: "moderate" },
+            { q: "Central angle intercepting 200 degree arc?", a: "200", d: "moderate" },
+            { q: "Sum of arc measures in circle?", a: "360", d: "moderate" },
+            { q: "A circle is the set of all points in a \_\_\_.", a: "plane", d: "moderate" },
+            { q: "Concentric circles have the same \_\_\_.", a: "center", d: "moderate" },
+            { q: "Are all radii of a circle equal?", a: "yes", d: "moderate" },
+            { q: "Minor arc measure < \_\_\_.", a: "180", d: "moderate" },
+            { q: "Does a secant contain a chord?", a: "yes", d: "moderate" },
+            { q: "Sector area r=6, n=10.", a: "pi", d: "hard" },
+            { q: "Radius if area is pi.", a: "1", d: "hard" },
+            { q: "Measure of angle in semicircle?", a: "90", d: "hard" },
+            { q: "Chord segments 5, 6 and 3, x. Find x.", a: "10", d: "hard" },
+            { q: "Tangents are \_\_\_ to radius.", a: "perpendicular", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-H-808",
+        title: "Unit 7: Circles",
+        note: "Practical circle math.",
+        questions: [
+            { q: "Radius is \_\_\_ the diameter.", a: "half", d: "easy" },
+            { q: "Circle area = pi * \_\_\_.", a: "r^2", d: "easy" },
+            { q: "Vertex on circle is an \_\_\_ angle.", a: "inscribed", d: "easy" },
+            { q: "Tangent touches at the point of \_\_\_.", a: "tangency", d: "easy" },
+            { q: "A minor arc is named by \_\_\_ letters.", a: "2", d: "easy" },
+            { q: "A major arc is named by \_\_\_ letters.", a: "3", d: "moderate" },
+            { q: "Circumference with r=0.5?", a: "pi", d: "moderate" },
+            { q: "Area with d=6?", a: "9*pi", d: "moderate" },
+            { q: "If arc is 50, inscribed angle is \_\_\_.", a: "25", d: "moderate" },
+            { q: "Parallel chords intercept \_\_\_ arcs.", a: "congruent", d: "moderate" },
+            { q: "Length of arc r=10, n=18.", a: "pi", d: "moderate" },
+            { q: "Total degrees in 1/3 of a circle?", a: "120", d: "moderate" },
+            { q: "Formula for diameter?", a: "d=2r", d: "moderate" },
+            { q: "Can a circle have a negative radius?", a: "no", d: "moderate" },
+            { q: "Is pi approximately 3.14?", a: "yes", d: "moderate" },
+            { q: "Find sector area: r=2, n=45.", a: "0.5*pi", d: "hard" },
+            { q: "Diameter of circle with circumference 5*pi.", a: "5", d: "hard" },
+            { q: "Angle outside: 1/2(100-40) = \_\_\_.", a: "30", d: "hard" },
+            { q: "Radius if circumference is 12*pi.", a: "6", d: "hard" },
+            { q: "Inscribed quadrilateral: angle A=80, angle C=\_\_\_.", a: "100", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-I-909",
+        title: "Unit 7: Circles",
+        note: "Arc and Segment review.",
+        questions: [
+            { q: "Is a diameter a line?", a: "no", d: "easy" },
+            { q: "Area of circle with r=10.", a: "100*pi", d: "easy" },
+            { q: "Radius of circle with d=18.", a: "9", d: "easy" },
+            { q: "A tangent is \_\_\_ to the circle.", a: "external", d: "easy" },
+            { q: "Intercepted arc of 90 deg central angle?", a: "90", d: "easy" },
+            { q: "Sector area: 1/4 of circle with r=2.", a: "pi", d: "moderate" },
+            { q: "Arc length: 1/2 of circle with r=4.", a: "4*pi", d: "moderate" },
+            { q: "Radius of circle with area 36*pi.", a: "6", d: "moderate" },
+            { q: "Circumference of circle with d=1.", a: "pi", d: "moderate" },
+            { q: "If arc is 300, it is a \_\_\_ arc.", a: "major", d: "moderate" },
+            { q: "Can two circles intersect at 3 points?", a: "no", d: "moderate" },
+            { q: "Measure of arc for a 60 deg inscribed angle?", a: "120", d: "moderate" },
+            { q: "Area of circle with r=1/2?", a: "0.25*pi", d: "moderate" },
+            { q: "Central angle for a 1/5 circle arc?", a: "72", d: "moderate" },
+            { q: "Are chords congruent if arcs are congruent?", a: "yes", d: "moderate" },
+            { q: "Find x: external secant segments (2+4)*2 = (3+x)*3.", a: "1", d: "hard" },
+            { q: "Tangent squared: x^2 = 4 * 9. Find x.", a: "6", d: "hard" },
+            { q: "Arc length: n=120, r=3.", a: "2*pi", d: "hard" },
+            { q: "Sector area: n=120, r=3.", a: "3*pi", d: "hard" },
+            { q: "Total degrees in a semicircle?", a: "180", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-J-010",
+        title: "Unit 7: Circles",
+        note: "Final Circles assessment.",
+        questions: [
+            { q: "Vertex at center = \_\_\_ angle.", a: "central", d: "easy" },
+            { q: "Vertex on circle = \_\_\_ angle.", a: "inscribed", d: "easy" },
+            { q: "Ratio of C to d is \_\_\_.", a: "pi", d: "easy" },
+            { q: "Half diameter = \_\_\_.", a: "radius", d: "easy" },
+            { q: "Area of circle r=5?", a: "25*pi", d: "easy" },
+            { q: "Is every diameter a chord?", a: "yes", d: "moderate" },
+            { q: "Tangents are \_\_\_ to radii at tangency.", a: "perpendicular", d: "moderate" },
+            { q: "Sum of opposite angles in cyclic quad?", a: "180", d: "moderate" },
+            { q: "Arc of 180 degrees is a \_\_\_.", a: "semicircle", d: "moderate" },
+            { q: "Find circumference if r=10.", a: "20*pi", d: "moderate" },
+            { q: "Area of sector with r=1 and n=360.", a: "pi", d: "moderate" },
+            { q: "Measure of arc if inscribed angle is 1.", a: "2", d: "moderate" },
+            { q: "Inscribed angle of 90 means arc is \_\_\_.", a: "180", d: "moderate" },
+            { q: "Do tangents intersect circle twice?", a: "no", d: "moderate" },
+            { q: "Are concentric circles similar?", a: "yes", d: "moderate" },
+            { q: "Secant-Secant: 10*4 = (x+2)*2. Find x.", a: "18", d: "hard" },
+            { q: "Sector area: r=12, n=30.", a: "12*pi", d: "hard" },
+            { q: "Arc length: r=12, n=30.", a: "2*pi", d: "hard" },
+            { q: "Angle between tangent and chord = 1/2 \_\_\_.", a: "arc", d: "hard" },
+            { q: "Measure of full circle?", a: "360", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

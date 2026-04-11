@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U12-A-101",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "In $y = a(b)^x$, what does 'a' represent?", a: "initial value", d: "easy" },
+            { q: "Does $y = 5(1.2)^x$ represent growth or decay?", a: "growth", d: "easy" },
+            { q: "If the growth rate is 5%, what is the growth factor 'b'?", a: "1.05", d: "easy" },
+            { q: "Evaluate $y = 100(2)^x$ for $x = 3$.", a: "800", d: "easy" },
+            { q: "Does $y = 10(0.85)^x$ represent growth or decay?", a: "decay", d: "easy" },
+            { q: "Identify the decay rate as a percentage for $y = 50(0.90)^x$.", a: "10%", d: "moderate" },
+            { q: "A population of 100 triples every year. Write the equation.", a: "y=100(3)^x", d: "moderate" },
+            { q: "Find the y-intercept of $f(x) = 2(4)^x$.", a: "2", d: "moderate" },
+            { q: "If $b > 1$, the function is exponential \_\_\_.", a: "growth", d: "moderate" },
+            { q: "If $0 < b < 1$, the function is exponential \_\_\_.", a: "decay", d: "moderate" },
+            { q: "Evaluate $y = 2(3)^x$ when $x = 0$.", a: "2", d: "moderate" },
+            { q: "A car worth $20,000$ loses 15% value per year. Find 'b'.", a: "0.85", d: "moderate" },
+            { q: "Solve for $x$: $2^x = 16$.", a: "4", d: "moderate" },
+            { q: "The horizontal line an exponential graph approaches is the \_\_\_.", a: "asymptote", d: "moderate" },
+            { q: "Write the growth factor for a 100% increase.", a: "2", d: "moderate" },
+            { q: "Compound interest formula: $A = P(1 + r)^t$. Find $A$ if $P=100, r=0.1, t=2$.", a: "121", d: "hard" },
+            { q: "A substance has a half-life of 10 days. What is 'b'?", a: "0.5", d: "hard" },
+            { q: "Find the growth rate $r$ if the factor $b$ is 1.075.", a: "7.5%", d: "hard" },
+            { q: "Is $y = -2(3)^x$ an exponential growth function?", a: "no", d: "hard" },
+            { q: "Where is the asymptote for $y = 5(2)^x + 3$?", a: "y=3", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-B-202",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "In $y = a(b)^x$, what is 'b' if it's decaying at 20%?", a: "0.8", d: "easy" },
+            { q: "Is $y = 0.5(4)^x$ growth or decay?", a: "growth", d: "easy" },
+            { q: "What is the initial value of $y = 250(1.04)^x$?", a: "250", d: "easy" },
+            { q: "If $b = 1.5$, what is the percentage growth rate?", a: "50%", d: "easy" },
+            { q: "Does an exponential graph ever cross its horizontal asymptote?", a: "no", d: "easy" },
+            { q: "Find $y$ if $a=10, b=2, x=5$.", a: "320", d: "moderate" },
+            { q: "Growth factor for a 2% increase?", a: "1.02", d: "moderate" },
+            { q: "Decay factor for a 2% decrease?", a: "0.98", d: "moderate" },
+            { q: "What is the domain of $y = 3^x$?", a: "all real numbers", d: "moderate" },
+            { q: "Evaluate $y = 4(0.5)^2$.", a: "1", d: "moderate" },
+            { q: "If a town's population $P = 5000(1.02)^t$, what is the annual growth?", a: "2%", d: "moderate" },
+            { q: "Find the x-intercept of $y = 2^x$.", a: "none", d: "moderate" },
+            { q: "What happens to $y$ as $x$ increases in $y = 10(0.2)^x$?", a: "decreases", d: "moderate" },
+            { q: "Write $1/2$ as a decimal for decay problems.", a: "0.5", d: "moderate" },
+            { q: "Is the graph of $y = 2^x$ increasing or decreasing?", a: "increasing", d: "moderate" },
+            { q: "Solve $3^x = 1/9$.", a: "-2", d: "hard" },
+            { q: "If $y = a(b)^x$ passes through $(0, 4)$ and $(1, 12)$, find $b$.", a: "3", d: "hard" },
+            { q: "Calculate balance: $P=500$, rate=5% compounded annually for 2 years.", a: "551.25", d: "hard" },
+            { q: "Find the decay rate $r$ if $b = 0.995$.", a: "0.5%", d: "hard" },
+            { q: "As $x$ approaches negative infinity, $y = 2^x$ approaches \_\_\_.", a: "0", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-C-303",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "Initial value of $y = 7(1.05)^x$.", a: "7", d: "easy" },
+            { q: "Growth or Decay: $y = 100(0.5)^x$?", a: "decay", d: "easy" },
+            { q: "Next value in sequence: 2, 6, 18, \_\_\_.", a: "54", d: "easy" },
+            { q: "Growth factor 'b' for 10% growth.", a: "1.1", d: "easy" },
+            { q: "Does $y = 3^x$ have a constant slope?", a: "no", d: "easy" },
+            { q: "Evaluate $f(x) = 3(2)^x$ for $x = -1$.", a: "1.5", d: "moderate" },
+            { q: "If population doubles every year, $b = \_\_\_$.", a: "2", d: "moderate" },
+            { q: "Decay rate of $y = 20(0.75)^x$.", a: "25%", d: "moderate" },
+            { q: "What is $f(0)$ for any function $f(x) = a(b)^x$?", a: "a", d: "moderate" },
+            { q: "Is $y = 4x$ an exponential function?", a: "no", d: "moderate" },
+            { q: "Equation for: starts at 50, grows by 20% each year.", a: "y=50(1.2)^x", d: "moderate" },
+            { q: "What is the base in $y = 5^x$?", a: "5", d: "moderate" },
+            { q: "Range of $y = 2^x$.", a: "y > 0", d: "moderate" },
+            { q: "If $b=1$, is the function growing?", a: "no", d: "moderate" },
+            { q: "Find $b$ if the value cuts in half.", a: "0.5", d: "moderate" },
+            { q: "Solve $5^{x+1} = 25$.", a: "1", d: "hard" },
+            { q: "A 100mg sample has a half-life of 5 hours. Amount after 10 hours?", a: "25", d: "hard" },
+            { q: "Find the equation through $(0, 5)$ and $(2, 20)$.", a: "y=5(2)^x", d: "hard" },
+            { q: "What is the asymptote of $y = 2(3)^x - 4$?", a: "y=-4", d: "hard" },
+            { q: "Percent change if $b = 0.15$.", a: "-85%", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-D-404",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "Growth or Decay: $y = 0.2(1.1)^x$?", a: "growth", d: "easy" },
+            { q: "Initial value of $y = (0.9)^x$.", a: "1", d: "easy" },
+            { q: "Factor $b$ for 40% decay.", a: "0.6", d: "easy" },
+            { q: "Solve $10^x = 1000$.", a: "3", d: "easy" },
+            { q: "What is the growth rate if $b = 1.01$?", a: "1%", d: "easy" },
+            { q: "Evaluate $y = 16(0.5)^x$ for $x = 2$.", a: "4", d: "moderate" },
+            { q: "If $y = 3(b)^x$ passes through $(1, 15)$, what is $b$?", a: "5", d: "moderate" },
+            { q: "Asymptote for all basic $y = ab^x$ functions.", a: "y=0", d: "moderate" },
+            { q: "Factor $b$ for 150% growth.", a: "2.5", d: "moderate" },
+            { q: "Is $y = 2(-3)^x$ an exponential function?", a: "no", d: "moderate" },
+            { q: "Find $y$ if $a=50, b=1.1, x=2$.", a: "60.5", d: "moderate" },
+            { q: "In $y = a(1-r)^x$, what does 'r' represent?", a: "decay rate", d: "moderate" },
+            { q: "Does $y = 5^x$ grow faster than $y = 2^x$?", a: "yes", d: "moderate" },
+            { q: "Vertex of an exponential function?", a: "none", d: "moderate" },
+            { q: "Can $b$ be a negative number?", a: "no", d: "moderate" },
+            { q: "Solve $2^{x-3} = 32$.", a: "8", d: "hard" },
+            { q: "Investment of $1000$ at 4% for 10 years equation.", a: "y=1000(1.04)^10", d: "hard" },
+            { q: "Find $a$ if $y = a(2)^x$ passes through $(3, 40)$.", a: "5", d: "hard" },
+            { q: "Growth rate for $b = 3$.", a: "200%", d: "hard" },
+            { q: "Range of $y = -3(2)^x$.", a: "y < 0", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-E-505",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "Factor $b$ if growth is 100%.", a: "2", d: "easy" },
+            { q: "Is $y = 12(0.99)^x$ growth or decay?", a: "decay", d: "easy" },
+            { q: "Initial value for $f(x) = 4^x$.", a: "1", d: "easy" },
+            { q: "Evaluate $3(2)^2$.", a: "12", d: "easy" },
+            { q: "If $b=0.7$, what is the decay rate?", a: "30%", d: "easy" },
+            { q: "Find $y$ intercept of $y = 10(0.5)^x$.", a: "10", d: "moderate" },
+            { q: "Write equation: start at 1, double every $x$.", a: "y=2^x", d: "moderate" },
+            { q: "Factor $b$ for 0.5% growth.", a: "1.005", d: "moderate" },
+            { q: "What is $2^{-2}$ as a decimal?", a: "0.25", d: "moderate" },
+            { q: "Does $y = 2^x + 5$ have an asymptote at $y=5$?", a: "yes", d: "moderate" },
+            { q: "Rate of change for $y=10(2)^x$ at $x=1$ to $x=2$.", a: "20", d: "moderate" },
+            { q: "Is $y = x^2$ exponential?", a: "no", d: "moderate" },
+            { q: "Find $y$ if $a=1, b=3, x=4$.", a: "81", d: "moderate" },
+            { q: "The variable in exponential functions is the \_\_\_.", a: "exponent", d: "moderate" },
+            { q: "If value decreases by half, it is \_\_\_ decay.", a: "half-life", d: "moderate" },
+            { q: "Solve $4^x = 8$.", a: "1.5", d: "hard" },
+            { q: "Find $b$ if $y = 10(b)^x$ passes through $(2, 90)$.", a: "3", d: "hard" },
+            { q: "A bank account has $200$ and earns 3% interest. Equation?", a: "y=200(1.03)^x", d: "hard" },
+            { q: "Asymptote of $y = 3(0.5)^x - 1$.", a: "y=-1", d: "hard" },
+            { q: "If $f(x) = 5^x$, find $f(x+1)/f(x)$.", a: "5", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-F-606",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "Growth or Decay: $y = 5(1.001)^x$?", a: "growth", d: "easy" },
+            { q: "Initial value: $y = 0.5(2)^x$.", a: "0.5", d: "easy" },
+            { q: "Factor $b$ for 50% decay.", a: "0.5", d: "easy" },
+            { q: "Solve $3^x = 27$.", a: "3", d: "easy" },
+            { q: "What is $b$ in $y = a(b)^x$ called?", a: "growth factor", d: "easy" },
+            { q: "Evaluate $y = 10(3)^x$ for $x = 2$.", a: "90", d: "moderate" },
+            { q: "Decay rate if $b = 0.65$.", a: "35%", d: "moderate" },
+            { q: "Growth rate if $b = 1.12$.", a: "12%", d: "moderate" },
+            { q: "What is $a$ if $y = a(3)^x$ passes through $(1, 12)$?", a: "4", d: "moderate" },
+            { q: "Is $y = (1/3)^x$ growth or decay?", a: "decay", d: "moderate" },
+            { q: "Domain of $f(x) = a(b)^x$.", a: "all real numbers", d: "moderate" },
+            { q: "Does the graph of $y = 3^x$ cross the x-axis?", a: "no", d: "moderate" },
+            { q: "Write equation: start at 100, lose 10% daily.", a: "y=100(0.9)^x", d: "moderate" },
+            { q: "What is $b$ if growth is 300%?", a: "4", d: "moderate" },
+            { q: "Evaluate $2(5)^0$.", a: "2", d: "moderate" },
+            { q: "Solve $2^{2x} = 16$.", a: "2", d: "hard" },
+            { q: "A 64g sample with half-life of 2 days. Amount after 6 days?", a: "8", d: "hard" },
+            { q: "Find the common ratio: 100, 50, 25...", a: "0.5", d: "hard" },
+            { q: "Asymptote of $y = 4(2)^x + 7$.", a: "y=7", d: "hard" },
+            { q: "If $b = 2.25$, find $r$ as a percentage.", a: "125%", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-G-707",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "Growth factor for 5% growth.", a: "1.05", d: "easy" },
+            { q: "Decay factor for 5% decay.", a: "0.95", d: "easy" },
+            { q: "Initial value of $y = 3(2.5)^x$.", a: "3", d: "easy" },
+            { q: "Evaluate $y = 2^4$.", a: "16", d: "easy" },
+            { q: "Does $y = 8(0.1)^x$ grow or decay?", a: "decay", d: "easy" },
+            { q: "Find $y$ if $x=0$ in $y=5(1.2)^x$.", a: "5", d: "moderate" },
+            { q: "Growth rate if $b = 2.1$.", a: "110%", d: "moderate" },
+            { q: "Solve $10^x = 0.1$.", a: "-1", d: "moderate" },
+            { q: "If $a=2, b=4, x=0.5$, find $y$.", a: "4", d: "moderate" },
+            { q: "Equation for: starts at 20, doubles every $x$.", a: "y=20(2)^x", d: "moderate" },
+            { q: "What is the asymptote of $y = 3^x$?", a: "y=0", d: "moderate" },
+            { q: "Decay rate if $b = 0.88$.", a: "12%", d: "moderate" },
+            { q: "Is the range of $y=3^x$ all positive numbers?", a: "yes", d: "moderate" },
+            { q: "If $b=1.03$, value increases by \_\_\_ percent.", a: "3", d: "moderate" },
+            { q: "What is $b$ if value is cut in 4 each step?", a: "0.25", d: "moderate" },
+            { q: "Solve $9^x = 27$.", a: "1.5", d: "hard" },
+            { q: "Find $b$ if $(1, 10)$ and $(2, 50)$ are on the graph.", a: "5", d: "hard" },
+            { q: "Balance after 3 years: $100$ at 10% interest.", a: "133.1", d: "hard" },
+            { q: "Range of $y = 2(0.5)^x + 10$.", a: "y > 10", d: "hard" },
+            { q: "Growth rate if $b = e$ (approx 2.718).", a: "171.8%", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-H-808",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "Initial value: $y = 150(1.02)^x$.", a: "150", d: "easy" },
+            { q: "Is $y = 3(0.4)^x$ decay?", a: "yes", d: "easy" },
+            { q: "Factor $b$ for 20% growth.", a: "1.2", d: "easy" },
+            { q: "Evaluate $y = 5(2)^3$.", a: "40", d: "easy" },
+            { q: "Can $a$ be zero in an exponential function?", a: "no", d: "easy" },
+            { q: "What is $b$ if decay is 1%?", a: "0.99", d: "moderate" },
+            { q: "Find $y$ intercept: $y = 2(0.5)^x - 3$.", a: "-1", d: "moderate" },
+            { q: "Growth rate if $b = 1.002$.", a: "0.2%", d: "moderate" },
+            { q: "Solve $2^x = 1/4$.", a: "-2", d: "moderate" },
+            { q: "Write equation: start at 5, triple every $x$.", a: "y=5(3)^x", d: "moderate" },
+            { q: "If $b=4$, the value \_\_\_ every step.", a: "quadruples", d: "moderate" },
+            { q: "Range of $y = (0.2)^x$.", a: "y > 0", d: "moderate" },
+            { q: "Asymptote of $y = 5^x + 1$.", a: "y=1", d: "moderate" },
+            { q: "Evaluate $10(0.1)^1$.", a: "1", d: "moderate" },
+            { q: "Is $y = 2^x$ always positive?", a: "yes", d: "moderate" },
+            { q: "Solve $8^x = 4$.", a: "2/3", d: "hard" },
+            { q: "Find $b$ if $(0, 2)$ and $(3, 54)$ are on the graph.", a: "3", d: "hard" },
+            { q: "Half-life of 20 years. Fraction left after 60 years?", a: "0.125", d: "hard" },
+            { q: "If $b = 1.045$, what is $r$?", a: "4.5%", d: "hard" },
+            { q: "Equation for 1000 investing at 2% for $t$ years.", a: "y=1000(1.02)^t", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-I-909",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "Initial value: $y = (1.5)^x$.", a: "1", d: "easy" },
+            { q: "Growth or Decay: $y = 10(0.999)^x$?", a: "decay", d: "easy" },
+            { q: "Factor $b$ for 7% growth.", a: "1.07", d: "easy" },
+            { q: "Evaluate $y = 2(10)^2$.", a: "200", d: "easy" },
+            { q: "In $y=ab^x$, $x$ is the \_\_\_ variable.", a: "independent", d: "easy" },
+            { q: "Decay rate if $b = 0.4$.", a: "60%", d: "moderate" },
+            { q: "Solve $5^x = 125$.", a: "3", d: "moderate" },
+            { q: "Find $y$ intercept of $y = 6(2)^x$.", a: "6", d: "moderate" },
+            { q: "Equation for: start at 10, grow 50% each year.", a: "y=10(1.5)^x", d: "moderate" },
+            { q: "If $b=1.25$, growth rate is \_\_\_.", a: "25%", d: "moderate" },
+            { q: "Is $y = 3(1)^x$ exponential growth?", a: "no", d: "moderate" },
+            { q: "What is $b$ if value drops by 3/4?", a: "0.25", d: "moderate" },
+            { q: "Asymptote of $y = 2^x - 10$.", a: "y=-10", d: "moderate" },
+            { q: "Evaluate $4(0.5)^3$.", a: "0.5", d: "moderate" },
+            { q: "Range of $y = -2^x$.", a: "y < 0", d: "moderate" },
+            { q: "Solve $27^x = 9$.", a: "2/3", d: "hard" },
+            { q: "Find $a$ if $y = a(0.5)^x$ passes through $(2, 5)$.", a: "20", d: "hard" },
+            { q: "Interest: $500$ at 6% annually for 5 years equation.", a: "y=500(1.06)^5", d: "hard" },
+            { q: "Find $b$ for a 0.1% decrease.", a: "0.999", d: "hard" },
+            { q: "Is $f(x) = 2 \cdot 3^x$ always increasing?", a: "yes", d: "hard" }
+        ]
+    },
+    {
+        id: "U12-J-010",
+        title: "Unit 12: Growth & Decay",
+        questions: [
+            { q: "Factor $b$ for 12% growth.", a: "1.12", d: "easy" },
+            { q: "Is $y = 2(0.8)^x$ growth?", a: "no", d: "easy" },
+            { q: "Initial value of $y = 50(2)^x$.", a: "50", d: "easy" },
+            { q: "Evaluate $3^0$.", a: "1", d: "easy" },
+            { q: "What is $b$ if it stays the same?", a: "1", d: "easy" },
+            { q: "Decay rate if $b = 0.95$.", a: "5%", d: "moderate" },
+            { q: "Solve $4^x = 64$.", a: "3", d: "moderate" },
+            { q: "Growth rate if $b = 1.05$.", a: "5%", d: "moderate" },
+            { q: "Equation for: start at 100, half every year.", a: "y=100(0.5)^x", d: "moderate" },
+            { q: "Find $y$ if $a=2, b=3, x=2$.", a: "18", d: "moderate" },
+            { q: "Asymptote of $y = (0.5)^x + 2$.", a: "y=2", d: "moderate" },
+            { q: "Is $y = 3^x$ a linear function?", a: "no", d: "moderate" },
+            { q: "What is the y-intercept of $y = a(b)^x$?", a: "a", d: "moderate" },
+            { q: "Evaluate $100(0.1)^2$.", a: "1", d: "moderate" },
+            { q: "Does $y = 2^x$ have a maximum?", a: "no", d: "moderate" },
+            { q: "Solve $2^{x} = 0.25$.", a: "-2", d: "hard" },
+            { q: "Find $b$ if $(0, 3)$ and $(1, 15)$ are on the graph.", a: "5", d: "hard" },
+            { q: "If $r = 0.04$, what is the growth factor?", a: "1.04", d: "hard" },
+            { q: "Find $a$ if $y = a(3)^x$ passes through $(2, 18)$.", a: "2", d: "hard" },
+            { q: "What is the domain of $y = 5(2)^x$?", a: "all real numbers", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

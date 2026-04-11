@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U7-A-101",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (0, 0) a solution to y > x - 5?", a: "yes", d: "easy" },
+            { q: "Does a dashed line represent < or <=?", a: "<", d: "easy" },
+            { q: "True or False: A solid line includes the points on the line as solutions.", a: "true", d: "easy" },
+            { q: "If y >= 2, do you shade above or below the line?", a: "above", d: "easy" },
+            { q: "Is (2, 2) a solution to y < x?", a: "no", d: "easy" },
+            { q: "Which side of x > 3 is shaded: left or right?", a: "right", d: "moderate" },
+            { q: "Is (1, 1) a solution to the system: y > 0 and x > 0?", a: "yes", d: "moderate" },
+            { q: "Graphing y <= -x + 4: Is the y-intercept included in the solution set?", a: "yes", d: "moderate" },
+            { q: "Solve for y: 2x + y < 10.", a: "y < -2x + 10", d: "moderate" },
+            { q: "If a point is in the overlapping shaded region, is it a solution to the system?", a: "yes", d: "moderate" },
+            { q: "Find a point that satisfies y > 5 and x < 2.", a: "(1,6)", d: "moderate" },
+            { q: "True or False: The point (0, 0) is a solution to y < 2x + 1.", a: "true", d: "moderate" },
+            { q: "If you multiply an inequality by -1, what happens to the sign?", a: "flips", d: "moderate" },
+            { q: "Is (3, 4) a solution to x + y <= 7?", a: "yes", d: "moderate" },
+            { q: "Does y > 2x + 1 and y > 2x + 5 have an overlapping region?", a: "yes", d: "moderate" },
+            { q: "Is (2, 5) a solution to the system: y >= 2x + 1 and y <= 10?", a: "yes", d: "hard" },
+            { q: "Find the vertex of the region bounded by x >= 0, y >= 0, and x + y <= 5.", a: "(0,0)", d: "hard" },
+            { q: "If y > x + 1 and y < x - 1, is there a solution region?", a: "no", d: "hard" },
+            { q: "Write the inequality for: y is at most 10.", a: "y <= 10", d: "hard" },
+            { q: "A system has x >= 0 and y >= 0. In which quadrant is the solution?", a: "1", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-B-202",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (1, 5) a solution to y < x?", a: "no", d: "easy" },
+            { q: "Solid line: does it use > or >=?", a: ">=", d: "easy" },
+            { q: "Shade below for which sign: > or < ?", a: "<", d: "easy" },
+            { q: "Is (0, 0) a solution to x + y < 1?", a: "yes", d: "easy" },
+            { q: "A vertical dashed line at x = 2: is (2, 5) a solution to x > 2?", a: "no", d: "easy" },
+            { q: "Solve for y: -y > x + 2.", a: "y < -x - 2", d: "moderate" },
+            { q: "Is (2, -3) a solution to y >= -4?", a: "yes", d: "moderate" },
+            { q: "Which quadrant is shaded for x < 0 and y < 0?", a: "3", d: "moderate" },
+            { q: "Is (3, 3) a solution to y > x?", a: "no", d: "moderate" },
+            { q: "True or False: (0, 0) satisfies 5x - 2y <= 0.", a: "true", d: "moderate" },
+            { q: "If y > 3x and y < 3x + 2, is the region between the lines?", a: "yes", d: "moderate" },
+            { q: "What is the x-intercept of the boundary line 2x + 4y = 8?", a: "4", d: "moderate" },
+            { q: "Is (4, 1) a solution to y <= -x + 5?", a: "yes", d: "moderate" },
+            { q: "If you divide by -2, does y > 4 become y < -2?", a: "yes", d: "moderate" },
+            { q: "Is (1, 2) in the solution set of y > 2x - 5?", a: "yes", d: "moderate" },
+            { q: "Is (0, 6) a solution to: y > 2x and y < x + 10?", a: "yes", d: "hard" },
+            { q: "A region is bounded by y <= 4, y >= 0, and x = 2. Is (1, 2) inside?", a: "yes", d: "hard" },
+            { q: "Write an inequality: x is at least 5.", a: "x >= 5", d: "hard" },
+            { q: "Is there a solution to y > 5 and y < 2?", a: "no", d: "hard" },
+            { q: "Solve for y: 3x - 2y <= 6.", a: "y >= 1.5x - 3", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-C-303",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (0, 0) a solution to y >= 0?", a: "yes", d: "easy" },
+            { q: "Dashed line: is (x, y) on the line a solution?", a: "no", d: "easy" },
+            { q: "Shade above for y > x + 1? (yes/no)", a: "yes", d: "easy" },
+            { q: "Is (5, 2) a solution to x + y > 10?", a: "no", d: "easy" },
+            { q: "Symbol for 'at most':", a: "<=", d: "easy" },
+            { q: "Is (1, 1) a solution to y >= x?", a: "yes", d: "moderate" },
+            { q: "Which side of y < 5 is shaded?", a: "below", d: "moderate" },
+            { q: "Is (-2, -2) a solution to x < 0?", a: "yes", d: "moderate" },
+            { q: "Convert to slope-intercept form: x + y <= 5.", a: "y <= -x + 5", d: "moderate" },
+            { q: "Is (0, 3) a solution to y > 2x + 4?", a: "no", d: "moderate" },
+            { q: "If lines are parallel, can a system of inequalities have a solution?", a: "yes", d: "moderate" },
+            { q: "Is (2, 2) a solution to y >= 2?", a: "yes", d: "moderate" },
+            { q: "Which quadrant is x > 0 and y < 0?", a: "4", d: "moderate" },
+            { q: "Is (10, 0) a solution to x + y < 5?", a: "no", d: "moderate" },
+            { q: "Does y < x and y > x have a solution?", a: "no", d: "moderate" },
+            { q: "Is (3, 5) a solution to: y > x + 1 and y < 10?", a: "yes", d: "hard" },
+            { q: "Find the y-intercept of the boundary y - 3x <= 6.", a: "6", d: "hard" },
+            { q: "Is (0, 0) a solution to 2x - 3y > 1?", a: "no", d: "hard" },
+            { q: "Solve for y: -3y < 9x + 6.", a: "y > -3x - 2", d: "hard" },
+            { q: "A triangle is formed by x=0, y=0, and y=-x+3. Is (1, 1) inside?", a: "yes", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-D-404",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (2, 3) a solution to y > x?", a: "yes", d: "easy" },
+            { q: "Shade right for x > 4? (yes/no)", a: "yes", d: "easy" },
+            { q: "Is the line solid for y < 5?", a: "no", d: "easy" },
+            { q: "Symbol for 'greater than or equal to':", a: ">=", d: "easy" },
+            { q: "Is (0, 0) a solution to y < x - 2?", a: "no", d: "easy" },
+            { q: "Is (4, 4) a solution to y <= x?", a: "yes", d: "moderate" },
+            { q: "Shade below for y <= -2x + 3? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (-1, 5) a solution to y > 4?", a: "yes", d: "moderate" },
+            { q: "Solve for y: x - y > 2.", a: "y < x - 2", d: "moderate" },
+            { q: "Is (2, 1) a solution to 2x + y < 10?", a: "yes", d: "moderate" },
+            { q: "If y > 2 and x < 3, is (2, 5) a solution?", a: "yes", d: "moderate" },
+            { q: "Is (0, 0) a solution to y >= x?", a: "yes", d: "moderate" },
+            { q: "Which quadrant is x < 0 and y > 0?", a: "2", d: "moderate" },
+            { q: "Is (5, 5) a solution to y < 5?", a: "no", d: "moderate" },
+            { q: "Can a system of inequalities have exactly one solution point?", a: "yes", d: "moderate" },
+            { q: "Is (1, 1) a solution to y > x - 1 and y < x + 1?", a: "yes", d: "hard" },
+            { q: "Identify the boundary line for 4x + 2y >= 12.", a: "y = -2x + 6", d: "hard" },
+            { q: "Is (0, 4) a solution to y < -x + 4?", a: "no", d: "hard" },
+            { q: "Solve for y: 5x + 5y <= 10.", a: "y <= -x + 2", d: "hard" },
+            { q: "A region has x >= 0, y >= 0, and y <= 2. Is it infinite or finite?", a: "infinite", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-E-505",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (10, 10) a solution to y <= x?", a: "yes", d: "easy" },
+            { q: "Does > mean shade above?", a: "yes", d: "easy" },
+            { q: "Is the line dashed for y >= 2x?", a: "no", d: "easy" },
+            { q: "Symbol for 'less than':", a: "<", d: "easy" },
+            { q: "Is (0, 0) a solution to y > -1?", a: "yes", d: "easy" },
+            { q: "Is (2, 6) a solution to y < 3x?", a: "no", d: "moderate" },
+            { q: "Shade left for x <= -1? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (5, 0) a solution to x + y >= 5?", a: "yes", d: "moderate" },
+            { q: "Solve for y: 4x + y > 8.", a: "y > -4x + 8", d: "moderate" },
+            { q: "Is (1, 1) a solution to y < 2x and y > 0?", a: "yes", d: "moderate" },
+            { q: "Which quadrant is shaded for x > 2 and y > 2?", a: "1", d: "moderate" },
+            { q: "Is (0, 0) a solution to x - y < 5?", a: "yes", d: "moderate" },
+            { q: "If y < 2x and y > 2x + 5, is there a solution?", a: "no", d: "moderate" },
+            { q: "Is (3, 3) a solution to x + y <= 6?", a: "yes", d: "moderate" },
+            { q: "True or False: y > 0 is the area above the x-axis.", a: "true", d: "moderate" },
+            { q: "Is (2, 4) a solution to: y >= x + 2 and y <= 10 - x?", a: "yes", d: "hard" },
+            { q: "Boundary line of 3x - y < 4 in slope-intercept form.", a: "y = 3x - 4", d: "hard" },
+            { q: "Is (5, 5) a solution to y > x?", a: "no", d: "hard" },
+            { q: "Solve for y: -2x - y >= 4.", a: "y <= -2x - 4", d: "hard" },
+            { q: "Is (1, 2) in the region x > 0, y > 0, x+y < 4?", a: "yes", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-F-606",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (0, 0) a solution to y < 5?", a: "yes", d: "easy" },
+            { q: "Solid line for x <= 10? (yes/no)", a: "yes", d: "easy" },
+            { q: "Shade above for y > 2? (yes/no)", a: "yes", d: "easy" },
+            { q: "Is (1, 1) a solution to x + y < 2?", a: "no", d: "easy" },
+            { q: "Symbol for 'more than':", a: ">", d: "easy" },
+            { q: "Is (2, 2) a solution to y < x + 1?", a: "yes", d: "moderate" },
+            { q: "Shade right for x >= 0? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (3, -1) a solution to y < 0?", a: "yes", d: "moderate" },
+            { q: "Solve for y: 2x - y >= 4.", a: "y <= 2x - 4", d: "moderate" },
+            { q: "Is (5, 5) a solution to y > 5 and x > 5?", a: "no", d: "moderate" },
+            { q: "Which quadrant is x < -1 and y > 1?", a: "2", d: "moderate" },
+            { q: "Is (0, 0) a solution to 10x + y > -5?", a: "yes", d: "moderate" },
+            { q: "Does y < 4 and y > 6 have an overlap?", a: "no", d: "moderate" },
+            { q: "Is (1, 4) a solution to y >= 4x?", a: "yes", d: "moderate" },
+            { q: "Shade below for y < -x? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (2, 3) a solution to: y < x + 2 and y > x - 2?", a: "yes", d: "hard" },
+            { q: "X-intercept of the line x + 2y = 10.", a: "10", d: "hard" },
+            { q: "Is (0, 0) a solution to y > x^2? (linear check)", a: "no", d: "hard" },
+            { q: "Solve for y: -x + 3y < 9.", a: "y < 1/3x + 3", d: "hard" },
+            { q: "A region is x >= 0, y >= 0, x+y <= 1. Is (0.5, 0.5) inside?", a: "yes", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-G-707",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (1, 1) a solution to y > 0?", a: "yes", d: "easy" },
+            { q: "Dashed line for y < x? (yes/no)", a: "yes", d: "easy" },
+            { q: "Shade below for y <= 5? (yes/no)", a: "yes", d: "easy" },
+            { q: "Is (0, 0) a solution to x + y > -1?", a: "yes", d: "easy" },
+            { q: "Symbol for 'minimum of':", a: ">=", d: "easy" },
+            { q: "Is (4, 2) a solution to y > x?", a: "no", d: "moderate" },
+            { q: "Shade left for x < 5? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (0, -5) a solution to y <= -5?", a: "yes", d: "moderate" },
+            { q: "Solve for y: 3x + y < 6.", a: "y < -3x + 6", d: "moderate" },
+            { q: "Is (2, 2) a solution to y >= x and x >= 2?", a: "yes", d: "moderate" },
+            { q: "Which quadrant is x > 0 and y > 0?", a: "1", d: "moderate" },
+            { q: "Is (0, 0) a solution to y > 2x + 1?", a: "no", d: "moderate" },
+            { q: "Does y > x and y < x - 5 have solutions?", a: "no", d: "moderate" },
+            { q: "Is (5, 1) a solution to x - y > 2?", a: "yes", d: "moderate" },
+            { q: "Solid line for x = 4? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (1, 5) a solution to: y > 2x and y < 10?", a: "yes", d: "hard" },
+            { q: "Slope of the boundary y + 2x <= 5.", a: "-2", d: "hard" },
+            { q: "Is (0, 0) a solution to x + y <= 0?", a: "yes", d: "hard" },
+            { q: "Solve for y: 2y - 4x > 8.", a: "y > 2x + 4", d: "hard" },
+            { q: "Finite region bounded by x=0, y=0, x=2, y=2. Area?", a: "4", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-H-808",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (5, 5) a solution to y >= 5?", a: "yes", d: "easy" },
+            { q: "Shade above for y > x? (yes/no)", a: "yes", d: "easy" },
+            { q: "Is the line dashed for y <= x?", a: "no", d: "easy" },
+            { q: "Is (0, 0) a solution to y < 10?", a: "yes", d: "easy" },
+            { q: "Symbol for 'less than or equal to':", a: "<=", d: "easy" },
+            { q: "Is (1, 2) a solution to y < x?", a: "no", d: "moderate" },
+            { q: "Shade right for x > -2? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (0, 4) a solution to y > 3?", a: "yes", d: "moderate" },
+            { q: "Solve for y: x + 2y < 4.", a: "y < -0.5x + 2", d: "moderate" },
+            { q: "Is (3, 3) a solution to y < 4 and x > 2?", a: "yes", d: "moderate" },
+            { q: "Which quadrant is x < 0 and y < 0?", a: "3", d: "moderate" },
+            { q: "Is (0, 0) a solution to y >= x - 1?", a: "yes", d: "moderate" },
+            { q: "If y > x + 5 and y < x + 2, any solutions?", a: "no", d: "moderate" },
+            { q: "Is (2, 1) a solution to x + y <= 3?", a: "yes", d: "moderate" },
+            { q: "Dashed line for y > 0? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (2, 2) a solution to: y > x - 1 and y < 5?", a: "yes", d: "hard" },
+            { q: "Find the boundary line of 2x - y > 6.", a: "y = 2x - 6", d: "hard" },
+            { q: "Is (1, 1) on the boundary of y <= x?", a: "yes", d: "hard" },
+            { q: "Solve for y: -x - y < 0.", a: "y > -x", d: "hard" },
+            { q: "Is (1, 1) in the region x > 0, y > 0, x+2y < 5?", a: "yes", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-I-909",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (0, 0) a solution to y > x?", a: "no", d: "easy" },
+            { q: "Solid line for y >= 0? (yes/no)", a: "yes", d: "easy" },
+            { q: "Shade below for y < -5? (yes/no)", a: "yes", d: "easy" },
+            { q: "Is (1, 1) a solution to x < 2?", a: "yes", d: "easy" },
+            { q: "Symbol for 'at least':", a: ">=", d: "easy" },
+            { q: "Is (5, 2) a solution to y > x - 4?", a: "yes", d: "moderate" },
+            { q: "Shade left for x <= 0? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (-3, 2) a solution to x < -2?", a: "yes", d: "moderate" },
+            { q: "Solve for y: 5x + y <= 10.", a: "y <= -5x + 10", d: "moderate" },
+            { q: "Is (1, 1) a solution to y > 0 and x < 2?", a: "yes", d: "moderate" },
+            { q: "Which quadrant is x < -5 and y < -5?", a: "3", d: "moderate" },
+            { q: "Is (0, 0) a solution to y < 2x + 3?", a: "yes", d: "moderate" },
+            { q: "Overlap for y > 2 and y < 0?", a: "no", d: "moderate" },
+            { q: "Is (4, 4) a solution to y >= x?", a: "yes", d: "moderate" },
+            { q: "Is the x-axis the boundary for y > 0?", a: "yes", d: "moderate" },
+            { q: "Is (3, 6) a solution to: y > 2x - 1 and y < 10?", a: "yes", d: "hard" },
+            { q: "Y-intercept of x - y >= 5.", a: "-5", d: "hard" },
+            { q: "Is (0, 0) a solution to 4x + 2y < 0?", a: "no", d: "hard" },
+            { q: "Solve for y: 3y - x > 6.", a: "y > 1/3x + 2", d: "hard" },
+            { q: "Is (2, 2) in the region x > 1, y > 1, x+y < 10?", a: "yes", d: "hard" }
+        ]
+    },
+    {
+        id: "U7-J-010",
+        title: "Unit 7: Systems of Inequalities",
+        questions: [
+            { q: "Is (1, 1) a solution to x + y <= 2?", a: "yes", d: "easy" },
+            { q: "Dashed line for y > 5? (yes/no)", a: "yes", d: "easy" },
+            { q: "Shade above for y >= x? (yes/no)", a: "yes", d: "easy" },
+            { q: "Is (0, 0) a solution to x < 1?", a: "yes", d: "easy" },
+            { q: "Symbol for 'no more than':", a: "<=", d: "easy" },
+            { q: "Is (2, 10) a solution to y < 5x?", a: "no", d: "moderate" },
+            { q: "Shade right for x > 1? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Is (0, 0) a solution to y >= -2?", a: "yes", d: "moderate" },
+            { q: "Solve for y: 3x - y < 0.", a: "y > 3x", d: "moderate" },
+            { q: "Is (4, 4) a solution to y <= x and y > 0?", a: "yes", d: "moderate" },
+            { q: "Which quadrant is x > 10 and y < -10?", a: "4", d: "moderate" },
+            { q: "Is (0, 0) a solution to y > x - 5?", a: "yes", d: "moderate" },
+            { q: "Overlap for x > 5 and x < 2?", a: "no", d: "moderate" },
+            { q: "Is (2, 5) a solution to y >= 2x?", a: "yes", d: "moderate" },
+            { q: "Is the y-axis the boundary for x > 0?", a: "yes", d: "moderate" },
+            { q: "Is (1, 2) a solution to: y > x and y < 5?", a: "yes", d: "hard" },
+            { q: "Slope of the line 3x + 3y <= 9.", a: "-1", d: "hard" },
+            { q: "Is (2, 2) on the boundary of y = x?", a: "yes", d: "hard" },
+            { q: "Solve for y: -2y > 4x + 8.", a: "y < -2x - 4", d: "hard" },
+            { q: "Region x > 0, y > 0. Is (-1, 5) inside?", a: "no", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

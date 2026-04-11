@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algebra 2 — California Standards</title>
+  <link rel="stylesheet" href="../libstyle.css">
+  <style>
+    /* Algebra 2 — purple accent */
+    :root {
+      --page-accent:        #9b59b6;
+      --page-accent-dim:    rgba(155,89,182,0.18);
+      --page-accent-border: rgba(155,89,182,0.45);
+      --page-accent-text:   #c8a4e8;
+      --page-accent-active: rgba(155,89,182,0.25);
+      --page-accent-light:  rgba(155,89,182,0.55);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Algebra 2</h1>
+      <p>California Common Core State Standards — Complete Topic Reference</p>
+      <a href="../library.html" class="back-link">← Back to Library</a>
+    </div>
+
+    <div class="course-layout">
+      <!-- SIDEBAR -->
+      <nav class="sidebar">
+        <div class="sidebar-title">Topics</div>
+
+        <div class="sidebar-search-wrap">
+          <input type="search" id="sidebar-search" class="sidebar-search" placeholder="Filter topics… (press /)" autocomplete="off">
+        </div>
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Real Number System (N-RN) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('nrn1')">N-RN.1 · Rational Exponents</button>
+            <button class="nav-link" onclick="showTopic('nrn2')">N-RN.2 · Radicals &amp; Rational Exponents</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Complex Numbers (N-CN) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('ncn1')">N-CN.1 · The Imaginary Unit i</button>
+            <button class="nav-link" onclick="showTopic('ncn2')">N-CN.2 · Operations with Complex Numbers</button>
+            <button class="nav-link" onclick="showTopic('ncn7')">N-CN.7 · Quadratics with Complex Solutions</button>
+            <button class="nav-link" onclick="showTopic('ncn8')">N-CN.8 · Polynomial Identities &amp; Complex Numbers</button>
+            <button class="nav-link" onclick="showTopic('ncn9')">N-CN.9 · Fundamental Theorem of Algebra</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Expressions (A-SSE) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('a2sse1')">A-SSE.1 · Interpreting Expressions</button>
+            <button class="nav-link" onclick="showTopic('a2sse2')">A-SSE.2 · Structure of Expressions</button>
+            <button class="nav-link" onclick="showTopic('a2sse4')">A-SSE.4 · Geometric Series Formula</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Polynomials &amp; Rational Expressions (A-APR) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('a2apr1')">A-APR.1 · Closure of Polynomials</button>
+            <button class="nav-link" onclick="showTopic('a2apr2')">A-APR.2 · Remainder Theorem</button>
+            <button class="nav-link" onclick="showTopic('a2apr3')">A-APR.3 · Zeros of Polynomials</button>
+            <button class="nav-link" onclick="showTopic('a2apr4')">A-APR.4 · Polynomial Identities</button>
+            <button class="nav-link" onclick="showTopic('a2apr5')">A-APR.5 · Binomial Theorem</button>
+            <button class="nav-link" onclick="showTopic('a2apr6')">A-APR.6 · Rewriting Rational Expressions</button>
+            <button class="nav-link" onclick="showTopic('a2apr7')">A-APR.7 · Rational Expression System</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Creating &amp; Solving Equations (A-CED / A-REI) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('a2ced1')">A-CED.1 · One-Variable Equations</button>
+            <button class="nav-link" onclick="showTopic('a2ced4')">A-CED.4 · Rearranging Formulas</button>
+            <button class="nav-link" onclick="showTopic('a2rei2')">A-REI.2 · Rational &amp; Radical Equations</button>
+            <button class="nav-link" onclick="showTopic('a2rei4')">A-REI.4 · Quadratic Equations (Advanced)</button>
+            <button class="nav-link" onclick="showTopic('a2rei6')">A-REI.6 · Systems of Equations</button>
+            <button class="nav-link" onclick="showTopic('a2rei7')">A-REI.7 · Nonlinear Systems</button>
+            <button class="nav-link" onclick="showTopic('a2rei11')">A-REI.11 · Intersections as Solutions</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Interpreting Functions (F-IF) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('a2fif4')">F-IF.4 · Key Features of Functions</button>
+            <button class="nav-link" onclick="showTopic('a2fif6')">F-IF.6 · Rate of Change</button>
+            <button class="nav-link" onclick="showTopic('a2fif7')">F-IF.7 · Graphing Advanced Functions</button>
+            <button class="nav-link" onclick="showTopic('a2fif8')">F-IF.8 · Equivalent Forms</button>
+            <button class="nav-link" onclick="showTopic('a2fif9')">F-IF.9 · Comparing Functions</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Building Functions (F-BF) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('a2fbf1')">F-BF.1 · Writing Functions</button>
+            <button class="nav-link" onclick="showTopic('a2fbf2')">F-BF.2 · Sequences</button>
+            <button class="nav-link" onclick="showTopic('a2fbf3')">F-BF.3 · Transformations</button>
+            <button class="nav-link" onclick="showTopic('a2fbf4')">F-BF.4 · Inverse Functions</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Exponential &amp; Log Models (F-LE) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('a2fle4')">F-LE.4 · Logarithms as Inverses</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Trigonometric Functions (F-TF) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('ftf1')">F-TF.1 · Radian Measure</button>
+            <button class="nav-link" onclick="showTopic('ftf2')">F-TF.2 · The Unit Circle</button>
+            <button class="nav-link" onclick="showTopic('ftf5')">F-TF.5 · Modeling with Trig Functions</button>
+            <button class="nav-link" onclick="showTopic('ftf8')">F-TF.8 · Pythagorean Identity</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Statistics: Data &amp; Distributions (S-ID / S-IC) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('sid4')">S-ID.4 · Normal Distribution</button>
+            <button class="nav-link" onclick="showTopic('sic1')">S-IC.1 · Statistics as a Process</button>
+            <button class="nav-link" onclick="showTopic('sic2')">S-IC.2 · Evaluating Models</button>
+            <button class="nav-link" onclick="showTopic('sic3')">S-IC.3 · Types of Studies</button>
+            <button class="nav-link" onclick="showTopic('sic4')">S-IC.4 · Sample Survey Data</button>
+            <button class="nav-link" onclick="showTopic('sic5')">S-IC.5 · Randomized Experiment Data</button>
+            <button class="nav-link" onclick="showTopic('sic6')">S-IC.6 · Evaluating Statistical Reports</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Conditional Probability (S-CP) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('scp1')">S-CP.1 · Events as Subsets</button>
+            <button class="nav-link" onclick="showTopic('scp2')">S-CP.2 · Independent Events</button>
+            <button class="nav-link" onclick="showTopic('scp3')">S-CP.3 · Conditional Probability</button>
+            <button class="nav-link" onclick="showTopic('scp4')">S-CP.4 · Two-Way Tables &amp; Probability</button>
+            <button class="nav-link" onclick="showTopic('scp5')">S-CP.5 · Everyday Conditional Probability</button>
+            <button class="nav-link" onclick="showTopic('scp6')">S-CP.6 · Finding Conditional Probability</button>
+            <button class="nav-link" onclick="showTopic('scp7')">S-CP.7 · Addition Rule</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Using Probability to Decide (S-MD) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('smd6')">S-MD.6 · Fair Decisions with Probability</button>
+            <button class="nav-link" onclick="showTopic('smd7')">S-MD.7 · Analyzing Decisions</button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content content">
+
+        <!-- WELCOME -->
+        <div class="topic-section active" id="welcome">
+          <h2 class="topic-title">Algebra 2</h2>
+          <p>Select a topic from the sidebar to begin. Topics are organized by California Common Core domain.</p>
+          <div class="welcome-grid">
+            <div class="welcome-card"><h4>Number System</h4><p>7 standards — rational exponents, complex numbers, fundamental theorem of algebra</p></div>
+            <div class="welcome-card"><h4>Expressions &amp; Polynomials</h4><p>10 standards — structure, remainder theorem, zeros, polynomial identities, binomial theorem</p></div>
+            <div class="welcome-card"><h4>Creating &amp; Solving Equations</h4><p>7 standards — rational equations, radical equations, nonlinear systems</p></div>
+            <div class="welcome-card"><h4>Functions</h4><p>9 standards — polynomial, rational, exponential, logarithmic, and trig functions</p></div>
+            <div class="welcome-card"><h4>Trigonometry</h4><p>4 standards — radians, unit circle, modeling, Pythagorean identity</p></div>
+            <div class="welcome-card"><h4>Statistics &amp; Probability</h4><p>16 standards — normal distribution, study design, inference, conditional probability</p></div>
+          </div>
+        </div>
+
+        <!-- N-RN.1 -->
+        <div class="topic-section" id="nrn1">
+          <span class="standard-badge">N-RN.1</span>
+          <h2 class="topic-title">Rational Exponents</h2>
+          <p class="standard-text">Explain how the definition of the meaning of rational exponents follows from extending the properties of integer exponents to those values, allowing for a notation for radicals in terms of rational exponents.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>a<sup>1/n</sup> = ⁿ√a (the nth root of a)</li>
+            <li>a<sup>m/n</sup> = (ⁿ√a)<sup>m</sup> = ⁿ√(a<sup>m</sup>)</li>
+            <li>Properties of integer exponents extend: a<sup>m</sup> · a<sup>n</sup> = a<sup>m+n</sup>, (a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></li>
+            <li>These properties motivate: (a<sup>1/n</sup>)<sup>n</sup> = a<sup>1</sup> = a → a<sup>1/n</sup> must be the nth root</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Simplify 8<sup>2/3</sup>: 8<sup>2/3</sup> = (8<sup>1/3</sup>)² = (∛8)² = 2² = 4.</p>
+          <p>Or: 8<sup>2/3</sup> = (8²)<sup>1/3</sup> = 64<sup>1/3</sup> = ∛64 = 4 ✓</p>
+        </div>
+
+        <!-- N-RN.2 -->
+        <div class="topic-section" id="nrn2">
+          <span class="standard-badge">N-RN.2</span>
+          <h2 class="topic-title">Rewriting Radicals and Rational Exponents</h2>
+          <p class="standard-text">Rewrite expressions involving radicals and rational exponents using the properties of exponents.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Convert between radical and rational exponent form freely</li>
+            <li>√a = a<sup>1/2</sup>; ∛a = a<sup>1/3</sup>; ⁴√a = a<sup>1/4</sup></li>
+            <li>Simplify using exponent rules: combine like bases, distribute over products</li>
+            <li>Rationalize denominators when needed</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Simplify <span class="fraction"><span class="top">x<sup>3/4</sup></span><span class="bottom">x<sup>1/4</sup></span></span> = x<sup>3/4 − 1/4</sup> = x<sup>2/4</sup> = x<sup>1/2</sup> = √x.</p>
+          <p>Simplify √x · ∛x = x<sup>1/2</sup> · x<sup>1/3</sup> = x<sup>3/6 + 2/6</sup> = x<sup>5/6</sup> = ⁶√x⁵.</p>
+        </div>
+
+        <!-- N-CN.1 -->
+        <div class="topic-section" id="ncn1">
+          <span class="standard-badge">N-CN.1</span>
+          <h2 class="topic-title">The Imaginary Unit i</h2>
+          <p class="standard-text">Know there is a complex number i such that i² = −1, and every complex number has the form a + bi with a and b real.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>i = √(−1), defined so that i² = −1</li>
+            <li>Complex number: a + bi where a is the real part, b is the imaginary part</li>
+            <li>Powers of i cycle: i¹ = i, i² = −1, i³ = −i, i⁴ = 1, i⁵ = i, …</li>
+            <li>To find i<sup>n</sup>: divide n by 4, use the remainder (0→1, 1→i, 2→−1, 3→−i)</li>
+            <li>Real numbers: b = 0. Pure imaginary: a = 0.</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Simplify i²³: 23 ÷ 4 = 5 remainder 3, so i²³ = i³ = −i.</p>
+          <p>Write √(−9) in complex form: √(−9) = √9 · √(−1) = 3i.</p>
+        </div>
+
+        <!-- N-CN.2 -->
+        <div class="topic-section" id="ncn2">
+          <span class="standard-badge">N-CN.2</span>
+          <h2 class="topic-title">Operations with Complex Numbers</h2>
+          <p class="standard-text">Use the relation i² = −1 and the commutative, associative, and distributive properties to add, subtract, and multiply complex numbers.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Add/Subtract:</strong> combine real parts and imaginary parts separately</li>
+            <li><strong>Multiply:</strong> use FOIL, then replace i² with −1</li>
+            <li><strong>Complex conjugate</strong> of a + bi is a − bi; product (a+bi)(a−bi) = a² + b² (real)</li>
+            <li><strong>Divide:</strong> multiply numerator and denominator by conjugate of denominator</li>
+          </ul>
+          <h3>Example</h3>
+          <p>(3 + 2i)(1 − 4i) = 3 − 12i + 2i − 8i² = 3 − 10i − 8(−1) = 3 + 8 − 10i = 11 − 10i.</p>
+          <p>Divide (2+i)/(1−i): multiply by (1+i)/(1+i) = (2+2i+i+i²)/(1+1) = (2+3i−1)/2 = (1+3i)/2.</p>
+        </div>
+
+        <!-- N-CN.7 -->
+        <div class="topic-section" id="ncn7">
+          <span class="standard-badge">N-CN.7</span>
+          <h2 class="topic-title">Quadratic Equations with Complex Solutions</h2>
+          <p class="standard-text">Solve quadratic equations with real coefficients that have complex solutions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>When the discriminant b² − 4ac &lt; 0, the equation has two complex (non-real) solutions</li>
+            <li>Complex solutions always come in conjugate pairs: a + bi and a − bi</li>
+            <li>Use the quadratic formula: x = <span class="fraction"><span class="top">−b ± √(b²−4ac)</span><span class="bottom">2a</span></span>, then write √(negative) using i</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve x² + 4x + 13 = 0: discriminant = 16 − 52 = −36. x = <span class="fraction"><span class="top">−4 ± √(−36)</span><span class="bottom">2</span></span> = <span class="fraction"><span class="top">−4 ± 6i</span><span class="bottom">2</span></span> = −2 ± 3i.</p>
+        </div>
+
+        <!-- N-CN.8 -->
+        <div class="topic-section" id="ncn8">
+          <span class="standard-badge">N-CN.8</span>
+          <h2 class="topic-title">Polynomial Identities Extended to Complex Numbers</h2>
+          <p class="standard-text">Extend polynomial identities to the complex numbers. For example, rewrite x² + 4 as (x + 2i)(x − 2i).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>The factoring pattern a² − b² = (a+b)(a−b) extends when b is imaginary</li>
+            <li>Sum of squares: x² + a² = (x + ai)(x − ai)</li>
+            <li>This is only possible in the complex number system, not over the reals</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Factor x² + 9: = x² − (−9) = x² − (3i)² = (x + 3i)(x − 3i). Verify: (x+3i)(x−3i) = x² − 9i² = x² + 9 ✓.</p>
+        </div>
+
+        <!-- N-CN.9 -->
+        <div class="topic-section" id="ncn9">
+          <span class="standard-badge">N-CN.9</span>
+          <h2 class="topic-title">Fundamental Theorem of Algebra</h2>
+          <p class="standard-text">Know the Fundamental Theorem of Algebra; show that it is true for quadratic polynomials.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Fundamental Theorem:</strong> every non-constant polynomial with complex coefficients has at least one complex root</li>
+            <li>A degree-n polynomial has exactly n roots (counting multiplicity) in the complex numbers</li>
+            <li>Real-coefficient polynomials: complex roots come in conjugate pairs</li>
+            <li>Consequence: every polynomial factors completely over the complex numbers</li>
+          </ul>
+          <h3>Example</h3>
+          <p>x⁴ − 1 = (x²−1)(x²+1) = (x−1)(x+1)(x−i)(x+i). Four roots: 1, −1, i, −i. The degree-4 polynomial has exactly 4 roots ✓.</p>
+        </div>
+
+        <!-- A-SSE.1 (A2) -->
+        <div class="topic-section" id="a2sse1">
+          <span class="standard-badge">A-SSE.1</span>
+          <h2 class="topic-title">Interpreting Expressions in Context</h2>
+          <p class="standard-text">Interpret parts of an expression, such as terms, factors, and coefficients, in context. Interpret complicated expressions by viewing one or more of their parts as a single entity.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>In Algebra 2, expressions often involve polynomial, rational, logarithmic, and trigonometric forms</li>
+            <li>View complex sub-expressions as a unit to simplify interpretation</li>
+            <li>Connect algebraic form to real-world meaning (e.g., in finance, science, engineering)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>In the compound interest formula A = P(1 + r/n)<sup>nt</sup>: P = principal, r/n = rate per period, nt = total number of periods, (1 + r/n)<sup>nt</sup> = growth factor. Each part has physical meaning.</p>
+        </div>
+
+        <!-- A-SSE.2 (A2) -->
+        <div class="topic-section" id="a2sse2">
+          <span class="standard-badge">A-SSE.2</span>
+          <h2 class="topic-title">Structure of Advanced Expressions</h2>
+          <p class="standard-text">Use the structure of an expression to identify ways to rewrite it.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Recognize patterns: sum/difference of cubes, grouping, substitution</li>
+            <li><strong>Sum of cubes:</strong> a³ + b³ = (a+b)(a² − ab + b²)</li>
+            <li><strong>Difference of cubes:</strong> a³ − b³ = (a−b)(a² + ab + b²)</li>
+            <li>Substitution: let u = x² to factor x⁴ − 5x² + 6 as u² − 5u + 6 = (u−2)(u−3)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Factor x⁶ − 8: = (x²)³ − 2³ = (x²−2)(x⁴ + 2x² + 4) using difference of cubes with a = x², b = 2.</p>
+        </div>
+
+        <!-- A-SSE.4 -->
+        <div class="topic-section" id="a2sse4">
+          <span class="standard-badge">A-SSE.4</span>
+          <h2 class="topic-title">Geometric Series Formula</h2>
+          <p class="standard-text">Derive the formula for the sum of a finite geometric series (when the common ratio is not 1), and use the formula to solve problems.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Geometric series: a + ar + ar² + … + ar<sup>n−1</sup></li>
+            <li>Sum: S<sub>n</sub> = a · <span class="fraction"><span class="top">1 − r<sup>n</sup></span><span class="bottom">1 − r</span></span> (for r ≠ 1)</li>
+            <li>Derivation: S − rS = a − ar<sup>n</sup>, so S(1−r) = a(1−r<sup>n</sup>)</li>
+            <li>Infinite geometric series (|r| &lt; 1): S = <span class="fraction"><span class="top">a</span><span class="bottom">1 − r</span></span></li>
+          </ul>
+          <h3>Example</h3>
+          <p>Sum of 5 + 10 + 20 + 40 + 80 (a=5, r=2, n=5): S = 5 · <span class="fraction"><span class="top">1 − 2⁵</span><span class="bottom">1 − 2</span></span> = 5 · <span class="fraction"><span class="top">1 − 32</span><span class="bottom">−1</span></span> = 5 · 31 = 155.</p>
+        </div>
+
+        <!-- A-APR.1 (A2) -->
+        <div class="topic-section" id="a2apr1">
+          <span class="standard-badge">A-APR.1</span>
+          <h2 class="topic-title">Closure of Polynomials (Advanced)</h2>
+          <p class="standard-text">Understand that polynomials form a system closed under addition, subtraction, and multiplication. In Algebra 2 this extends to operations that arise from factoring higher-degree polynomials.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Polynomial operations always yield polynomials (closure property)</li>
+            <li>Division of polynomials may yield a rational expression (not always a polynomial)</li>
+            <li>Long division and synthetic division for dividing polynomials</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Divide x³ − 2x² + 3x − 4 by (x − 1) using synthetic division: coefficients 1, −2, 3, −4; root 1. Result: x² − x + 2 remainder −2. So x³−2x²+3x−4 = (x−1)(x²−x+2) − 2.</p>
+        </div>
+
+        <!-- A-APR.2 -->
+        <div class="topic-section" id="a2apr2">
+          <span class="standard-badge">A-APR.2</span>
+          <h2 class="topic-title">Remainder Theorem</h2>
+          <p class="standard-text">Know and apply the Remainder Theorem: for a polynomial p(x) and a number a, the remainder on division by (x − a) is p(a), so p(a) = 0 if and only if (x − a) is a factor of p(x).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Remainder Theorem:</strong> p(a) equals the remainder when p(x) is divided by (x − a)</li>
+            <li><strong>Factor Theorem:</strong> (x − a) is a factor of p(x) if and only if p(a) = 0</li>
+            <li>Use to test potential factors without full division</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Is (x − 2) a factor of p(x) = x³ − 3x² + x + 2? p(2) = 8 − 12 + 2 + 2 = 0. Yes! (x−2) is a factor. Factor out: p(x) = (x−2)(x²−x−1).</p>
+        </div>
+
+        <!-- A-APR.3 -->
+        <div class="topic-section" id="a2apr3">
+          <span class="standard-badge">A-APR.3</span>
+          <h2 class="topic-title">Zeros of Polynomials and Graphing</h2>
+          <p class="standard-text">Identify zeros of polynomials when suitable factorizations are available, and use the zeros to construct a rough graph of the function defined by the polynomial.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Zeros of p(x) = values where p(x) = 0 → x-intercepts of graph</li>
+            <li><strong>Multiplicity:</strong> if (x−a)<sup>k</sup> is a factor, x = a is a zero of multiplicity k</li>
+            <li>Odd multiplicity: graph crosses x-axis at zero</li>
+            <li>Even multiplicity: graph touches (bounces at) x-axis at zero</li>
+            <li>End behavior determined by leading term</li>
+          </ul>
+          <h3>Example</h3>
+          <p>p(x) = (x+1)²(x−3). Zeros: x=−1 (mult. 2, bounce) and x=3 (mult. 1, cross). Leading term: x³ → end behavior up right, down left.</p>
+        </div>
+
+        <!-- A-APR.4 -->
+        <div class="topic-section" id="a2apr4">
+          <span class="standard-badge">A-APR.4</span>
+          <h2 class="topic-title">Polynomial Identities</h2>
+          <p class="standard-text">Prove polynomial identities and use them to describe numerical relationships. For example, the polynomial identity (x² + y²)² = (x² − y²)² + (2xy)².</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>A polynomial identity is an equation true for all values of the variables</li>
+            <li>Prove by expanding and simplifying both sides algebraically</li>
+            <li>(a + b)² = a² + 2ab + b² (perfect square)</li>
+            <li>(a + b)(a − b) = a² − b² (difference of squares)</li>
+            <li>(x² + y²)² = (x²−y²)² + (2xy)² → Pythagorean triple generator</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Prove (a+b)³ = a³ + 3a²b + 3ab² + b³: expand (a+b)(a+b)² = (a+b)(a²+2ab+b²) = a³ + 2a²b + ab² + a²b + 2ab² + b³ = a³ + 3a²b + 3ab² + b³ ✓.</p>
+        </div>
+
+        <!-- A-APR.5 -->
+        <div class="topic-section" id="a2apr5">
+          <span class="standard-badge">A-APR.5 (CA)</span>
+          <h2 class="topic-title">Binomial Theorem</h2>
+          <p class="standard-text">Know and apply the Binomial Theorem for the expansion of (x + y)ⁿ in powers of x and y for a positive integer n, where x and y are any numbers, with coefficients determined by Pascal's Triangle.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>(x + y)<sup>n</sup> = Σ C(n,k) · x<sup>n−k</sup> · y<sup>k</sup> for k = 0 to n</li>
+            <li>C(n,k) = <span class="fraction"><span class="top">n!</span><span class="bottom">k!(n−k)!</span></span> (binomial coefficients)</li>
+            <li>Pascal's Triangle: each entry is sum of the two above it; row n gives coefficients of (x+y)<sup>n</sup></li>
+            <li>The kth term (from k=0): C(n,k) · x<sup>n−k</sup> · y<sup>k</sup></li>
+          </ul>
+          <h3>Example</h3>
+          <p>Expand (x + 2)³: C(3,0)x³ + C(3,1)x²(2) + C(3,2)x(4) + C(3,3)(8) = x³ + 6x² + 12x + 8.</p>
+        </div>
+
+        <!-- A-APR.6 -->
+        <div class="topic-section" id="a2apr6">
+          <span class="standard-badge">A-APR.6</span>
+          <h2 class="topic-title">Rewriting Rational Expressions</h2>
+          <p class="standard-text">Rewrite simple rational expressions in different forms; write a(x)/b(x) in the form q(x) + r(x)/b(x), where a(x), b(x), q(x), and r(x) are polynomials with the degree of r(x) less than the degree of b(x).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Polynomial long division: divide numerator by denominator</li>
+            <li>Result: quotient + (remainder/divisor)</li>
+            <li>Check: divisor × quotient + remainder = numerator</li>
+            <li>Used to find oblique asymptotes of rational functions</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Divide (x² + 3x + 1) ÷ (x + 2): x² + 3x + 1 = (x+2)(x+1) − 1. So result = x+1 + <span class="fraction"><span class="top">−1</span><span class="bottom">x+2</span></span>.</p>
+        </div>
+
+        <!-- A-APR.7 -->
+        <div class="topic-section" id="a2apr7">
+          <span class="standard-badge">A-APR.7</span>
+          <h2 class="topic-title">Rational Expressions as a System</h2>
+          <p class="standard-text">Understand that rational expressions form a system analogous to the rational numbers, closed under addition, subtraction, multiplication, and division by a nonzero rational expression; add, subtract, multiply, and divide rational expressions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Add/Subtract: find LCD, convert to common denominator, combine numerators</li>
+            <li>Multiply: multiply numerators, multiply denominators, then simplify</li>
+            <li>Divide: multiply by the reciprocal of the divisor</li>
+            <li>Factor first to identify common factors to cancel</li>
+          </ul>
+          <h3>Example</h3>
+          <p><span class="fraction"><span class="top">2</span><span class="bottom">x+1</span></span> + <span class="fraction"><span class="top">3</span><span class="bottom">x−2</span></span> = <span class="fraction"><span class="top">2(x−2) + 3(x+1)</span><span class="bottom">(x+1)(x−2)</span></span> = <span class="fraction"><span class="top">2x−4+3x+3</span><span class="bottom">(x+1)(x−2)</span></span> = <span class="fraction"><span class="top">5x−1</span><span class="bottom">(x+1)(x−2)</span></span>.</p>
+        </div>
+
+        <!-- A-CED.1 (A2) -->
+        <div class="topic-section" id="a2ced1">
+          <span class="standard-badge">A-CED.1</span>
+          <h2 class="topic-title">Creating Equations in One Variable (Advanced)</h2>
+          <p class="standard-text">Create equations and inequalities in one variable and use them to solve problems. In Algebra 2, this includes polynomial, rational, radical, exponential, and logarithmic equations.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Exponential equations: use logarithms to solve (e.g., 2<sup>x</sup> = 50 → x = log₂50)</li>
+            <li>Logarithmic equations: exponentiate both sides or use log properties</li>
+            <li>Rational equations: multiply through by LCD, check for extraneous solutions</li>
+            <li>Radical equations: isolate radical, square both sides, check for extraneous solutions</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A population doubles every 5 years. Starting at 1000, when does it reach 8000? 1000 · 2<sup>t/5</sup> = 8000 → 2<sup>t/5</sup> = 8 = 2³ → t/5 = 3 → t = 15 years.</p>
+        </div>
+
+        <!-- A-CED.4 (A2) -->
+        <div class="topic-section" id="a2ced4">
+          <span class="standard-badge">A-CED.4</span>
+          <h2 class="topic-title">Rearranging Advanced Formulas</h2>
+          <p class="standard-text">Rearrange formulas to highlight a quantity of interest, including formulas involving exponentials, logarithms, and radical expressions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Apply inverse operations at each step (same as solving equations)</li>
+            <li>To isolate an exponent: take logarithm of both sides</li>
+            <li>To isolate a logarithm: exponentiate both sides</li>
+            <li>To isolate under a radical: raise both sides to the appropriate power</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve A = P · e<sup>rt</sup> for t: A/P = e<sup>rt</sup> → ln(A/P) = rt → t = <span class="fraction"><span class="top">ln(A/P)</span><span class="bottom">r</span></span>.</p>
+        </div>
+
+        <!-- A-REI.2 (A2) -->
+        <div class="topic-section" id="a2rei2">
+          <span class="standard-badge">A-REI.2</span>
+          <h2 class="topic-title">Rational and Radical Equations</h2>
+          <p class="standard-text">Solve simple rational and radical equations in one variable, and give examples showing how extraneous solutions may arise.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Rational equations:</strong> multiply both sides by LCD; solve resulting polynomial; check solutions in original</li>
+            <li><strong>Radical equations:</strong> isolate radical; raise both sides to power of radical; check solutions</li>
+            <li><strong>Extraneous solutions:</strong> arise from squaring both sides or multiplying by expressions that could be 0; must check ALL solutions in the original equation</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve √(x + 5) = x − 1: square both sides: x + 5 = x² − 2x + 1 → x² − 3x − 4 = 0 → (x−4)(x+1) = 0. Check x=4: √9 = 3 ✓. Check x=−1: √4 = −2? No (extraneous). Solution: x = 4.</p>
+        </div>
+
+        <!-- A-REI.4 (A2) -->
+        <div class="topic-section" id="a2rei4">
+          <span class="standard-badge">A-REI.4</span>
+          <h2 class="topic-title">Quadratic Equations — Advanced</h2>
+          <p class="standard-text">Solve quadratic equations by inspection, taking square roots, completing the square, the quadratic formula, and factoring. Recognize when the quadratic formula gives complex solutions and write them in a + bi form.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>All methods from Algebra 1 apply; in Algebra 2, solutions may be complex</li>
+            <li>When discriminant &lt; 0: solutions are complex conjugates a ± bi</li>
+            <li>Relate the discriminant to the number and type of solutions</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve 2x² − 3x + 5 = 0: discriminant = 9 − 40 = −31 &lt; 0. x = <span class="fraction"><span class="top">3 ± √(−31)</span><span class="bottom">4</span></span> = <span class="fraction"><span class="top">3 ± i√31</span><span class="bottom">4</span></span>.</p>
+        </div>
+
+        <!-- A-REI.6 (A2) -->
+        <div class="topic-section" id="a2rei6">
+          <span class="standard-badge">A-REI.6</span>
+          <h2 class="topic-title">Systems of Equations (Advanced)</h2>
+          <p class="standard-text">Solve systems of linear equations exactly and approximately. In Algebra 2, extend to systems involving three variables.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Three-variable systems: use elimination to reduce to two-variable, then solve</li>
+            <li>Matrix methods: augmented matrix with row operations (Gaussian elimination)</li>
+            <li>Solutions: unique point, no solution (inconsistent), infinitely many (dependent)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>System: x+y+z=6, 2x−y+z=3, x+2y−z=5. From eq1 and eq2 eliminate y: 3x+2z=9. From eq1 and eq3 eliminate z: 2x+3y=11. Continue to find x=1, y=2, z=3.</p>
+        </div>
+
+        <!-- A-REI.7 -->
+        <div class="topic-section" id="a2rei7">
+          <span class="standard-badge">A-REI.7</span>
+          <h2 class="topic-title">Solving Nonlinear Systems</h2>
+          <p class="standard-text">Solve a simple system consisting of a linear equation and a quadratic equation in two variables algebraically and graphically.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Substitute the linear equation into the quadratic; solve the resulting quadratic</li>
+            <li>May have 0, 1, or 2 real solutions (tangent, intersecting, or non-intersecting)</li>
+            <li>Graphically: find intersection of the line and parabola</li>
+          </ul>
+          <h3>Example</h3>
+          <p>System: y = x + 2 and y = x² − 4. Substitute: x + 2 = x² − 4 → x² − x − 6 = 0 → (x−3)(x+2) = 0. x = 3 → y = 5; x = −2 → y = 0. Two solutions: (3, 5) and (−2, 0).</p>
+        </div>
+
+        <!-- A-REI.11 (A2) -->
+        <div class="topic-section" id="a2rei11">
+          <span class="standard-badge">A-REI.11</span>
+          <h2 class="topic-title">Intersections and Solutions</h2>
+          <p class="standard-text">Explain why the x-coordinates of the points where the graphs of y = f(x) and y = g(x) intersect are the solutions of the equation f(x) = g(x); find the solutions approximately, using technology.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>In Algebra 2, f and g may be polynomial, exponential, logarithmic, or trig functions</li>
+            <li>Algebraic solutions may not be possible — numerical or graphical methods used</li>
+            <li>Each x-intersection is a solution to f(x) = g(x)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Find where e<sup>x</sup> = x + 2: graph both functions; they intersect at approximately x ≈ 1.15 and x ≈ −1.84. No simple algebraic solution — use technology or Newton's method.</p>
+        </div>
+
+        <!-- F-IF.4 (A2) -->
+        <div class="topic-section" id="a2fif4">
+          <span class="standard-badge">F-IF.4</span>
+          <h2 class="topic-title">Key Features of Advanced Functions</h2>
+          <p class="standard-text">Interpret key features of graphs and tables for polynomial, rational, exponential, logarithmic, and trigonometric functions in terms of context.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Rational functions:</strong> vertical asymptotes (where denominator = 0), horizontal asymptotes (end behavior), holes (cancelled factors)</li>
+            <li><strong>Exponential:</strong> horizontal asymptote, growth/decay rate</li>
+            <li><strong>Logarithmic:</strong> vertical asymptote, domain x &gt; 0</li>
+            <li><strong>Trig:</strong> period, amplitude, midline, phase shift</li>
+          </ul>
+          <h3>Example</h3>
+          <p>f(x) = <span class="fraction"><span class="top">x + 1</span><span class="bottom">x − 3</span></span>: vertical asymptote x = 3; horizontal asymptote y = 1 (degrees equal, ratio of leading coefficients); x-intercept at x = −1; y-intercept at y = −1/3.</p>
+        </div>
+
+        <!-- F-IF.6 (A2) -->
+        <div class="topic-section" id="a2fif6">
+          <span class="standard-badge">F-IF.6</span>
+          <h2 class="topic-title">Rate of Change — Advanced Functions</h2>
+          <p class="standard-text">Calculate and interpret the average rate of change of a function over a specified interval, including polynomial, exponential, and trigonometric functions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Same formula: <span class="fraction"><span class="top">f(b) − f(a)</span><span class="bottom">b − a</span></span></li>
+            <li>For exponential: rate of change is not constant — it grows proportionally to the function value</li>
+            <li>Interpret in context with appropriate units</li>
+          </ul>
+          <h3>Example</h3>
+          <p>f(x) = 2<sup>x</sup> over [0, 3]: (f(3)−f(0))/(3−0) = (8−1)/3 = 7/3 ≈ 2.33. This is the average growth per unit — much less than the instantaneous rate at x=3.</p>
+        </div>
+
+        <!-- F-IF.7 (A2) -->
+        <div class="topic-section" id="a2fif7">
+          <span class="standard-badge">F-IF.7</span>
+          <h2 class="topic-title">Graphing Advanced Functions</h2>
+          <p class="standard-text">Graph polynomial functions, showing zeros and end behavior; graph rational functions, showing intercepts, asymptotes, and end behavior; graph exponential and logarithmic functions; graph trigonometric functions, showing period, midline, and amplitude.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Polynomial:</strong> end behavior from leading term; zeros from factored form</li>
+            <li><strong>Rational:</strong> vertical asymptotes from denominator zeros; horizontal from degree comparison</li>
+            <li><strong>Exponential y = ab<sup>x</sup>:</strong> y-intercept at (0,a); horizontal asymptote y=0</li>
+            <li><strong>Logarithm y = log<sub>b</sub>(x):</strong> vertical asymptote x=0; passes through (1,0) and (b,1)</li>
+            <li><strong>y = A·sin(Bx + C) + D:</strong> amplitude |A|, period 2π/B, phase shift −C/B, midline y=D</li>
+          </ul>
+          <h3>Example</h3>
+          <p>y = 3·sin(2x) + 1: amplitude = 3, period = π, midline y = 1. Graph oscillates between y=−2 and y=4.</p>
+        </div>
+
+        <!-- F-IF.8 (A2) -->
+        <div class="topic-section" id="a2fif8">
+          <span class="standard-badge">F-IF.8</span>
+          <h2 class="topic-title">Equivalent Forms — Advanced</h2>
+          <p class="standard-text">Write a function in different but equivalent forms to reveal different properties. Use the properties of exponents to interpret expressions for exponential functions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>f(x) = a · b<sup>x</sup> = a · e<sup>x·ln(b)</sup> (natural base equivalent)</li>
+            <li>Monthly compounding vs. continuous: A = P(1+r/12)<sup>12t</sup> vs. A = Pe<sup>rt</sup></li>
+            <li>Factor polynomials into different forms to reveal zeros vs. vertex</li>
+          </ul>
+          <h3>Example</h3>
+          <p>f(x) = 100 · (0.5)<sup>x/3</sup>. Rewrite: (0.5)<sup>x/3</sup> = (0.5<sup>1/3</sup>)<sup>x</sup> ≈ (0.794)<sup>x</sup>. This shows the per-period decay factor, revealing f decreases by about 20.6% per unit of x.</p>
+        </div>
+
+        <!-- F-IF.9 (A2) -->
+        <div class="topic-section" id="a2fif9">
+          <span class="standard-badge">F-IF.9</span>
+          <h2 class="topic-title">Comparing Advanced Functions</h2>
+          <p class="standard-text">Compare properties of two functions each represented in a different way (algebraically, graphically, numerically, or verbally), including polynomial, exponential, logarithmic, and trigonometric functions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Compare: domain, range, zeros, asymptotes, rate of change, periodicity</li>
+            <li>Translate between representations to extract comparable properties</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Function A: graph of exponential decay with horizontal asymptote y=0. Function B: f(x) = 5 · 0.8<sup>x</sup>. Compare y-intercepts: read from graph vs. f(0)=5. Compare decay rates: read steepness from graph vs. 20% per unit from formula.</p>
+        </div>
+
+        <!-- F-BF.1 (A2) -->
+        <div class="topic-section" id="a2fbf1">
+          <span class="standard-badge">F-BF.1</span>
+          <h2 class="topic-title">Writing Advanced Functions</h2>
+          <p class="standard-text">Write a function that describes a relationship between two quantities, including combining function types using arithmetic operations and composition.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Composition:</strong> f(g(x)) — apply g first, then f to the result</li>
+            <li>Domain of f(g(x)): x values where g(x) is defined AND in the domain of f</li>
+            <li>Combine functions: revenue = price × quantity; each may be a function of another variable</li>
+          </ul>
+          <h3>Example</h3>
+          <p>f(x) = x² and g(x) = x + 3. f(g(x)) = f(x+3) = (x+3)² = x²+6x+9. g(f(x)) = g(x²) = x²+3. Note f(g(x)) ≠ g(f(x)) — composition is generally not commutative.</p>
+        </div>
+
+        <!-- F-BF.2 (A2) -->
+        <div class="topic-section" id="a2fbf2">
+          <span class="standard-badge">F-BF.2</span>
+          <h2 class="topic-title">Sequences and Series</h2>
+          <p class="standard-text">Write arithmetic and geometric sequences recursively and explicitly; use them to model situations; translate between the two forms. Connect to function families.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Arithmetic: a<sub>n</sub> = a₁ + (n−1)d → linear function of n</li>
+            <li>Geometric: a<sub>n</sub> = a₁ · r<sup>n−1</sup> → exponential function of n</li>
+            <li>Partial sums of arithmetic: S<sub>n</sub> = <span class="fraction"><span class="top">n</span><span class="bottom">2</span></span>(a₁ + aₙ)</li>
+            <li>Partial sums of geometric: S<sub>n</sub> = a₁ · <span class="fraction"><span class="top">1 − rⁿ</span><span class="bottom">1 − r</span></span></li>
+          </ul>
+          <h3>Example</h3>
+          <p>$1000 invested at 5% annual interest: a₁=1000, r=1.05. After 10 years: a₁₀ = 1000 · 1.05⁹ ≈ $1551. This is a geometric sequence.</p>
+        </div>
+
+        <!-- F-BF.3 (A2) -->
+        <div class="topic-section" id="a2fbf3">
+          <span class="standard-badge">F-BF.3</span>
+          <h2 class="topic-title">Transformations of Advanced Functions</h2>
+          <p class="standard-text">Identify the effect on the graph of replacing f(x) by f(x)+k, kf(x), f(kx), and f(x+k). Extend to trigonometric, exponential, and logarithmic functions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Rules apply to ALL function families — linear, quadratic, trig, exponential, etc.</li>
+            <li>y = A·sin(B(x−C)) + D: amplitude A, period 2π/B, phase shift C, vertical shift D</li>
+            <li>Logarithm: y = log(x−h) + k shifts the vertical asymptote to x = h</li>
+          </ul>
+          <h3>Example</h3>
+          <p>y = log₂(x): shift right 3, up 1 → y = log₂(x−3) + 1. Vertical asymptote moves from x=0 to x=3. Point (1,0) moves to (4,1).</p>
+        </div>
+
+        <!-- F-BF.4 (A2) -->
+        <div class="topic-section" id="a2fbf4">
+          <span class="standard-badge">F-BF.4</span>
+          <h2 class="topic-title">Inverse Functions — Advanced</h2>
+          <p class="standard-text">Find the inverse of a function. Verify by composition that two functions are inverses of each other. Restrict domains to make non-invertible functions invertible. Read inverse values from a table or graph.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>f⁻¹ exists only if f is one-to-one (passes horizontal line test)</li>
+            <li>Exponential and logarithm are inverse functions: log<sub>b</sub>(b<sup>x</sup>) = x</li>
+            <li>Restrict domain of y = x² to [0,∞) so inverse y = √x is defined</li>
+            <li>Verify: f(f⁻¹(x)) = x AND f⁻¹(f(x)) = x</li>
+          </ul>
+          <h3>Example</h3>
+          <p>f(x) = e<sup>x</sup>. Find inverse: y = e<sup>x</sup> → x = e<sup>y</sup> → y = ln(x). So f⁻¹(x) = ln(x). Verify: e<sup>ln(x)</sup> = x and ln(e<sup>x</sup>) = x ✓.</p>
+        </div>
+
+        <!-- F-LE.4 -->
+        <div class="topic-section" id="a2fle4">
+          <span class="standard-badge">F-LE.4</span>
+          <h2 class="topic-title">Logarithms as Solutions to Exponential Equations</h2>
+          <p class="standard-text">For exponential models, express as a logarithm the solution to ab<sup>ct</sup> = d where a, c, and d are numbers and the base b is 2, 10, or e; evaluate the logarithm using technology.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>log<sub>b</sub>(x) is the inverse of b<sup>x</sup>: log<sub>b</sub>(b<sup>x</sup>) = x</li>
+            <li>Natural log: ln(x) = log<sub>e</sub>(x); Common log: log(x) = log₁₀(x)</li>
+            <li><strong>Change of base:</strong> log<sub>b</sub>(x) = ln(x)/ln(b) = log(x)/log(b)</li>
+            <li>Log properties: log(ab) = log(a)+log(b); log(a/b) = log(a)−log(b); log(aⁿ) = n·log(a)</li>
+            <li>Solve ab<sup>ct</sup> = d: divide by a, take log of both sides, use power rule</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve 5 · 2<sup>3t</sup> = 160: 2<sup>3t</sup> = 32 = 2⁵ → 3t = 5 → t = 5/3. Or: 3t = log₂(32) = 5/ln(2) · ln(2) = 5. Same result.</p>
+        </div>
+
+        <!-- F-TF.1 -->
+        <div class="topic-section" id="ftf1">
+          <span class="standard-badge">F-TF.1</span>
+          <h2 class="topic-title">Radian Measure</h2>
+          <p class="standard-text">Understand radian measure of an angle as the length of the arc on the unit circle subtended by the angle.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>1 radian = angle that subtends an arc of length 1 on the unit circle (radius = 1)</li>
+            <li>Full circle: 2π radians = 360°; π rad = 180°</li>
+            <li>Convert degrees to radians: multiply by π/180</li>
+            <li>Convert radians to degrees: multiply by 180/π</li>
+            <li>Common: 30°=π/6, 45°=π/4, 60°=π/3, 90°=π/2, 180°=π</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Convert 150° to radians: 150 × π/180 = 5π/6. Convert 3π/4 to degrees: 3π/4 × 180/π = 135°.</p>
+        </div>
+
+        <!-- F-TF.2 -->
+        <div class="topic-section" id="ftf2">
+          <span class="standard-badge">F-TF.2</span>
+          <h2 class="topic-title">The Unit Circle</h2>
+          <p class="standard-text">Explain how the unit circle in the coordinate plane enables the extension of trigonometric functions to all real numbers, interpreted as radian measures of angles traversed counterclockwise around the unit circle.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Unit circle: circle of radius 1 centered at origin; (cos θ, sin θ) is the point at angle θ</li>
+            <li>cos θ = x-coordinate, sin θ = y-coordinate on the unit circle</li>
+            <li>Values extend beyond 0 to 2π by cycling — period of sin and cos is 2π</li>
+            <li>Quadrant signs: Q1 both +; Q2 sin +, cos −; Q3 both −; Q4 sin −, cos +</li>
+            <li>Key points: (0°/0, (1,0)), (90°/π/2, (0,1)), (180°/π, (−1,0)), (270°/3π/2, (0,−1))</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Find cos(2π/3): 2π/3 = 120° — in Q2. Reference angle 60°: cos(60°) = 1/2, negative in Q2. So cos(2π/3) = −1/2. sin(2π/3) = sin(60°) = √3/2 (positive in Q2).</p>
+        </div>
+
+        <!-- F-TF.5 -->
+        <div class="topic-section" id="ftf5">
+          <span class="standard-badge">F-TF.5</span>
+          <h2 class="topic-title">Modeling with Trigonometric Functions</h2>
+          <p class="standard-text">Choose trigonometric functions to model periodic phenomena with specified amplitude, frequency, and midline.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>General form: y = A·sin(B(x − C)) + D or y = A·cos(B(x − C)) + D</li>
+            <li><strong>Amplitude |A|:</strong> half the distance from min to max</li>
+            <li><strong>Period 2π/B:</strong> horizontal length of one full cycle</li>
+            <li><strong>Phase shift C:</strong> horizontal shift; positive = shift right</li>
+            <li><strong>Vertical shift (midline) D:</strong> center line of oscillation</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Ocean tides: max 10 ft, min 2 ft, period 12 hours, starts at min at t=0. Amplitude = 4, midline = 6. Use cosine (starts at min with negative A): y = −4·cos(2π/12 · t) + 6 = −4·cos(πt/6) + 6.</p>
+        </div>
+
+        <!-- F-TF.8 -->
+        <div class="topic-section" id="ftf8">
+          <span class="standard-badge">F-TF.8</span>
+          <h2 class="topic-title">Pythagorean Identity</h2>
+          <p class="standard-text">Prove the Pythagorean identity sin²(θ) + cos²(θ) = 1 and use it to find sin(θ), cos(θ), or tan(θ) given sin(θ) or cos(θ) and the quadrant of the angle.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>sin²θ + cos²θ = 1 (follows from the Pythagorean theorem on the unit circle)</li>
+            <li>Dividing by cos²θ: tan²θ + 1 = sec²θ</li>
+            <li>Dividing by sin²θ: 1 + cot²θ = csc²θ</li>
+            <li>Use quadrant information to determine the correct sign of the unknown ratio</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Given sin θ = 3/5 and θ is in Quadrant II. cos²θ = 1 − 9/25 = 16/25. cos θ = ±4/5. In Q2, cos is negative → cos θ = −4/5. tan θ = sin/cos = (3/5)/(−4/5) = −3/4.</p>
+        </div>
+
+        <!-- S-ID.4 -->
+        <div class="topic-section" id="sid4">
+          <span class="standard-badge">S-ID.4</span>
+          <h2 class="topic-title">Normal Distribution</h2>
+          <p class="standard-text">Use the mean and standard deviation of a data set to fit it to a normal distribution and to estimate population percentages. Recognize that there are data sets for which such a procedure is not appropriate.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Normal distribution: bell-shaped, symmetric about the mean μ</li>
+            <li>Standard deviation σ measures spread</li>
+            <li><strong>68-95-99.7 Rule:</strong> 68% within 1σ, 95% within 2σ, 99.7% within 3σ of mean</li>
+            <li>Z-score: z = (x − μ)/σ — number of standard deviations from mean</li>
+            <li>Not all data is normal — skewed distributions require different methods</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Test scores: μ=75, σ=10. What percent score between 65 and 85? This is within 1σ of mean → approximately 68%. What percent score above 95? 95 is 2σ above mean → about 2.5%.</p>
+        </div>
+
+        <!-- S-IC.1 -->
+        <div class="topic-section" id="sic1">
+          <span class="standard-badge">S-IC.1</span>
+          <h2 class="topic-title">Statistics as a Process</h2>
+          <p class="standard-text">Understand statistics as a process for making inferences about population parameters based on a random sample from that population.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Population:</strong> the entire group of interest</li>
+            <li><strong>Parameter:</strong> a numerical summary of the population (e.g., population mean μ)</li>
+            <li><strong>Sample:</strong> a subset of the population actually measured</li>
+            <li><strong>Statistic:</strong> a numerical summary of the sample (e.g., sample mean x̄)</li>
+            <li>Random samples allow valid inferences about the population</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A school of 800 students wants to know average sleep. They randomly survey 80 students and find x̄ = 7.2 hours. This statistic estimates the population parameter μ (true average for all 800).</p>
+        </div>
+
+        <!-- S-IC.2 -->
+        <div class="topic-section" id="sic2">
+          <span class="standard-badge">S-IC.2</span>
+          <h2 class="topic-title">Evaluating Statistical Models</h2>
+          <p class="standard-text">Decide if a specified model is consistent with results from a given data-generating process, e.g., using simulation.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>If a result is very unlikely under the assumed model, question the model</li>
+            <li>Simulation: generate many samples from the model; compare observed result to simulated distribution</li>
+            <li>A result far in the tail of the simulated distribution suggests the model may be wrong</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A coin claimed to be fair is flipped 100 times and lands heads 70 times. Simulate 100 coin flips 1000 times. If getting ≥70 heads is very rare (&lt;1% of simulations), the coin is likely not fair.</p>
+        </div>
+
+        <!-- S-IC.3 -->
+        <div class="topic-section" id="sic3">
+          <span class="standard-badge">S-IC.3</span>
+          <h2 class="topic-title">Types of Statistical Studies</h2>
+          <p class="standard-text">Recognize the purposes of and differences among sample surveys, experiments, and observational studies; explain how randomization relates to each.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Survey:</strong> ask questions; estimates population characteristics; random sampling essential</li>
+            <li><strong>Observational study:</strong> observe without intervening; can show association, not causation</li>
+            <li><strong>Experiment:</strong> researcher assigns treatments; random assignment allows causal conclusions</li>
+            <li><strong>Random assignment:</strong> controls for confounding variables in experiments</li>
+          </ul>
+          <h3>Example</h3>
+          <p>To test a new drug: survey would just ask people if they feel better (bias); observational would compare who chose to take the drug vs. not (confounding); a randomized experiment (randomly assign drug vs. placebo) is the gold standard for causal inference.</p>
+        </div>
+
+        <!-- S-IC.4 -->
+        <div class="topic-section" id="sic4">
+          <span class="standard-badge">S-IC.4</span>
+          <h2 class="topic-title">Sample Survey Data and Margin of Error</h2>
+          <p class="standard-text">Use data from a sample survey to estimate a population mean or proportion; develop a margin of error through the use of simulation models for random sampling.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Sample proportion p̂ estimates population proportion p</li>
+            <li><strong>Margin of error (MOE):</strong> how far the estimate might be from the true value</li>
+            <li>Larger samples → smaller margin of error → more precise estimate</li>
+            <li>95% confidence interval: p̂ ± MOE (contains true p about 95% of the time)</li>
+            <li>Approximate MOE for proportions: ≈ 1/√n</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Poll of 400 voters: 52% favor candidate A. MOE ≈ 1/√400 = 1/20 = 5%. 95% CI: 52% ± 5% = (47%, 57%). The true proportion is likely in this range.</p>
+        </div>
+
+        <!-- S-IC.5 -->
+        <div class="topic-section" id="sic5">
+          <span class="standard-badge">S-IC.5</span>
+          <h2 class="topic-title">Randomized Experiment Data</h2>
+          <p class="standard-text">Use data from a randomized experiment to compare two treatments; use simulations to decide if differences between parameters are significant.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Observed difference between treatment and control could be due to random chance</li>
+            <li>Simulate: randomly re-assign subjects to groups many times; see how often you get a difference at least as large</li>
+            <li>If the observed difference is very rare in simulation → statistically significant → evidence of a real treatment effect</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Treatment group improves by 8 points on average vs. control. Simulate 1000 random reassignments; only 2% produce a difference ≥ 8. The result is statistically significant (p ≈ 0.02).</p>
+        </div>
+
+        <!-- S-IC.6 -->
+        <div class="topic-section" id="sic6">
+          <span class="standard-badge">S-IC.6</span>
+          <h2 class="topic-title">Evaluating Statistical Reports</h2>
+          <p class="standard-text">Evaluate reports based on data by looking at the study design, data collection method, and conclusions drawn.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Check: Who was sampled? How? Was it random?</li>
+            <li>Check: Was it an experiment or observational study? (limits causal claims)</li>
+            <li>Watch for: biased sampling, leading questions, cherry-picked data, confounding</li>
+            <li>Check: Are conclusions supported by the data and design?</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Headline: "Students who eat breakfast score 20% higher on tests." This is observational — affluence may cause both breakfast-eating and test scores. The report should not claim breakfast causes better scores.</p>
+        </div>
+
+        <!-- S-CP.1 -->
+        <div class="topic-section" id="scp1">
+          <span class="standard-badge">S-CP.1</span>
+          <h2 class="topic-title">Events as Subsets of a Sample Space</h2>
+          <p class="standard-text">Describe events as subsets of a sample space using characteristics of the outcomes, or as unions, intersections, or complements of other events ("or," "and," "not").</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Sample space S:</strong> all possible outcomes</li>
+            <li><strong>Event A:</strong> a subset of S</li>
+            <li><strong>Union A ∪ B:</strong> A OR B (either or both happen)</li>
+            <li><strong>Intersection A ∩ B:</strong> A AND B (both happen)</li>
+            <li><strong>Complement Aᶜ:</strong> NOT A (A does not happen)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Roll a die. S = {1,2,3,4,5,6}. A = even = {2,4,6}. B = >3 = {4,5,6}. A∩B = {4,6}; A∪B = {2,4,5,6}; Aᶜ = {1,3,5}.</p>
+        </div>
+
+        <!-- S-CP.2 -->
+        <div class="topic-section" id="scp2">
+          <span class="standard-badge">S-CP.2</span>
+          <h2 class="topic-title">Independent Events</h2>
+          <p class="standard-text">Understand that two events A and B are independent if the probability of A and B occurring together is the product of their probabilities, and use this characterization to determine if they are independent.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>A and B are independent if P(A ∩ B) = P(A) · P(B)</li>
+            <li>Equivalently: P(A|B) = P(A) — knowing B doesn't affect probability of A</li>
+            <li>Independent ≠ mutually exclusive: if A and B are mutually exclusive (and both possible), they are NOT independent</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Flip a coin and roll a die. P(H) = 1/2, P(6) = 1/6. P(H and 6) = 1/12 = P(H)·P(6) ✓ → independent. Drawing cards without replacement: not independent (probabilities change).</p>
+        </div>
+
+        <!-- S-CP.3 -->
+        <div class="topic-section" id="scp3">
+          <span class="standard-badge">S-CP.3</span>
+          <h2 class="topic-title">Conditional Probability</h2>
+          <p class="standard-text">Understand the conditional probability of A given B as P(A and B)/P(B), and interpret independence of A and B as saying that the conditional probability of A given B is the same as the probability of A, and the conditional probability of B given A is the same as the probability of B.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>P(A|B) = <span class="fraction"><span class="top">P(A ∩ B)</span><span class="bottom">P(B)</span></span> ("probability of A given B has occurred")</li>
+            <li>Restricts the sample space to only outcomes in B</li>
+            <li>Independence check: A ⊥ B iff P(A|B) = P(A)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Draw a card. P(King | Face card): P(King and Face) = 4/52, P(Face) = 12/52. P(King|Face) = (4/52)/(12/52) = 4/12 = 1/3. (Makes sense: 4 kings out of 12 face cards.)</p>
+        </div>
+
+        <!-- S-CP.4 -->
+        <div class="topic-section" id="scp4">
+          <span class="standard-badge">S-CP.4</span>
+          <h2 class="topic-title">Two-Way Tables and Probability</h2>
+          <p class="standard-text">Construct and interpret two-way frequency tables of data when two categories are associated with each object being classified. Use the two-way table as a sample space to decide if events are independent and to approximate conditional probabilities.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Read P(A), P(B), P(A ∩ B) from cell counts and totals</li>
+            <li>Test independence: does P(A ∩ B) ≈ P(A) · P(B)?</li>
+            <li>Conditional probability: row or column relative frequencies</li>
+          </ul>
+          <h3>Example</h3>
+          <p>100 students: 40 athletes (30 pass, 10 fail), 60 non-athletes (35 pass, 25 fail). P(Pass|Athlete) = 30/40 = 75%. P(Pass|Non-athlete) = 35/60 ≈ 58%. Different rates suggest association between athletics and passing.</p>
+        </div>
+
+        <!-- S-CP.5 -->
+        <div class="topic-section" id="scp5">
+          <span class="standard-badge">S-CP.5</span>
+          <h2 class="topic-title">Conditional Probability in Everyday Language</h2>
+          <p class="standard-text">Recognize and explain the concepts of conditional probability and independence in everyday language and everyday situations.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Real-world conditional probability: "given that it is raining, what is the chance of traffic?"</li>
+            <li>Independence in context: "does knowing someone's height tell us their test score?" (likely no → independent)</li>
+            <li>Translate plain English to probability notation</li>
+          </ul>
+          <h3>Example</h3>
+          <p>"What is the probability that a randomly selected employee is female, given that they work in engineering?" This is P(Female | Engineering) — find it by dividing female engineers by all engineers.</p>
+        </div>
+
+        <!-- S-CP.6 -->
+        <div class="topic-section" id="scp6">
+          <span class="standard-badge">S-CP.6</span>
+          <h2 class="topic-title">Finding Conditional Probability</h2>
+          <p class="standard-text">Find the conditional probability P(A|B) as the fraction of B's outcomes that also belong to A, and interpret the answer in terms of the model.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>P(A|B) = (# outcomes in A and B) ÷ (# outcomes in B)</li>
+            <li>Equivalently: P(A|B) = P(A ∩ B) / P(B)</li>
+            <li>Use tables or lists to count outcomes directly</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Bag has 5 red, 3 blue, 2 green. One is drawn and is not green. P(Red | not green) = 5/(5+3) = 5/8. The sample space is restricted to the 8 non-green marbles.</p>
+        </div>
+
+        <!-- S-CP.7 -->
+        <div class="topic-section" id="scp7">
+          <span class="standard-badge">S-CP.7</span>
+          <h2 class="topic-title">Addition Rule for Probability</h2>
+          <p class="standard-text">Apply the Addition Rule, P(A or B) = P(A) + P(B) − P(A and B), and interpret the answer in terms of the model.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</li>
+            <li>Subtract P(A ∩ B) to avoid double-counting outcomes in both A and B</li>
+            <li>Mutually exclusive events: P(A ∩ B) = 0, so P(A ∪ B) = P(A) + P(B)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>P(draw a heart) = 13/52; P(draw a face card) = 12/52; P(heart and face) = 3/52 (J♥, Q♥, K♥). P(heart or face) = 13/52 + 12/52 − 3/52 = 22/52 = 11/26.</p>
+        </div>
+
+        <!-- S-MD.6 -->
+        <div class="topic-section" id="smd6">
+          <span class="standard-badge">S-MD.6</span>
+          <h2 class="topic-title">Fair Decisions with Probability</h2>
+          <p class="standard-text">Use probabilities to make fair decisions (e.g., drawing by lots, using a random number generator).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>A decision is fair if each outcome has the appropriate probability</li>
+            <li>Random number generators, coin flips, and random draws can implement fair decisions</li>
+            <li>Must verify that the method actually produces the desired probabilities</li>
+          </ul>
+          <h3>Example</h3>
+          <p>5 students must each give a 5-minute presentation. To assign a fair random order, assign each a number 1–5, then use a random number generator (without replacement). Each student has equal probability of any position.</p>
+        </div>
+
+        <!-- S-MD.7 -->
+        <div class="topic-section" id="smd7">
+          <span class="standard-badge">S-MD.7</span>
+          <h2 class="topic-title">Analyzing Decisions Using Probability</h2>
+          <p class="standard-text">Analyze decisions and strategies using probability concepts (e.g., product testing, medical testing).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Medical testing: sensitivity (P(positive | disease)), specificity (P(negative | no disease))</li>
+            <li>False positive: test positive when disease absent; false negative: test negative when disease present</li>
+            <li>Expected value: used to analyze decisions — pick option with highest expected payoff</li>
+            <li>E(X) = Σ [x · P(X = x)]</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Game: win $10 with probability 0.3, lose $4 with probability 0.7. E = 10(0.3) + (−4)(0.7) = 3 − 2.8 = $0.20. Positive expected value → favorable game on average.</p>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="topics.js"></script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U8-A-101",
+        title: "Unit 8: Area and Perimeter",
+        note: "For answers with pi, type 'pi' (e.g., 10*pi). Use '/' for fractions.",
+        questions: [
+            { q: "The distance around a polygon is called the \_\_\_.", a: "perimeter", d: "easy" },
+            { q: "The amount of space inside a 2D figure is the \_\_\_.", a: "area", d: "easy" },
+            { q: "Formula for the area of a rectangle?", a: "l*w", d: "easy" },
+            { q: "Formula for the area of a triangle?", a: "1/2*b*h", d: "easy" },
+            { q: "Find the perimeter of a square with side 5.", a: "20", d: "easy" },
+            { q: "Find the area of a square with side 5.", a: "25", d: "moderate" },
+            { q: "The area of a parallelogram is base times \_\_\_.", a: "height", d: "moderate" },
+            { q: "What is the area of a circle with radius r?", a: "pi*r^2", d: "moderate" },
+            { q: "Find the area of a triangle with b=10 and h=4.", a: "20", d: "moderate" },
+            { q: "Area of a trapezoid: 1/2 * h * (b1 + \_\_\_).", a: "b2", d: "moderate" },
+            { q: "Perimeter of a circle is also called the \_\_\_.", a: "circumference", d: "moderate" },
+            { q: "Find the area of a rectangle with length 8 and width 3.", a: "24", d: "moderate" },
+            { q: "If the base of a triangle is 6 and area is 12, what is the height?", a: "4", d: "moderate" },
+            { q: "A figure made of two or more simple shapes is a \_\_\_ figure.", a: "composite", d: "moderate" },
+            { q: "Find the circumference of a circle with r=3.", a: "6*pi", d: "moderate" },
+            { q: "If the side of a square doubles, the perimeter is multiplied by \_\_\_.", a: "2", d: "hard" },
+            { q: "If the side of a square doubles, the area is multiplied by \_\_\_.", a: "4", d: "hard" },
+            { q: "Area of a rhombus: 1/2 * d1 * \_\_\_.", a: "d2", d: "hard" },
+            { q: "Find the area of a trapezoid: h=4, b1=5, b2=10.", a: "30", d: "hard" },
+            { q: "Area of a regular polygon: 1/2 * apothem * \_\_\_.", a: "perimeter", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-B-202",
+        title: "Unit 8: Area and Perimeter",
+        note: "For answers with pi, type 'pi'. Use '/' for fractions.",
+        questions: [
+            { q: "Area of a circle formula?", a: "pi*r^2", d: "easy" },
+            { q: "Perimeter of a rectangle: 2l + \_\_\_.", a: "2w", d: "easy" },
+            { q: "Units for area are always \_\_\_.", a: "squared", d: "easy" },
+            { q: "A square has a perimeter of 12. Length of one side?", a: "3", d: "easy" },
+            { q: "Find the area of a rectangle with sides 5 and 10.", a: "50", d: "easy" },
+            { q: "Area of a triangle with base 8 and height 5?", a: "20", d: "moderate" },
+            { q: "The height of a triangle must be \_\_\_ to the base.", a: "perpendicular", d: "moderate" },
+            { q: "Area of a parallelogram with b=7 and h=3?", a: "21", d: "moderate" },
+            { q: "What is the circumference of a circle with diameter 10?", a: "10*pi", d: "moderate" },
+            { q: "Find the side of a square if its area is 64.", a: "8", d: "moderate" },
+            { q: "A trapezoid has bases 4 and 6, and height 5. Area?", a: "25", d: "moderate" },
+            { q: "Area of a circle with diameter 6?", a: "9*pi", d: "moderate" },
+            { q: "Perimeter of a triangle with sides 3, 4, 5?", a: "12", d: "moderate" },
+            { q: "The 'a' in the formula A = 1/2 * a * P stands for \_\_\_.", a: "apothem", d: "moderate" },
+            { q: "Area of a kite: 1/2 * (product of \_\_\_).", a: "diagonals", d: "moderate" },
+            { q: "If dimensions are tripled, the area is multiplied by \_\_\_.", a: "9", d: "hard" },
+            { q: "Find the area of a circle with circumference 8*pi.", a: "16*pi", d: "hard" },
+            { q: "Area of a right triangle with legs 6 and 8?", a: "24", d: "hard" },
+            { q: "A rectangle has area 40 and width 4. Perimeter?", a: "28", d: "hard" },
+            { q: "Ratio of perimeters of similar figures with scale factor 1:3?", a: "1:3", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-C-303",
+        title: "Unit 8: Area and Perimeter",
+        note: "Calculations for common polygons.",
+        questions: [
+            { q: "Area of a square with side 's'?", a: "s^2", d: "easy" },
+            { q: "Circumference of a circle with radius 'r'?", a: "2*pi*r", d: "easy" },
+            { q: "Perimeter of a regular hexagon with side 4?", a: "24", d: "easy" },
+            { q: "Base times height is the area for which 4-sided shape?", a: "parallelogram", d: "easy" },
+            { q: "Find the area of a triangle: b=12, h=6.", a: "36", d: "easy" },
+            { q: "Find the area of a trapezoid: b1=2, b2=8, h=10.", a: "50", d: "moderate" },
+            { q: "Area of a circle with r=10?", a: "100*pi", d: "moderate" },
+            { q: "Find the perimeter of a rectangle: l=15, w=10.", a: "50", d: "moderate" },
+            { q: "Diagonal 1 of a rhombus is 6, Diagonal 2 is 10. Area?", a: "30", d: "moderate" },
+            { q: "If area of a square is 100, what is the perimeter?", a: "40", d: "moderate" },
+            { q: "Area of a sector is a fraction of the circle's \_\_\_.", a: "area", d: "moderate" },
+            { q: "Find the area of a square with perimeter 20.", a: "25", d: "moderate" },
+            { q: "A circle has area 49*pi. Radius?", a: "7", d: "moderate" },
+            { q: "Distance from the center to the midpoint of a side in a regular polygon?", a: "apothem", d: "moderate" },
+            { q: "Perimeter of a semicircle with radius r (arc only)?", a: "pi*r", d: "moderate" },
+            { q: "If scale factor is 2:5, the area ratio is \_\_\_.", a: "4:25", d: "hard" },
+            { q: "Find the area of a regular polygon with P=40 and a=5.", a: "100", d: "hard" },
+            { q: "Find base of a parallelogram if area=60 and h=5.", a: "12", d: "hard" },
+            { q: "Area of a triangle with vertices (0,0), (4,0), and (0,3)?", a: "6", d: "hard" },
+            { q: "A circle is inscribed in a square of side 10. Area of circle?", a: "25*pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-D-404",
+        title: "Unit 8: Area and Perimeter",
+        note: "Focus on Circles and Triangles.",
+        questions: [
+            { q: "Area of a triangle: (base * height) / \_\_\_.", a: "2", d: "easy" },
+            { q: "Is perimeter measured in square units?", a: "no", d: "easy" },
+            { q: "Perimeter of a square with side 1?", a: "4", d: "easy" },
+            { q: "Find area of rectangle: 2 by 9.", a: "18", d: "easy" },
+            { q: "Area of circle formula?", a: "pi*r^2", d: "easy" },
+            { q: "Area of a triangle with b=5, h=10?", a: "25", d: "moderate" },
+            { q: "Find r if circumference is 2*pi.", a: "1", d: "moderate" },
+            { q: "A trapezoid has bases 10 and 20. Median length?", a: "15", d: "moderate" },
+            { q: "Find the perimeter of a regular pentagon with side 6.", a: "30", d: "moderate" },
+            { q: "Area of parallelogram with b=12, h=4?", a: "48", d: "moderate" },
+            { q: "Circle with r=4. Area?", a: "16*pi", d: "moderate" },
+            { q: "Area of a square with side 1/2?", a: "1/4", d: "moderate" },
+            { q: "If radius is 5, circumference is \_\_\_.", a: "10*pi", d: "moderate" },
+            { q: "A rectangle has perimeter 20 and length 6. Width?", a: "4", d: "moderate" },
+            { q: "Can the apothem be longer than the radius?", a: "no", d: "moderate" },
+            { q: "Ratio of areas is 1:16. Scale factor?", a: "1:4", d: "hard" },
+            { q: "Area of a rhombus with diagonals 12 and 16?", a: "96", d: "hard" },
+            { q: "Find the height of a trapezoid if A=40, b1=6, b2=14.", a: "4", d: "hard" },
+            { q: "Area of a sector with n=90 degrees and r=2?", a: "pi", d: "hard" },
+            { q: "Area of an equilateral triangle with side 2? (sqrt(3) form)", a: "sqrt(3)", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-E-505",
+        title: "Unit 8: Area and Perimeter",
+        note: "Composite figures and scaling.",
+        questions: [
+            { q: "A circle's radius is 1. Area?", a: "pi", d: "easy" },
+            { q: "A square's area is 1. Perimeter?", a: "4", d: "easy" },
+            { q: "Base of a triangle is 4, height is 3. Area?", a: "6", d: "easy" },
+            { q: "Area of a rectangle with length 10, width 1.", a: "10", d: "easy" },
+            { q: "Formula for area of a parallelogram?", a: "b*h", d: "easy" },
+            { q: "Area of a trapezoid with h=2, b1=3, b2=5.", a: "8", d: "moderate" },
+            { q: "What happens to area if all sides are doubled?", a: "quadruples", d: "moderate" },
+            { q: "Find radius if area is 81*pi.", a: "9", d: "moderate" },
+            { q: "Circumference of a circle with r=10.", a: "20*pi", d: "moderate" },
+            { q: "Perimeter of a square with side 2.5.", a: "10", d: "moderate" },
+            { q: "Area of a kite with diagonals 4 and 5.", a: "10", d: "moderate" },
+            { q: "If scale factor is 4, area is multiplied by \_\_\_.", a: "16", d: "moderate" },
+            { q: "Find base of triangle if A=50 and h=10.", a: "10", d: "moderate" },
+            { q: "Area of a regular hexagon with P=12 and a=2.", a: "12", d: "moderate" },
+            { q: "Perimeter of a rectangle with l=1.5, w=2.", a: "7", d: "moderate" },
+            { q: "Area of circle with d=1.", a: "0.25*pi", d: "hard" },
+            { q: "Find the area of a square inscribed in a circle of radius 5.", a: "50", d: "hard" },
+            { q: "Radius of circle with area 12*pi?", a: "sqrt(12)", d: "hard" },
+            { q: "Area of triangle with sides 3, 4, 5.", a: "6", d: "hard" },
+            { q: "A 10x10 square has a 2x2 square cut out. Remaining area?", a: "96", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-F-606",
+        title: "Unit 8: Area and Perimeter",
+        note: "Test 6: Geometry Basics.",
+        questions: [
+            { q: "Perimeter of a circle with diameter d?", a: "pi*d", d: "easy" },
+            { q: "Area of a square with side 3?", a: "9", d: "easy" },
+            { q: "Area of a rectangle with sides 4 and 6?", a: "24", d: "easy" },
+            { q: "Sum of all sides of a polygon?", a: "perimeter", d: "easy" },
+            { q: "Area of a circle with r=2?", a: "4*pi", d: "easy" },
+            { q: "If h=10 and b=5, area of triangle is \_\_\_.", a: "25", d: "moderate" },
+            { q: "Perimeter of a rectangle with l=8, w=2.", a: "20", d: "moderate" },
+            { q: "Find the area of a circle with d=20.", a: "100*pi", d: "moderate" },
+            { q: "Area of rhombus: d1=4, d2=8.", a: "16", d: "moderate" },
+            { q: "A square has area 49. Perimeter?", a: "28", d: "moderate" },
+            { q: "Area of a parallelogram: b=15, h=2.", a: "30", d: "moderate" },
+            { q: "Find side of a square if P=100.", a: "25", d: "moderate" },
+            { q: "Area of a trapezoid with h=3, bases 4 and 8.", a: "18", d: "moderate" },
+            { q: "Area of a triangle with b=20, h=5.", a: "50", d: "moderate" },
+            { q: "If the radius of a circle is tripled, area is multiplied by \_\_\_.", a: "9", d: "moderate" },
+            { q: "Area of regular polygon with a=4, P=20.", a: "40", d: "hard" },
+            { q: "Find d2 of a kite if A=20 and d1=5.", a: "8", d: "hard" },
+            { q: "Area of circle with circumference 10*pi.", a: "25*pi", d: "hard" },
+            { q: "Perimeter of a regular octagon with side 5.", a: "40", d: "hard" },
+            { q: "A rectangle's length is twice its width. If w=5, area?", a: "50", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-G-707",
+        title: "Unit 8: Area and Perimeter",
+        note: "Test 7: Polygon Focus.",
+        questions: [
+            { q: "Area of rectangle: 7x3?", a: "21", d: "easy" },
+            { q: "Perimeter of square with side 10?", a: "40", d: "easy" },
+            { q: "Formula for area of a trapezoid?", a: "1/2*h*(b1+b2)", d: "easy" },
+            { q: "Area of circle with r=1?", a: "pi", d: "easy" },
+            { q: "Base of triangle=10, h=2. Area?", a: "10", d: "easy" },
+            { q: "Area of parallelogram: b=6, h=6.", a: "36", d: "moderate" },
+            { q: "Find radius if circumference is 12*pi.", a: "6", d: "moderate" },
+            { q: "Area of square with side 1.1?", a: "1.21", d: "moderate" },
+            { q: "Perimeter of rectangle: l=100, w=1.", a: "202", d: "moderate" },
+            { q: "If scale factor is 1/2, area is multiplied by \_\_\_.", a: "1/4", d: "moderate" },
+            { q: "Area of rhombus with diagonals 2 and 20.", a: "20", d: "moderate" },
+            { q: "Side of square with area 144.", a: "12", d: "moderate" },
+            { q: "Find b2 if A=20, h=4, b1=5.", a: "5", d: "moderate" },
+            { q: "Area of triangle with b=7, h=4.", a: "14", d: "moderate" },
+            { q: "Is the apothem a segment to a vertex?", a: "no", d: "moderate" },
+            { q: "Area of circle with diameter 0.2?", a: "0.01*pi", d: "hard" },
+            { q: "Find the area of a square if its diagonal is 10.", a: "50", d: "hard" },
+            { q: "Perimeter of equilateral triangle with side 9.", a: "27", d: "hard" },
+            { q: "Area of regular pentagon: a=2, P=10.", a: "10", d: "hard" },
+            { q: "Find width of rectangle: Area=48, Length=12.", a: "4", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-H-808",
+        title: "Unit 8: Area and Perimeter",
+        note: "Test 8: Mixed Problems.",
+        questions: [
+            { q: "Units for perimeter?", a: "linear", d: "easy" },
+            { q: "Area of circle with r=5?", a: "25*pi", d: "easy" },
+            { q: "Perimeter of rectangle with sides 5, 5?", a: "20", d: "easy" },
+            { q: "Area of square with side 8?", a: "64", d: "easy" },
+            { q: "Area of triangle: b=1, h=1.", a: "1/2", d: "easy" },
+            { q: "Find h of rectangle if A=100 and b=20.", a: "5", d: "moderate" },
+            { q: "If sides triple, perimeter is multiplied by \_\_\_.", a: "3", d: "moderate" },
+            { q: "Area of circle with d=4.", a: "4*pi", d: "moderate" },
+            { q: "Area of trapezoid: bases 2 and 4, h=3.", a: "9", d: "moderate" },
+            { q: "Perimeter of square with area 36.", a: "24", d: "moderate" },
+            { q: "Area of parallelogram: b=9, h=10.", a: "90", d: "moderate" },
+            { q: "Side of regular hexagon with P=60.", a: "10", d: "moderate" },
+            { q: "Area of kite: diagonals 6 and 7.", a: "21", d: "moderate" },
+            { q: "Does a rhombus have perpendicular diagonals?", a: "yes", d: "moderate" },
+            { q: "Radius if circumference is pi.", a: "0.5", d: "moderate" },
+            { q: "Area of circle with circumference 4*pi.", a: "4*pi", d: "hard" },
+            { q: "A triangle has area 15. If base is 5, find height.", a: "6", d: "hard" },
+            { q: "Area of rectangle with l=12 and P=30.", a: "36", d: "hard" },
+            { q: "Area of regular polygon: a=1, P=6.", a: "3", d: "hard" },
+            { q: "Find the side of a square with area 1.69.", a: "1.3", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-I-909",
+        title: "Unit 8: Area and Perimeter",
+        note: "Test 9: Advanced Concepts.",
+        questions: [
+            { q: "Circumference with r=100?", a: "200*pi", d: "easy" },
+            { q: "Area of square with side 0.1?", a: "0.01", d: "easy" },
+            { q: "Area of rectangle: 1/2 by 4.", a: "2", d: "easy" },
+            { q: "Perimeter of triangle with sides 1, 1, 1?", a: "3", d: "easy" },
+            { q: "Area of circle with r=0?", a: "0", d: "easy" },
+            { q: "Area of trapezoid with h=5, bases 5 and 5.", a: "25", d: "moderate" },
+            { q: "If area ratio is 9:16, scale factor is \_\_\_.", a: "3:4", d: "moderate" },
+            { q: "Find diameter if area is 16*pi.", a: "8", d: "moderate" },
+            { q: "Area of rhombus with diagonals 10 and 10.", a: "50", d: "moderate" },
+            { q: "Perimeter of rectangle with area 12 and l=4.", a: "14", d: "moderate" },
+            { q: "Find h of triangle if A=24 and b=6.", a: "8", d: "moderate" },
+            { q: "Area of regular polygon: a=10, P=10.", a: "50", d: "moderate" },
+            { q: "If all dimensions are halved, area is multiplied by \_\_\_.", a: "1/4", d: "moderate" },
+            { q: "Circumference of circle with area 81*pi.", a: "18*pi", d: "moderate" },
+            { q: "Area of square with perimeter 400.", a: "10000", d: "moderate" },
+            { q: "Area of triangle with vertices (0,0), (6,0), (6,6)?", a: "18", d: "hard" },
+            { q: "Find the radius of a circle with area 50*pi.", a: "sqrt(50)", d: "hard" },
+            { q: "Perimeter of a rhombus with side 7.", a: "28", d: "hard" },
+            { q: "A 5x5 square is inside a 10x10 square. Area outside 5x5?", a: "75", d: "hard" },
+            { q: "Area of a sector with r=6 and n=60 degrees.", a: "6*pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U8-J-010",
+        title: "Unit 8: Area and Perimeter",
+        note: "Final Unit 8 Review.",
+        questions: [
+            { q: "Area of rectangle: b=5, h=2?", a: "10", d: "easy" },
+            { q: "Perimeter of square with side 6?", a: "24", d: "easy" },
+            { q: "Circumference of circle with r=1?", a: "2*pi", d: "easy" },
+            { q: "Area of triangle: b=4, h=5.", a: "10", d: "easy" },
+            { q: "Area of square with side 12?", a: "144", d: "easy" },
+            { q: "Area of trapezoid: h=1, b1=10, b2=20.", a: "15", d: "moderate" },
+            { q: "If scale factor is k, area ratio is \_\_\_.", a: "k^2", d: "moderate" },
+            { q: "Area of circle with d=2.", a: "pi", d: "moderate" },
+            { q: "Find side of square if area is 225.", a: "15", d: "moderate" },
+            { q: "Perimeter of rectangle with l=10, w=5.", a: "30", d: "moderate" },
+            { q: "Area of rhombus with diagonals 5 and 6.", a: "15", d: "moderate" },
+            { q: "Find b of parallelogram if A=100 and h=10.", a: "10", d: "moderate" },
+            { q: "A regular hexagon has side 2. Perimeter?", a: "12", d: "moderate" },
+            { q: "Area of regular polygon: a=5, P=20.", a: "50", d: "moderate" },
+            { q: "If radius of circle is 1/2, area is \_\_\_.", a: "0.25*pi", d: "moderate" },
+            { q: "Find the area of a rectangle if P=20 and w=2.", a: "16", d: "hard" },
+            { q: "Area of circle with circumference 6*pi.", a: "9*pi", d: "hard" },
+            { q: "Perimeter of isosceles triangle with base 10 and legs 13.", a: "36", d: "hard" },
+            { q: "Area of a triangle with base 14 and height 7.", a: "49", d: "hard" },
+            { q: "Area of a circle with radius 1/3.", a: "1/9*pi", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

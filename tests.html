@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathAssist | Practice Tests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #020617;
+      --card: rgba(30, 41, 59, 0.4);
+      --accent: #2dd4bf;
+      --accent-glow: rgba(45, 212, 191, 0.3);
+      --accent-2: #f59e0b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 0% 0%, rgba(45, 212, 191, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(20px);
+      background: rgba(2, 6, 23, 0.7);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 6vw;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1.3rem;
+      display: flex; gap: 10px; align-items: center;
+    }
+
+    .logo-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 6px; }
+
+    nav { display: flex; gap: 12px; }
+    nav a {
+      color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600;
+      padding: 8px 14px; border-radius: 8px; transition: 0.2s;
+    }
+    nav a:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem 6vw 4rem; }
+
+    .hero { text-align: center; padding: 2rem 0 3rem; }
+    .hero h1 { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 3.5rem); 
+      background: linear-gradient(to bottom, #fff, #94a3b8);
+      background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .course-section { margin-bottom: 5rem; }
+    
+    /* Centerized Labels */
+    .course-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem; color: #fff; 
+      margin-bottom: 2rem;
+      text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 20px;
+    }
+    .course-title::before, .course-title::after {
+      content: ""; height: 1px; width: 60px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .topics-grid { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 20px; 
+    }
+    
+    .topic-btn {
+      background: var(--card);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px; 
+      padding: 24px;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      min-height: 110px;
+      text-decoration: none; color: #e2e8f0;
+      font-weight: 600; font-size: 0.9rem; line-height: 1.4;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .topic-btn:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      background: rgba(45, 212, 191, 0.05);
+      color: #fff;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--accent-glow);
+    }
+
+    @media (max-width: 1000px) { .topics-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px) { .topics-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .topics-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo"><div class="logo-icon"></div>MathAssist</div>
+    <nav>
+      <a href="index.html">Homepage</a>
+      <a href="library.html">Resource Library</a>
+      <a href="practice.html">Practice Problems</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Practice Tests</h1>
+      <p style="color: var(--muted)">Choose a unit to start your full-length practice exam.</p>
+    </section>
+
+    <div class="course-section">
+      <h2 class="course-title">Algebra 1</h2>
+      <div class="topics-grid">
+        <a href="alg1u1.html" class="topic-btn">Algebra Foundations</a>
+        <a href="alg1u2.html" class="topic-btn">Solving Equations & Inequalities</a>
+        <a href="alg1u3.html" class="topic-btn">Working with Units</a>
+        <a href="alg1u4.html" class="topic-btn">Linear Equations & Graphs</a>
+        <a href="alg1u5.html" class="topic-btn">Forms of Linear Equations</a>
+        <a href="alg1u6.html" class="topic-btn">Systems of Equations</a>
+        <a href="alg1u7.html" class="topic-btn">Inequalities (Systems & Graphs)</a>
+        <a href="alg1u8.html" class="topic-btn">Functions</a>
+        <a href="alg1u9.html" class="topic-btn">Sequences</a>
+        <a href="alg1u10.html" class="topic-btn">Absolute Value & Piecewise Functions</a>
+        <a href="alg1u11.html" class="topic-btn">Exponents & Radicals</a>
+        <a href="alg1u12.html" class="topic-btn">Exponential Growth & Decay</a>
+        <a href="alg1u13.html" class="topic-btn">Quadratics: Multiplying & Factoring</a>
+        <a href="alg1u14.html" class="topic-btn">Quadratic Functions & Equations</a>
+        <a href="alg1u15.html" class="topic-btn">Irrational Numbers</a>
+      </div>
+    </div>
+
+    <div class="course-section">
+      <h2 class="course-title">Geometry</h2>
+      <div class="topics-grid">
+        <a href="geo1u1.html" class="topic-btn">Performing Transformations</a>
+        <a href="geo1u2.html" class="topic-btn">Congruence</a>
+        <a href="geo1u3.html" class="topic-btn">Similarity</a>
+        <a href="geo1u4.html" class="topic-btn">Right Triangles & Trigonometry</a>
+        <a href="geo1u5.html" class="topic-btn">Solid Geometry</a>
+        <a href="geo1u6.html" class="topic-btn">Analytic Geometry</a>
+        <a href="geo1u7.html" class="topic-btn">Circles</a>
+        <a href="geo1u8.html" class="topic-btn">Area and Perimeter</a>
+        <a href="geo1u9.html" class="topic-btn">Volume and Surface Area</a>
+      </div>
+    </div>
+
+    <div class="course-section">
+      <h2 class="course-title">Algebra 2</h2>
+      <div class="topics-grid">
+        <a href="alg2u1.html" class="topic-btn">Polynomial Arithmetic</a>
+        <a href="alg2u2.html" class="topic-btn">Complex Numbers</a>
+        <a href="alg2u3.html" class="topic-btn">Polynomial Factorization</a>
+        <a href="alg2u4.html" class="topic-btn">Polynomial Division</a>
+        <a href="alg2u5.html" class="topic-btn">Polynomial Graphs</a>
+        <a href="alg2u6.html" class="topic-btn">Rational Exponents & Radicals</a>
+        <a href="alg2u7.html" class="topic-btn">Exponential Models</a>
+        <a href="alg2u8.html" class="topic-btn">Logarithms</a>
+        <a href="alg2u9.html" class="topic-btn">Transformations of Functions</a>
+        <a href="alg2u10.html" class="topic-btn">Equations</a>
+        <a href="alg2u11.html" class="topic-btn">Trigonometry</a>
+        <a href="alg2u12.html" class="topic-btn">Rational Functions</a>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

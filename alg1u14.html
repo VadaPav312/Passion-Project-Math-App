@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U14-A-101",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What is the standard form of a quadratic equation?", a: "ax^2 + bx + c = 0", d: "easy" },
+            { q: "What is the shape of a quadratic graph called?", a: "parabola", d: "easy" },
+            { q: "If $a > 0$, does the parabola open up or down?", a: "up", d: "easy" },
+            { q: "Find the y-intercept of $y = x^2 + 5x + 6$.", a: "6", d: "easy" },
+            { q: "What are the 'roots' of a function?", a: "x-intercepts", d: "easy" },
+            { q: "Formula for the axis of symmetry?", a: "x = -b/(2a)", d: "moderate" },
+            { q: "Find the vertex of $y = (x - 3)^2 + 4$.", a: "(3, 4)", d: "moderate" },
+            { q: "Solve $x^2 = 49$ using square roots.", a: "7, -7", d: "moderate" },
+            { q: "Identify $a, b,$ and $c$ for $y = 2x^2 - 4x + 1$.", a: "a=2, b=-4, c=1", d: "moderate" },
+            { q: "What is the vertex if the axis of symmetry is $x=2$ and $f(2)=5$?", a: "(2, 5)", d: "moderate" },
+            { q: "Solve $x^2 - 9 = 0$.", a: "3, -3", d: "moderate" },
+            { q: "Does $y = -x^2 + 4$ have a maximum or minimum?", a: "maximum", d: "moderate" },
+            { q: "Find the axis of symmetry for $y = x^2 - 6x + 8$.", a: "x = 3", d: "moderate" },
+            { q: "What is the discriminant formula?", a: "b^2 - 4ac", d: "moderate" },
+            { q: "How many solutions if the discriminant is 0?", a: "1", d: "moderate" },
+            { q: "Solve using the quadratic formula: $x^2 - 5x + 6 = 0$.", a: "2, 3", d: "hard" },
+            { q: "Find the vertex of $y = x^2 + 4x - 5$.", a: "(-2, -9)", d: "hard" },
+            { q: "Solve $2x^2 = 32$.", a: "4, -4", d: "hard" },
+            { q: "If the discriminant is -10, how many real roots are there?", a: "0", d: "hard" },
+            { q: "Write $y = x^2 - 6x + 9$ in vertex form.", a: "y = (x - 3)^2", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-B-202",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What is the vertex form equation?", a: "y = a(x-h)^2 + k", d: "easy" },
+            { q: "If $a < 0$, the parabola opens \_\_\_.", a: "down", d: "easy" },
+            { q: "Find the y-intercept of $y = 3x^2 - 2x - 5$.", a: "-5", d: "easy" },
+            { q: "Solve $x^2 = 100$.", a: "10, -10", d: "easy" },
+            { q: "A parabola is symmetrical across the \_\_\_.", a: "axis of symmetry", d: "easy" },
+            { q: "Find the axis of symmetry for $y = 2x^2 + 8x$.", a: "x = -2", d: "moderate" },
+            { q: "Find the vertex of $y = (x + 5)^2 - 2$.", a: "(-5, -2)", d: "moderate" },
+            { q: "How many x-intercepts if the vertex is $(0,5)$ and $a=1$?", a: "0", d: "moderate" },
+            { q: "Solve $(x - 2)^2 = 16$.", a: "6, -2", d: "moderate" },
+            { q: "The highest or lowest point of a parabola is the \_\_\_.", a: "vertex", d: "moderate" },
+            { q: "Solve $x^2 - 25 = 0$.", a: "5, -5", d: "moderate" },
+            { q: "What is the discriminant if $a=1, b=4, c=4$?", a: "0", d: "moderate" },
+            { q: "Find the y-intercept of $y = (x-1)^2 + 3$.", a: "4", d: "moderate" },
+            { q: "If $b^2 - 4ac > 0$, there are \_\_\_ real roots.", a: "2", d: "moderate" },
+            { q: "Simplify $\\sqrt{-16}$ using 'i'.", a: "4i", d: "moderate" },
+            { q: "Solve $x^2 + 6x + 8 = 0$ by factoring.", a: "-2, -4", d: "hard" },
+            { q: "Convert $y = x^2 + 2x + 5$ to vertex form.", a: "y = (x + 1)^2 + 4", d: "hard" },
+            { q: "Solve $3x^2 = 27$.", a: "3, -3", d: "hard" },
+            { q: "Find the vertex of $y = -2x^2 + 12x - 10$.", a: "(3, 8)", d: "hard" },
+            { q: "Find the roots of $y = x^2 - 4$.", a: "2, -2", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-C-303",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What is the coordinate of the vertex in $y = x^2$?", a: "(0, 0)", d: "easy" },
+            { q: "The 'c' value in $ax^2+bx+c$ is always the \_\_\_.", a: "y-intercept", d: "easy" },
+            { q: "Solve $x^2 = 1$.", a: "1, -1", d: "easy" },
+            { q: "True or False: All quadratics have two real roots.", a: "false", d: "easy" },
+            { q: "If a parabola opens down, the vertex is a \_\_\_.", a: "maximum", d: "easy" },
+            { q: "Find the axis of symmetry for $y = x^2 + 10x$.", a: "x = -5", d: "moderate" },
+            { q: "Find the vertex of $y = (x - 7)^2$.", a: "(7, 0)", d: "moderate" },
+            { q: "Solve $2x^2 = 50$.", a: "5, -5", d: "moderate" },
+            { q: "Solve $(x + 3)^2 = 9$.", a: "0, -6", d: "moderate" },
+            { q: "What is the discriminant if $a=1, b=2, c=5$?", a: "-16", d: "moderate" },
+            { q: "Find the y-intercept of $y = x^2 - x$.", a: "0", d: "moderate" },
+            { q: "Roots are also called \_\_\_ or zeros.", a: "solutions", d: "moderate" },
+            { q: "If the vertex is $(3, -2)$ and $a$ is positive, how many roots?", a: "2", d: "moderate" },
+            { q: "Find the axis of symmetry: $y = 3x^2 - 12x + 1$.", a: "x = 2", d: "moderate" },
+            { q: "What is the square root of $x^2$?", a: "x", d: "moderate" },
+            { q: "Solve $x^2 - 10x + 21 = 0$.", a: "3, 7", d: "hard" },
+            { q: "Find the vertex: $y = x^2 - 8x + 12$.", a: "(4, -4)", d: "hard" },
+            { q: "Solve using Quadratic Formula: $x^2 + 2x - 3 = 0$.", a: "1, -3", d: "hard" },
+            { q: "Does $y = 5x^2 + 10$ cross the x-axis?", a: "no", d: "hard" },
+            { q: "Find the roots of $y = (x-4)(x+2)$.", a: "4, -2", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-D-404",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What is the Quadratic Formula?", a: "x = (-b +/- sqrt(b^2-4ac)) / (2a)", d: "easy" },
+            { q: "If $a=5$, is the parabola wider or narrower than $y=x^2$?", a: "narrower", d: "easy" },
+            { q: "Find the y-intercept of $y = -2x^2 + 4x + 7$.", a: "7", d: "easy" },
+            { q: "Solve $x^2 - 36 = 0$.", a: "6, -6", d: "easy" },
+            { q: "The domain of most quadratic functions is \_\_\_.", a: "all real numbers", d: "easy" },
+            { q: "Find the vertex of $y = x^2 - 2$.", a: "(0, -2)", d: "moderate" },
+            { q: "Axis of symmetry for $y = (x-4)^2 + 1$.", a: "x = 4", d: "moderate" },
+            { q: "Solve $x^2 + 16 = 0$ for complex roots.", a: "4i, -4i", d: "moderate" },
+            { q: "If $b^2 - 4ac = 25$, how many real roots?", a: "2", d: "moderate" },
+            { q: "Find the y-intercept of $y = 2(x+1)^2 - 5$.", a: "-3", d: "moderate" },
+            { q: "Does $y = 3x^2 + 6x + 3$ have 1 or 2 roots?", a: "1", d: "moderate" },
+            { q: "Find the axis of symmetry: $y = -x^2 + 4x$.", a: "x = 2", d: "moderate" },
+            { q: "Solve $5x^2 = 20$.", a: "2, -2", d: "moderate" },
+            { q: "If the vertex is $(1, 4)$ and it opens up, are there roots?", a: "no", d: "moderate" },
+            { q: "What is $h$ in the vertex $(h, k)$ for $y = (x+2)^2$?", a: "-2", d: "moderate" },
+            { q: "Solve $x^2 - 12x + 36 = 0$.", a: "6", d: "hard" },
+            { q: "Find the vertex: $y = 2x^2 - 8x + 6$.", a: "(2, -2)", d: "hard" },
+            { q: "Find the zeros of $f(x) = x^2 + 7x + 12$.", a: "-3, -4", d: "hard" },
+            { q: "Solve $x^2 - 7 = 0$.", a: "sqrt(7), -sqrt(7)", d: "hard" },
+            { q: "Write $y = x^2 + 4x$ in vertex form.", a: "y = (x+2)^2 - 4", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-E-505",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What is the vertex of $y = x^2 + 3$?", a: "(0, 3)", d: "easy" },
+            { q: "If $a=1/4$, is the parabola wider or narrower than $y=x^2$?", a: "wider", d: "easy" },
+            { q: "Find the y-intercept of $y = x^2 - 10$.", a: "-10", d: "easy" },
+            { q: "Solve $x^2 = 64$.", a: "8, -8", d: "easy" },
+            { q: "Can a quadratic have 3 roots?", a: "no", d: "easy" },
+            { q: "Find the axis of symmetry: $y = x^2 - 14x$.", a: "x = 7", d: "moderate" },
+            { q: "Vertex of $y = (x+10)^2 + 1$.", a: "(-10, 1)", d: "moderate" },
+            { q: "Solve $(x-1)^2 = 25$.", a: "6, -4", d: "moderate" },
+            { q: "If the vertex is $(0, -4)$ and $a=1$, how many roots?", a: "2", d: "moderate" },
+            { q: "Discriminant of $y = x^2 + x + 1$.", a: "-3", d: "moderate" },
+            { q: "Is the vertex of $y = -3x^2 + 5$ a min or max?", a: "max", d: "moderate" },
+            { q: "Solve $x^2 - 81 = 0$.", a: "9, -9", d: "moderate" },
+            { q: "What is 'k' in $y = 2(x-3)^2 + 5$?", a: "5", d: "moderate" },
+            { q: "Find the axis of symmetry: $y = 2x^2 + 12x + 1$.", a: "x = -3", d: "moderate" },
+            { q: "Roots of $y = x(x-5)$.", a: "0, 5", d: "moderate" },
+            { q: "Solve $x^2 - x - 6 = 0$.", a: "3, -2", d: "hard" },
+            { q: "Vertex of $y = x^2 + 6x + 5$.", a: "(-3, -4)", d: "hard" },
+            { q: "Solve $4x^2 - 100 = 0$.", a: "5, -5", d: "hard" },
+            { q: "How many roots for $y = x^2 + 4x + 4$?", a: "1", d: "hard" },
+            { q: "Solve $x^2 + 2x + 5 = 0$ (complex roots).", a: "-1 +/- 2i", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-F-606",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What letter represents the y-intercept in $ax^2+bx+c$?", a: "c", d: "easy" },
+            { q: "Vertex of $y = (x-1)^2$.", a: "(1, 0)", d: "easy" },
+            { q: "Solve $x^2 = 0$.", a: "0", d: "easy" },
+            { q: "Does $y = x^2 + 5$ have real roots?", a: "no", d: "easy" },
+            { q: "If $a$ is negative, the parabola has a \_\_\_ point.", a: "maximum", d: "easy" },
+            { q: "Axis of symmetry for $y = x^2 + 4x$.", a: "x = -2", d: "moderate" },
+            { q: "Vertex of $y = 2(x-5)^2 - 3$.", a: "(5, -3)", d: "moderate" },
+            { q: "Solve $x^2 - 144 = 0$.", a: "12, -12", d: "moderate" },
+            { q: "Solve $(x+4)^2 = 1$.", a: "-3, -5", d: "moderate" },
+            { q: "Discriminant of $y = x^2 - 6x + 9$.", a: "0", d: "moderate" },
+            { q: "What is the y-intercept of $y = (x+2)^2 - 1$?", a: "3", d: "moderate" },
+            { q: "If $D < 0$, the parabola \_\_\_ cross the x-axis.", a: "does not", d: "moderate" },
+            { q: "Find the vertex: $y = x^2 - 2x + 1$.", a: "(1, 0)", d: "moderate" },
+            { q: "Axis of symmetry: $y = -3x^2 + 6x - 2$.", a: "x = 1", d: "moderate" },
+            { q: "Zeros of $y = (x-8)(x-8)$.", a: "8", d: "moderate" },
+            { q: "Solve $x^2 + 3x - 10 = 0$.", a: "2, -5", d: "hard" },
+            { q: "Vertex of $y = -x^2 + 8x - 12$.", a: "(4, 4)", d: "hard" },
+            { q: "Solve $x^2 = 12$ (radical form).", a: "2\\sqrt{3}, -2\\sqrt{3}", d: "hard" },
+            { q: "Roots of $y = 2x^2 - 4x - 6$.", a: "3, -1", d: "hard" },
+            { q: "Find the range of $y = x^2 + 2$.", a: "y >= 2", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-G-707",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "If $b=0$ and $c=0$, what is the vertex of $ax^2$?", a: "(0, 0)", d: "easy" },
+            { q: "Direction of opening for $y = -2x^2 + 1$?", a: "down", d: "easy" },
+            { q: "Solve $x^2 = 121$.", a: "11, -11", d: "easy" },
+            { q: "How many roots if the vertex is on the x-axis?", a: "1", d: "easy" },
+            { q: "y-intercept of $y = x^2 + x - 12$.", a: "-12", d: "easy" },
+            { q: "Axis of symmetry: $y = x^2 - 20x + 5$.", a: "x = 10", d: "moderate" },
+            { q: "Vertex of $y = -(x + 4)^2 + 7$.", a: "(-4, 7)", d: "moderate" },
+            { q: "Solve $3x^2 = 75$.", a: "5, -5", d: "moderate" },
+            { q: "Solve $(x - 7)^2 = 0$.", a: "7", d: "moderate" },
+            { q: "Discriminant of $y = 2x^2 - 3x + 1$.", a: "1", d: "moderate" },
+            { q: "What is $a$ if $y = ax^2$ passes through $(1, 4)$?", a: "4", d: "moderate" },
+            { q: "If the vertex is $(2, 3)$ and $a=-1$, how many roots?", a: "2", d: "moderate" },
+            { q: "Find the y-intercept of $y = (x-3)^2$.", a: "9", d: "moderate" },
+            { q: "Axis of symmetry: $y = 5x^2 - 10x$.", a: "x = 1", d: "moderate" },
+            { q: "Roots of $y = (x+3)(x-3)$.", a: "3, -3", d: "moderate" },
+            { q: "Solve $x^2 - 7x + 10 = 0$.", a: "2, 5", d: "hard" },
+            { q: "Vertex of $y = x^2 - 4x + 7$.", a: "(2, 3)", d: "hard" },
+            { q: "Solve $x^2 - 5 = 0$ (radical form).", a: "sqrt(5), -sqrt(5)", d: "hard" },
+            { q: "Solve $x^2 + 10x + 25 = 0$.", a: "-5", d: "hard" },
+            { q: "Convert $y = x^2 - 8x + 15$ to vertex form.", a: "y = (x-4)^2 - 1", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-H-808",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What is the constant term in $y = x^2 + 4x + 1$?", a: "1", d: "easy" },
+            { q: "Vertex of $y = (x+2)^2$.", a: "(-2, 0)", d: "easy" },
+            { q: "Solve $x^2 = 225$.", a: "15, -15", d: "easy" },
+            { q: "Does $y = -x^2 - 1$ have real roots?", a: "no", d: "easy" },
+            { q: "The axis of symmetry always passes through the \_\_\_.", a: "vertex", d: "easy" },
+            { q: "Axis of symmetry: $y = x^2 + 12x$.", a: "x = -6", d: "moderate" },
+            { q: "Vertex of $y = 3(x-1)^2 + 4$.", a: "(1, 4)", d: "moderate" },
+            { q: "Solve $x^2 - 169 = 0$.", a: "13, -13", d: "moderate" },
+            { q: "Solve $(x+1)^2 = 4$.", a: "1, -3", d: "moderate" },
+            { q: "Discriminant of $y = x^2 + 6x + 5$.", a: "16", d: "moderate" },
+            { q: "y-intercept of $y = 2x^2 + 5x$.", a: "0", d: "moderate" },
+            { q: "How many real roots if $D=49$?", a: "2", d: "moderate" },
+            { q: "Find the vertex: $y = x^2 + 10x + 25$.", a: "(-5, 0)", d: "moderate" },
+            { q: "Axis of symmetry: $y = -x^2 + 2x + 10$.", a: "x = 1", d: "moderate" },
+            { q: "Zeros of $y = x^2 - 100$.", a: "10, -10", d: "moderate" },
+            { q: "Solve $x^2 - 4x - 12 = 0$.", a: "6, -2", d: "hard" },
+            { q: "Vertex of $y = -2x^2 + 4x + 1$.", a: "(1, 3)", d: "hard" },
+            { q: "Solve $2x^2 - 18 = 0$.", a: "3, -3", d: "hard" },
+            { q: "How many solutions if $b^2-4ac < 0$?", a: "0", d: "hard" },
+            { q: "Find the range of $y = -x^2 + 5$.", a: "y <= 5", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-I-909",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What is $a$ if $y = -x^2 + 2x$?", a: "-1", d: "easy" },
+            { q: "Vertex of $y = x^2 - 7$.", a: "(0, -7)", d: "easy" },
+            { q: "Solve $x^2 = 400$.", a: "20, -20", d: "easy" },
+            { q: "A quadratic graph is a symmetric \_\_\_-shape.", a: "U", d: "easy" },
+            { q: "y-intercept of $y = 5x^2 - 3x + 2$.", a: "2", d: "easy" },
+            { q: "Axis of symmetry: $y = x^2 - 2x$.", a: "x = 1", d: "moderate" },
+            { q: "Vertex of $y = (x+3)^2 - 10$.", a: "(-3, -10)", d: "moderate" },
+            { q: "Solve $2x^2 = 72$.", a: "6, -6", d: "moderate" },
+            { q: "Solve $(x-5)^2 = 9$.", a: "8, 2", d: "moderate" },
+            { q: "Discriminant of $y = 3x^2 - 2x + 5$.", a: "-56", d: "moderate" },
+            { q: "What is $h$ in $y = (x-8)^2 + 2$?", a: "8", d: "moderate" },
+            { q: "If the vertex is $(5, 0)$, how many roots are there?", a: "1", d: "moderate" },
+            { q: "Find the y-intercept of $y = -x^2 + 6$.", a: "6", d: "moderate" },
+            { q: "Axis of symmetry: $y = x^2 + 8x - 1$.", a: "x = -4", d: "moderate" },
+            { q: "Zeros of $y = (x+4)(x-1)$.", a: "-4, 1", d: "moderate" },
+            { q: "Solve $x^2 + 5x + 4 = 0$.", a: "-1, -4", d: "hard" },
+            { q: "Vertex of $y = x^2 - 6x$.", a: "(3, -9)", d: "hard" },
+            { q: "Solve $x^2 - 20 = 0$ (radical form).", a: "2\\sqrt{5}, -2\\sqrt{5}", d: "hard" },
+            { q: "Solve $x^2 + 14x + 49 = 0$.", a: "-7", d: "hard" },
+            { q: "Find the minimum value of $y = x^2 - 2x + 5$.", a: "4", d: "hard" }
+        ]
+    },
+    {
+        id: "U14-J-010",
+        title: "Unit 14: Quadratic Functions",
+        questions: [
+            { q: "What is the leading coefficient of $y = 4x^2 - 1$?", a: "4", d: "easy" },
+            { q: "Vertex of $y = (x+6)^2$.", a: "(-6, 0)", d: "easy" },
+            { q: "Solve $x^2 = 0.25$.", a: "0.5, -0.5", d: "easy" },
+            { q: "Does $y = 2x^2 + 10$ have x-intercepts?", a: "no", d: "easy" },
+            { q: "y-intercept of $y = x^2 + 4x$.", a: "0", d: "easy" },
+            { q: "Axis of symmetry: $y = x^2 + 16x + 2$.", a: "x = -8", d: "moderate" },
+            { q: "Vertex of $y = -2(x-1)^2 + 5$.", a: "(1, 5)", d: "moderate" },
+            { q: "Solve $x^2 - 196 = 0$.", a: "14, -14", d: "moderate" },
+            { q: "Solve $(x+3)^2 = 36$.", a: "3, -9", d: "moderate" },
+            { q: "Discriminant of $y = x^2 - 4x + 4$.", a: "0", d: "moderate" },
+            { q: "Find the y-intercept of $y = (x-2)^2 + 3$.", a: "7", d: "moderate" },
+            { q: "If the vertex is $(-2, -5)$ and $a=2$, how many roots?", a: "2", d: "moderate" },
+            { q: "Find the vertex: $y = x^2 - 12x + 36$.", a: "(6, 0)", d: "moderate" },
+            { q: "Axis of symmetry: $y = -x^2 - 4x + 1$.", a: "x = -2", d: "moderate" },
+            { q: "Roots of $y = x^2 - 0.01$.", a: "0.1, -0.1", d: "moderate" },
+            { q: "Solve $x^2 + x - 12 = 0$.", a: "3, -4", d: "hard" },
+            { q: "Vertex of $y = 2x^2 + 4x - 1$.", a: "(-1, -3)", d: "hard" },
+            { q: "Solve $x^2 - 50 = 0$ (radical form).", a: "5\\sqrt{2}, -5\\sqrt{2}", d: "hard" },
+            { q: "Solve $2x^2 - 12x + 18 = 0$.", a: "3", d: "hard" },
+            { q: "Range of $y = (x-1)^2 - 4$.", a: "y >= -4", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

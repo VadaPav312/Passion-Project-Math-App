@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algebra 1 — California Standards</title>
+  <link rel="stylesheet" href="../libstyle.css">
+  <style>
+    /* Algebra 1 — blue accent */
+    :root {
+      --page-accent:        #3498db;
+      --page-accent-dim:    rgba(52,152,219,0.2);
+      --page-accent-border: rgba(52,152,219,0.45);
+      --page-accent-text:   #7ec8e3;
+      --page-accent-active: rgba(52,152,219,0.25);
+      --page-accent-light:  rgba(52,152,219,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Algebra 1</h1>
+      <p>California Common Core State Standards — Complete Topic Reference</p>
+      <a href="../library.html" class="back-link">← Back to Library</a>
+    </div>
+
+    <div class="course-layout">
+      <!-- SIDEBAR -->
+      <nav class="sidebar">
+        <div class="sidebar-title">Topics</div>
+
+        <div class="sidebar-search-wrap">
+          <input type="search" id="sidebar-search" class="sidebar-search" placeholder="Filter topics… (press /)" autocomplete="off">
+        </div>
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Number &amp; Quantity (N-Q) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('nq1')">N-Q.1 · Using Units</button>
+            <button class="nav-link" onclick="showTopic('nq2')">N-Q.2 · Defining Quantities</button>
+            <button class="nav-link" onclick="showTopic('nq3')">N-Q.3 · Accuracy &amp; Precision</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Expressions (A-SSE) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('asse1')">A-SSE.1 · Interpreting Expressions</button>
+            <button class="nav-link" onclick="showTopic('asse2')">A-SSE.2 · Structure of Expressions</button>
+            <button class="nav-link" onclick="showTopic('asse3')">A-SSE.3 · Equivalent Forms</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Polynomials (A-APR) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('aapr1')">A-APR.1 · Polynomial Operations</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Creating Equations (A-CED) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('aced1')">A-CED.1 · One-Variable Equations</button>
+            <button class="nav-link" onclick="showTopic('aced2')">A-CED.2 · Two-Variable Equations</button>
+            <button class="nav-link" onclick="showTopic('aced3')">A-CED.3 · Constraints &amp; Systems</button>
+            <button class="nav-link" onclick="showTopic('aced4')">A-CED.4 · Rearranging Formulas</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Equations &amp; Inequalities (A-REI) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('arei1')">A-REI.1 · Properties of Equality</button>
+            <button class="nav-link" onclick="showTopic('arei3')">A-REI.3 · Linear Equations &amp; Inequalities</button>
+            <button class="nav-link" onclick="showTopic('arei4')">A-REI.4 · Quadratic Equations</button>
+            <button class="nav-link" onclick="showTopic('arei5')">A-REI.5 · Equivalent Systems</button>
+            <button class="nav-link" onclick="showTopic('arei6')">A-REI.6 · Systems of Linear Equations</button>
+            <button class="nav-link" onclick="showTopic('arei10')">A-REI.10 · Graphs as Solution Sets</button>
+            <button class="nav-link" onclick="showTopic('arei11')">A-REI.11 · Intersection Solutions</button>
+            <button class="nav-link" onclick="showTopic('arei12')">A-REI.12 · Graphing Inequalities</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Interpreting Functions (F-IF) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('fif1')">F-IF.1 · Function Definition</button>
+            <button class="nav-link" onclick="showTopic('fif2')">F-IF.2 · Function Notation</button>
+            <button class="nav-link" onclick="showTopic('fif3')">F-IF.3 · Sequences as Functions</button>
+            <button class="nav-link" onclick="showTopic('fif4')">F-IF.4 · Key Features of Graphs</button>
+            <button class="nav-link" onclick="showTopic('fif5')">F-IF.5 · Domain in Context</button>
+            <button class="nav-link" onclick="showTopic('fif6')">F-IF.6 · Average Rate of Change</button>
+            <button class="nav-link" onclick="showTopic('fif7')">F-IF.7 · Graphing Functions</button>
+            <button class="nav-link" onclick="showTopic('fif8')">F-IF.8 · Equivalent Forms</button>
+            <button class="nav-link" onclick="showTopic('fif9')">F-IF.9 · Comparing Functions</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Building Functions (F-BF) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('fbf1')">F-BF.1 · Writing Functions</button>
+            <button class="nav-link" onclick="showTopic('fbf2')">F-BF.2 · Arithmetic &amp; Geometric Sequences</button>
+            <button class="nav-link" onclick="showTopic('fbf3')">F-BF.3 · Transformations</button>
+            <button class="nav-link" onclick="showTopic('fbf4')">F-BF.4 · Inverse Functions</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Linear &amp; Exponential Models (F-LE) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('fle1')">F-LE.1 · Linear vs. Exponential</button>
+            <button class="nav-link" onclick="showTopic('fle2')">F-LE.2 · Constructing Functions</button>
+            <button class="nav-link" onclick="showTopic('fle3')">F-LE.3 · Comparing Growth Rates</button>
+            <button class="nav-link" onclick="showTopic('fle5')">F-LE.5 · Interpreting Parameters</button>
+          </div>
+        </div>
+
+        <div class="domain-group">
+          <div class="domain-header" onclick="toggleDomain(this)">Statistics &amp; Probability (S-ID) <span class="arrow">▶</span></div>
+          <div class="domain-topics">
+            <button class="nav-link" onclick="showTopic('sid1')">S-ID.1 · Data Representations</button>
+            <button class="nav-link" onclick="showTopic('sid2')">S-ID.2 · Comparing Distributions</button>
+            <button class="nav-link" onclick="showTopic('sid3')">S-ID.3 · Shape, Center, Spread</button>
+            <button class="nav-link" onclick="showTopic('sid5')">S-ID.5 · Two-Way Frequency Tables</button>
+            <button class="nav-link" onclick="showTopic('sid6')">S-ID.6 · Scatter Plots &amp; Best Fit</button>
+            <button class="nav-link" onclick="showTopic('sid7')">S-ID.7 · Interpreting Linear Models</button>
+            <button class="nav-link" onclick="showTopic('sid8')">S-ID.8 · Correlation Coefficient</button>
+            <button class="nav-link" onclick="showTopic('sid9')">S-ID.9 · Correlation vs. Causation</button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content content">
+
+        <!-- WELCOME -->
+        <div class="topic-section active" id="welcome">
+          <h2 class="topic-title">Algebra 1</h2>
+          <p>Select a topic from the sidebar to begin. Topics are organized by California Common Core domain.</p>
+          <div class="welcome-grid">
+            <div class="welcome-card"><h4>Number &amp; Quantity</h4><p>3 standards — units, quantities, accuracy</p></div>
+            <div class="welcome-card"><h4>Expressions</h4><p>4 standards — structure, polynomials, equivalent forms</p></div>
+            <div class="welcome-card"><h4>Creating Equations</h4><p>4 standards — one-variable, two-variable, constraints, formulas</p></div>
+            <div class="welcome-card"><h4>Equations &amp; Inequalities</h4><p>8 standards — linear, quadratic, systems, graphs</p></div>
+            <div class="welcome-card"><h4>Interpreting Functions</h4><p>9 standards — notation, features, graphing, comparing</p></div>
+            <div class="welcome-card"><h4>Building Functions</h4><p>4 standards — writing, sequences, transformations, inverses</p></div>
+            <div class="welcome-card"><h4>Linear &amp; Exponential Models</h4><p>4 standards — growth, construction, parameters</p></div>
+            <div class="welcome-card"><h4>Statistics &amp; Probability</h4><p>8 standards — data, distributions, scatter plots, correlation</p></div>
+          </div>
+        </div>
+
+        <!-- N-Q.1 -->
+        <div class="topic-section" id="nq1">
+          <span class="standard-badge">N-Q.1</span>
+          <h2 class="topic-title">Using Units and Dimensional Analysis</h2>
+          <p class="standard-text">Use units as a way to understand problems and to guide the solution of multi-step problems; choose and interpret units consistently in formulas; choose and interpret the scale and the origin in graphs and data displays.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Units carry meaning — they tell you <em>what</em> is being measured</li>
+            <li>Dimensional analysis: multiply by conversion factors (fractions equal to 1) to change units</li>
+            <li>Units must be consistent within a formula (e.g., both distances in meters)</li>
+            <li>The scale and origin chosen for a graph affect how data appears</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Convert 60 miles per hour to feet per second.</p>
+          <p>60 <span class="fraction"><span class="top">mi</span><span class="bottom">hr</span></span> × <span class="fraction"><span class="top">5280 ft</span><span class="bottom">1 mi</span></span> × <span class="fraction"><span class="top">1 hr</span><span class="bottom">3600 s</span></span> = 88 ft/s</p>
+          <p>Cancel units like variables: miles cancel, hours cancel, leaving ft/s.</p>
+        </div>
+
+        <!-- N-Q.2 -->
+        <div class="topic-section" id="nq2">
+          <span class="standard-badge">N-Q.2</span>
+          <h2 class="topic-title">Defining Appropriate Quantities</h2>
+          <p class="standard-text">Define appropriate quantities for the purpose of descriptive modeling.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Choose quantities that directly represent what the problem is asking about</li>
+            <li>Label variables clearly with units (e.g., let <em>t</em> = time in hours)</li>
+            <li>Sometimes the best quantity is a ratio or rate (e.g., cost per item)</li>
+            <li>Derived quantities: computed from others (e.g., area = length × width)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A store sells apples at $1.20 each and oranges at $0.80 each. You buy <em>a</em> apples and <em>r</em> oranges. Total cost <em>C</em> = 1.20<em>a</em> + 0.80<em>r</em> dollars. Here <em>C</em>, <em>a</em>, and <em>r</em> are the appropriate quantities.</p>
+        </div>
+
+        <!-- N-Q.3 -->
+        <div class="topic-section" id="nq3">
+          <span class="standard-badge">N-Q.3</span>
+          <h2 class="topic-title">Accuracy and Precision in Measurement</h2>
+          <p class="standard-text">Choose a level of accuracy appropriate to limitations on measurement when reporting quantities.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Precision:</strong> how fine the measurement tool is (decimal places)</li>
+            <li><strong>Accuracy:</strong> how close to the true value a measurement is</li>
+            <li>Significant figures reflect the precision of the original measurement</li>
+            <li>Calculated results should not imply more precision than inputs allow</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A ruler measures to the nearest mm. A board is measured as 1.235 m. Reporting the board as 1.23500000 m implies false precision. "1.235 m" or "1.24 m" is appropriate.</p>
+        </div>
+
+        <!-- A-SSE.1 -->
+        <div class="topic-section" id="asse1">
+          <span class="standard-badge">A-SSE.1</span>
+          <h2 class="topic-title">Interpreting Expressions</h2>
+          <p class="standard-text">Interpret parts of an expression, such as terms, factors, and coefficients, in context. Interpret complicated expressions by viewing one or more of their parts as a single entity.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Term:</strong> a single number, variable, or product (e.g., 3x², −5y)</li>
+            <li><strong>Coefficient:</strong> the numerical factor of a term (e.g., 3 in 3x²)</li>
+            <li><strong>Factor:</strong> something multiplied (e.g., in 6x, factors are 6 and x)</li>
+            <li>In context: P(1 + r)<sup>n</sup> — P is principal, r is interest rate, n is periods</li>
+          </ul>
+          <h3>Example</h3>
+          <p>In the expression 4πr², identify the parts: 4 is the coefficient, π is a constant, r is the variable, and the whole expression represents the surface area related to a sphere's radius r.</p>
+        </div>
+
+        <!-- A-SSE.2 -->
+        <div class="topic-section" id="asse2">
+          <span class="standard-badge">A-SSE.2</span>
+          <h2 class="topic-title">Rewriting Expressions Using Structure</h2>
+          <p class="standard-text">Use the structure of an expression to identify ways to rewrite it.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Recognize patterns like difference of squares: a² − b² = (a+b)(a−b)</li>
+            <li>Factor out GCF before applying other factoring methods</li>
+            <li>Recognize perfect square trinomials: a² + 2ab + b² = (a+b)²</li>
+            <li>Group terms to factor: ax + ay + bx + by = a(x+y) + b(x+y) = (a+b)(x+y)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Rewrite x⁴ − 16 by viewing it as (x²)² − 4² — a difference of squares.</p>
+          <p>(x²)² − 4² = (x² + 4)(x² − 4) = (x² + 4)(x + 2)(x − 2)</p>
+        </div>
+
+        <!-- A-SSE.3 -->
+        <div class="topic-section" id="asse3">
+          <span class="standard-badge">A-SSE.3</span>
+          <h2 class="topic-title">Equivalent Forms of Expressions</h2>
+          <p class="standard-text">Choose and produce an equivalent form of an expression to reveal and explain properties of the quantity represented by the expression. Factor a quadratic to reveal its zeros; complete the square to reveal the maximum or minimum; use properties of exponents to rewrite exponential expressions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Factored form</strong> reveals zeros: x² − 5x + 6 = (x−2)(x−3) → zeros at x = 2, 3</li>
+            <li><strong>Vertex form</strong> (completing the square) reveals max/min: a(x−h)² + k, vertex at (h, k)</li>
+            <li><strong>Standard form:</strong> ax² + bx + c reveals y-intercept directly</li>
+            <li>Exponential: 2 · 4<sup>t</sup> = 2 · (2²)<sup>t</sup> = 2 · 2<sup>2t</sup> = 2<sup>2t+1</sup></li>
+          </ul>
+          <h3>Example</h3>
+          <p>Complete the square for x² + 6x + 2:</p>
+          <p>x² + 6x + 9 − 9 + 2 = (x + 3)² − 7 → vertex at (−3, −7), which is the minimum.</p>
+        </div>
+
+        <!-- A-APR.1 -->
+        <div class="topic-section" id="aapr1">
+          <span class="standard-badge">A-APR.1</span>
+          <h2 class="topic-title">Polynomial Operations</h2>
+          <p class="standard-text">Understand that polynomials form a system analogous to the integers, namely, they are closed under the operations of addition, subtraction, and multiplication; add, subtract, and multiply polynomials.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Closed:</strong> adding, subtracting, or multiplying polynomials always yields a polynomial</li>
+            <li>Add/Subtract: combine like terms (same variable and exponent)</li>
+            <li>Multiply: use distributive property (FOIL for two binomials)</li>
+            <li>Degree of a product = sum of degrees of factors</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Multiply (2x + 3)(x − 5):</p>
+          <p>= 2x · x + 2x · (−5) + 3 · x + 3 · (−5)</p>
+          <p>= 2x² − 10x + 3x − 15 = 2x² − 7x − 15</p>
+        </div>
+
+        <!-- A-CED.1 -->
+        <div class="topic-section" id="aced1">
+          <span class="standard-badge">A-CED.1</span>
+          <h2 class="topic-title">Equations and Inequalities in One Variable</h2>
+          <p class="standard-text">Create equations and inequalities in one variable and use them to solve problems. Include equations arising from linear and quadratic functions, and simple rational and exponential functions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Translate word problems into algebraic equations or inequalities</li>
+            <li>Linear: ax + b = c or ax + b &lt; c</li>
+            <li>Quadratic: ax² + bx + c = 0</li>
+            <li>Exponential: 2<sup>x</sup> = 32 → x = 5</li>
+            <li>Rational: <span class="fraction"><span class="top">x</span><span class="bottom">3</span></span> + 1 = 5 → x = 12</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A phone plan costs $30/month plus $0.10/text. Model and solve: for how many texts does the bill equal $50?</p>
+          <p>30 + 0.10t = 50 → 0.10t = 20 → t = 200 texts</p>
+        </div>
+
+        <!-- A-CED.2 -->
+        <div class="topic-section" id="aced2">
+          <span class="standard-badge">A-CED.2</span>
+          <h2 class="topic-title">Equations in Two Variables</h2>
+          <p class="standard-text">Create equations in two or more variables to represent relationships between quantities; graph equations on coordinate axes with labels and scales.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Two-variable equations describe a relationship between two quantities</li>
+            <li>The graph is the complete set of all (x, y) pairs satisfying the equation</li>
+            <li>Label axes with quantity names and units</li>
+            <li>Choose scale so important features are visible</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Water drains from a 100-gallon tank at 4 gallons per minute. Write and graph the equation.</p>
+          <p>W = 100 − 4t, where W = gallons remaining and t = minutes. Graph on axes labeled "t (min)" and "W (gal)". x-intercept at t = 25, y-intercept at W = 100.</p>
+        </div>
+
+        <!-- A-CED.3 -->
+        <div class="topic-section" id="aced3">
+          <span class="standard-badge">A-CED.3</span>
+          <h2 class="topic-title">Constraints and Systems</h2>
+          <p class="standard-text">Represent constraints by equations or inequalities, and by systems of equations and/or inequalities, and interpret solutions as viable or non-viable options in a modeling context.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>A constraint limits possible values (e.g., a budget, a physical limit)</li>
+            <li>A system captures multiple simultaneous constraints</li>
+            <li>Solutions must be checked against context — non-negative quantities, integers only, etc.</li>
+            <li>Infeasible solutions are non-viable</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A student can spend at most $20. Sandwiches cost $5, drinks cost $2. Write constraints: 5s + 2d ≤ 20, s ≥ 0, d ≥ 0. If s = 3, d = 2: 15 + 4 = 19 ≤ 20 ✓ (viable). If s = 5: cost = 25 &gt; 20 (non-viable).</p>
+        </div>
+
+        <!-- A-CED.4 -->
+        <div class="topic-section" id="aced4">
+          <span class="standard-badge">A-CED.4</span>
+          <h2 class="topic-title">Rearranging Formulas</h2>
+          <p class="standard-text">Rearrange formulas to highlight a quantity of interest, using the same reasoning as in solving equations.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Use inverse operations just as in solving equations, but treat other variables as constants</li>
+            <li>Goal: isolate the target variable on one side</li>
+            <li>Common formulas: d = rt, A = lw, V = lwh, C = 2πr, A = πr²</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve A = <span class="fraction"><span class="top">1</span><span class="bottom">2</span></span>bh for h:</p>
+          <p>Multiply both sides by 2: 2A = bh</p>
+          <p>Divide both sides by b: h = <span class="fraction"><span class="top">2A</span><span class="bottom">b</span></span></p>
+        </div>
+
+        <!-- A-REI.1 -->
+        <div class="topic-section" id="arei1">
+          <span class="standard-badge">A-REI.1</span>
+          <h2 class="topic-title">Properties of Equality</h2>
+          <p class="standard-text">Explain each step in solving a simple equation as following from the equality of numbers asserted at the previous step, starting from the assumption that the original equation has a solution.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Addition/Subtraction Property:</strong> add or subtract equal amounts from both sides</li>
+            <li><strong>Multiplication/Division Property:</strong> multiply or divide both sides by same nonzero number</li>
+            <li>Each step produces an equivalent equation (same solution set)</li>
+            <li>Justify steps: "add 3 to both sides," "divide both sides by 2," etc.</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve 3x − 7 = 8 with justification:</p>
+          <p>3x − 7 = 8 &nbsp;&nbsp;&nbsp; (given)</p>
+          <p>3x = 15 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (add 7 to both sides)</p>
+          <p>x = 5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (divide both sides by 3)</p>
+        </div>
+
+        <!-- A-REI.3 -->
+        <div class="topic-section" id="arei3">
+          <span class="standard-badge">A-REI.3</span>
+          <h2 class="topic-title">Linear Equations and Inequalities in One Variable</h2>
+          <p class="standard-text">Solve linear equations and inequalities in one variable, including equations with coefficients represented by letters.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Isolate the variable using inverse operations</li>
+            <li>Distribute and combine like terms first</li>
+            <li>Inequalities: flip the inequality sign when multiplying or dividing by a negative</li>
+            <li>Graph solutions on a number line; open circle for strict, closed for ≤ or ≥</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve −2x + 5 &gt; 11:</p>
+          <p>−2x &gt; 6 &nbsp;&nbsp;&nbsp; (subtract 5)</p>
+          <p>x &lt; −3 &nbsp;&nbsp;&nbsp;&nbsp; (divide by −2, flip sign)</p>
+          <p>Solution: x &lt; −3, graphed as an open circle at −3 pointing left.</p>
+        </div>
+
+        <!-- A-REI.4 -->
+        <div class="topic-section" id="arei4">
+          <span class="standard-badge">A-REI.4</span>
+          <h2 class="topic-title">Solving Quadratic Equations</h2>
+          <p class="standard-text">Solve quadratic equations in one variable by inspection, taking square roots, completing the square, the quadratic formula, and factoring, as appropriate to the initial form of the equation.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Factoring:</strong> ax² + bx + c = 0 → (x − r₁)(x − r₂) = 0 → x = r₁ or r₂</li>
+            <li><strong>Square root:</strong> x² = k → x = ±√k</li>
+            <li><strong>Completing the square:</strong> add (b/2)² to both sides</li>
+            <li><strong>Quadratic formula:</strong> x = <span class="fraction"><span class="top">−b ± <span class="sqrt">b² − 4ac</span></span><span class="bottom">2a</span></span></li>
+            <li>The discriminant b² − 4ac determines number of real solutions: &gt;0 two, =0 one, &lt;0 none</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve x² − 5x + 6 = 0 by factoring:</p>
+          <p>(x − 2)(x − 3) = 0 → x = 2 or x = 3</p>
+        </div>
+
+        <!-- A-REI.5 -->
+        <div class="topic-section" id="arei5">
+          <span class="standard-badge">A-REI.5</span>
+          <h2 class="topic-title">Equivalent Systems (Elimination Justification)</h2>
+          <p class="standard-text">Prove that, given a system of two equations in two variables, replacing one equation by the sum of that equation and a multiple of the other produces a system with the same solutions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>The elimination method is valid because adding a true equation to another preserves equality</li>
+            <li>If (x, y) satisfies both equations, it satisfies any linear combination of them</li>
+            <li>The new system has the same solution set as the original</li>
+          </ul>
+          <h3>Example</h3>
+          <p>System: x + y = 5 and 2x − y = 1. Adding them: 3x = 6, so x = 2. Since (2,3) satisfies both originals, it's valid — the combined equation preserved the solution.</p>
+        </div>
+
+        <!-- A-REI.6 -->
+        <div class="topic-section" id="arei6">
+          <span class="standard-badge">A-REI.6</span>
+          <h2 class="topic-title">Solving Systems of Linear Equations</h2>
+          <p class="standard-text">Solve systems of linear equations exactly and approximately (e.g., with graphs), focusing on pairs of linear equations in two variables.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Substitution:</strong> solve one equation for a variable, substitute into the other</li>
+            <li><strong>Elimination:</strong> add or subtract multiples of equations to cancel a variable</li>
+            <li><strong>Graphing:</strong> solution is the intersection point of the two lines</li>
+            <li>No solution (parallel lines) or infinite solutions (same line)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Solve: y = 2x + 1 and y = −x + 7 (substitution):</p>
+          <p>2x + 1 = −x + 7 → 3x = 6 → x = 2, y = 5. Solution: (2, 5)</p>
+        </div>
+
+        <!-- A-REI.10 -->
+        <div class="topic-section" id="arei10">
+          <span class="standard-badge">A-REI.10</span>
+          <h2 class="topic-title">Graphs as Solution Sets</h2>
+          <p class="standard-text">Understand that the graph of an equation in two variables is the set of all its solutions plotted in the coordinate plane, often forming a curve (which could be a line).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Every point (x, y) on the graph satisfies the equation</li>
+            <li>Points not on the graph do not satisfy the equation</li>
+            <li>The graph is a visual representation of infinitely many solutions</li>
+          </ul>
+          <h3>Example</h3>
+          <p>For y = x² − 1: does (3, 8) lie on the graph? Check: 3² − 1 = 9 − 1 = 8 ✓ Yes. Does (2, 1)? 2² − 1 = 3 ≠ 1. No.</p>
+        </div>
+
+        <!-- A-REI.11 -->
+        <div class="topic-section" id="arei11">
+          <span class="standard-badge">A-REI.11</span>
+          <h2 class="topic-title">Intersection Points as Solutions</h2>
+          <p class="standard-text">Explain why the x-coordinates of the points where the graphs of y = f(x) and y = g(x) intersect are the solutions of the equation f(x) = g(x); find the solutions approximately, e.g., using technology to graph the functions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>At intersection: both functions give the same y, so f(x) = g(x)</li>
+            <li>Solving f(x) = g(x) algebraically finds x-coordinates of intersections</li>
+            <li>Graphically, intersections show where two quantities are equal</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Find where 2x + 1 = x² − 3: rearrange to x² − 2x − 4 = 0. Quadratic formula gives x ≈ 3.24 and x ≈ −1.24. These are the x-coordinates of intersection.</p>
+        </div>
+
+        <!-- A-REI.12 -->
+        <div class="topic-section" id="arei12">
+          <span class="standard-badge">A-REI.12</span>
+          <h2 class="topic-title">Graphing Linear Inequalities</h2>
+          <p class="standard-text">Graph the solutions to a linear inequality in two variables as a half-plane (excluding the boundary in the case of a strict inequality), and graph the solution set of a system of linear inequalities as the intersection of the corresponding half-planes.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Graph the boundary line first (dashed for strict &lt; or &gt;, solid for ≤ or ≥)</li>
+            <li>Test a point (like the origin) to determine which side is shaded</li>
+            <li>For systems: the solution is the overlapping (intersection) region of all shaded areas</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Graph y &gt; 2x − 1: draw a dashed line y = 2x − 1. Test (0,0): 0 &gt; −1 ✓, so shade above the line.</p>
+        </div>
+
+        <!-- F-IF.1 -->
+        <div class="topic-section" id="fif1">
+          <span class="standard-badge">F-IF.1</span>
+          <h2 class="topic-title">Function Definition and Domain/Range</h2>
+          <p class="standard-text">Understand that a function from one set (called the domain) to another set (called the range) assigns to each element of the domain exactly one element of the range. If f is a function and x is an element of its domain, then f(x) denotes the output. The graph of f is the graph of the equation y = f(x).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Each input has exactly one output (vertical line test on a graph)</li>
+            <li><strong>Domain:</strong> all allowable inputs (x-values)</li>
+            <li><strong>Range:</strong> all corresponding outputs (y-values)</li>
+            <li>A relation is a function if no x-value is repeated with different y-values</li>
+          </ul>
+          <h3>Example</h3>
+          <p>{(1,2), (2,4), (3,6)} — is this a function? Yes, each input (1, 2, 3) maps to exactly one output. {(1,2), (1,3)} is not a function — input 1 maps to two outputs.</p>
+        </div>
+
+        <!-- F-IF.2 -->
+        <div class="topic-section" id="fif2">
+          <span class="standard-badge">F-IF.2</span>
+          <h2 class="topic-title">Function Notation and Evaluation</h2>
+          <p class="standard-text">Use function notation, evaluate functions for inputs in their domains, and interpret statements that use function notation in terms of a context.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>f(x) means "the output of function f when the input is x"</li>
+            <li>Evaluate by substituting the input value for x</li>
+            <li>f(a) + f(b) ≠ f(a + b) in general</li>
+            <li>f(x + h) means substitute (x + h) everywhere x appears</li>
+          </ul>
+          <h3>Example</h3>
+          <p>If f(x) = 3x² − 2x + 1, find f(−2):</p>
+          <p>f(−2) = 3(−2)² − 2(−2) + 1 = 3(4) + 4 + 1 = 12 + 4 + 1 = 17</p>
+        </div>
+
+        <!-- F-IF.3 -->
+        <div class="topic-section" id="fif3">
+          <span class="standard-badge">F-IF.3</span>
+          <h2 class="topic-title">Sequences as Functions</h2>
+          <p class="standard-text">Recognize that sequences are functions, sometimes defined recursively, whose domain is a subset of the integers.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>A sequence is a list of numbers where position n is the input</li>
+            <li><strong>Explicit formula:</strong> directly computes the nth term (e.g., a<sub>n</sub> = 2n + 1)</li>
+            <li><strong>Recursive formula:</strong> each term defined using previous term (e.g., a<sub>n</sub> = a<sub>n−1</sub> + 3)</li>
+            <li>Domain is typically {1, 2, 3, …} (positive integers)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Sequence: 3, 7, 11, 15, … Explicit: a<sub>n</sub> = 4n − 1. Recursive: a<sub>1</sub> = 3, a<sub>n</sub> = a<sub>n−1</sub> + 4. Both define the same function on positive integers.</p>
+        </div>
+
+        <!-- F-IF.4 -->
+        <div class="topic-section" id="fif4">
+          <span class="standard-badge">F-IF.4</span>
+          <h2 class="topic-title">Key Features of Functions and Graphs</h2>
+          <p class="standard-text">For a function that models a relationship between two quantities, interpret key features of graphs and tables in terms of the quantities, and sketch graphs showing key features given a verbal description.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Intercepts:</strong> where the graph crosses the axes</li>
+            <li><strong>Intervals of increase/decrease:</strong> where the graph rises/falls left to right</li>
+            <li><strong>Maximum/minimum:</strong> peak (local/global) or valley values</li>
+            <li><strong>Symmetry:</strong> even functions symmetric over y-axis; odd functions over origin</li>
+            <li><strong>End behavior:</strong> what happens as x → ±∞</li>
+            <li><strong>Positive/negative:</strong> where f(x) &gt; 0 or f(x) &lt; 0</li>
+          </ul>
+          <h3>Example</h3>
+          <p>For f(x) = −x² + 4: intercepts at (±2, 0) and (0, 4); maximum at (0, 4); decreasing for x &gt; 0, increasing for x &lt; 0; end behavior → −∞ as x → ±∞.</p>
+        </div>
+
+        <!-- F-IF.5 -->
+        <div class="topic-section" id="fif5">
+          <span class="standard-badge">F-IF.5</span>
+          <h2 class="topic-title">Domain in Context</h2>
+          <p class="standard-text">Relate the domain of a function to its graph and, where applicable, to the quantitative relationship it describes.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Mathematical domain may be all reals, but context restricts it</li>
+            <li>Time can't be negative; counts must be whole numbers; physical measurements have upper limits</li>
+            <li>Identify if the domain is discrete or continuous</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A function models the height of a ball thrown upward: h(t) = −16t² + 64t. Mathematically defined for all t, but context requires 0 ≤ t ≤ 4 (the ball is in the air for 4 seconds). Domain = [0, 4].</p>
+        </div>
+
+        <!-- F-IF.6 -->
+        <div class="topic-section" id="fif6">
+          <span class="standard-badge">F-IF.6</span>
+          <h2 class="topic-title">Average Rate of Change</h2>
+          <p class="standard-text">Calculate and interpret the average rate of change of a function (presented symbolically or as a table) over a specified interval. Estimate the rate of change from a graph.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Average rate of change over [a, b] = <span class="fraction"><span class="top">f(b) − f(a)</span><span class="bottom">b − a</span></span></li>
+            <li>This equals the slope of the secant line connecting (a, f(a)) and (b, f(b))</li>
+            <li>For a linear function, average rate of change is constant (= slope)</li>
+            <li>Units: (units of output) per (unit of input)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>f(x) = x² over [1, 4]: <span class="fraction"><span class="top">f(4) − f(1)</span><span class="bottom">4 − 1</span></span> = <span class="fraction"><span class="top">16 − 1</span><span class="bottom">3</span></span> = 5. The function increases on average 5 units per unit of x over that interval.</p>
+        </div>
+
+        <!-- F-IF.7 -->
+        <div class="topic-section" id="fif7">
+          <span class="standard-badge">F-IF.7</span>
+          <h2 class="topic-title">Graphing Functions</h2>
+          <p class="standard-text">Graph functions expressed symbolically and show key features of the graph. Graph linear and quadratic functions; graph square root, cube root, and piecewise-defined functions; graph exponential and logarithmic functions.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Linear:</strong> y = mx + b — slope and y-intercept</li>
+            <li><strong>Quadratic:</strong> y = ax² + bx + c — vertex, axis of symmetry, direction of opening</li>
+            <li><strong>Square root:</strong> y = √x — starts at (0,0), only defined for x ≥ 0</li>
+            <li><strong>Absolute value:</strong> y = |x| — V-shape with vertex at origin</li>
+            <li><strong>Exponential:</strong> y = ab<sup>x</sup> — horizontal asymptote, always positive (if a &gt; 0)</li>
+            <li><strong>Piecewise:</strong> different formulas for different parts of the domain</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Graph f(x) = |x − 2| + 1: vertex at (2, 1), arms with slope ±1, V-shape opening upward.</p>
+        </div>
+
+        <!-- F-IF.8 -->
+        <div class="topic-section" id="fif8">
+          <span class="standard-badge">F-IF.8</span>
+          <h2 class="topic-title">Writing Functions in Equivalent Forms</h2>
+          <p class="standard-text">Write a function defined by an expression in different but equivalent forms to reveal and explain different properties of the function.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Factored form: reveals zeros of quadratic</li>
+            <li>Vertex form: a(x−h)² + k reveals vertex (h, k)</li>
+            <li>Standard form: ax² + bx + c reveals y-intercept (c)</li>
+            <li>Exponential: factor to reveal growth rate and starting value</li>
+          </ul>
+          <h3>Example</h3>
+          <p>f(x) = 2x² − 8x + 6: factor as 2(x−1)(x−3) → zeros at x=1,3. Vertex form: 2(x−2)² − 2 → vertex at (2, −2). Both forms are equivalent.</p>
+        </div>
+
+        <!-- F-IF.9 -->
+        <div class="topic-section" id="fif9">
+          <span class="standard-badge">F-IF.9</span>
+          <h2 class="topic-title">Comparing Functions</h2>
+          <p class="standard-text">Compare properties of two functions each represented in a different way (algebraically, graphically, numerically in tables, or by verbal descriptions).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Extract comparable properties from different representations</li>
+            <li>Compare: slopes, y-intercepts, maxima/minima, zeros, rates of change</li>
+            <li>A function in a table can reveal patterns; a graph shows shape; algebra gives exact values</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Function A: graphed with y-intercept 3 and slope 2. Function B: y = 3x − 1. Which has the greater y-intercept? A does (3 &gt; −1). Which grows faster? B does (slope 3 &gt; 2).</p>
+        </div>
+
+        <!-- F-BF.1 -->
+        <div class="topic-section" id="fbf1">
+          <span class="standard-badge">F-BF.1</span>
+          <h2 class="topic-title">Writing Functions from Context</h2>
+          <p class="standard-text">Write a function that describes a relationship between two quantities. Determine an explicit expression, a recursive process, or steps for calculation from a context. Combine standard function types using arithmetic operations.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Identify the independent variable (input) and dependent variable (output)</li>
+            <li>Look for rates of change, initial values, and patterns in data</li>
+            <li>Functions can be added, subtracted, multiplied: (f + g)(x) = f(x) + g(x)</li>
+          </ul>
+          <h3>Example</h3>
+          <p>A car travels at 55 mph. Write distance as a function of time: d(t) = 55t. If a second car starts 20 miles ahead: total lead = 20 − (55t − 60t) for the first car catching up is a combined function.</p>
+        </div>
+
+        <!-- F-BF.2 -->
+        <div class="topic-section" id="fbf2">
+          <span class="standard-badge">F-BF.2</span>
+          <h2 class="topic-title">Arithmetic and Geometric Sequences</h2>
+          <p class="standard-text">Write arithmetic and geometric sequences both recursively and with an explicit formula, use them to model situations, and translate between the two forms.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Arithmetic sequence:</strong> add constant d each time. Explicit: a<sub>n</sub> = a<sub>1</sub> + (n−1)d</li>
+            <li><strong>Geometric sequence:</strong> multiply by constant r. Explicit: a<sub>n</sub> = a<sub>1</sub> · r<sup>n−1</sup></li>
+            <li>Arithmetic: constant differences → linear function</li>
+            <li>Geometric: constant ratios → exponential function</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Geometric sequence: 3, 6, 12, 24, … → r = 2. Explicit: a<sub>n</sub> = 3 · 2<sup>n−1</sup>. Recursive: a<sub>1</sub> = 3, a<sub>n</sub> = 2a<sub>n−1</sub>.</p>
+        </div>
+
+        <!-- F-BF.3 -->
+        <div class="topic-section" id="fbf3">
+          <span class="standard-badge">F-BF.3</span>
+          <h2 class="topic-title">Transformations of Functions</h2>
+          <p class="standard-text">Identify the effect on the graph of replacing f(x) by f(x) + k, k·f(x), f(kx), and f(x + k) for specific values of k (both positive and negative); find the value of k given the graphs.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>f(x) + k: vertical shift up k (or down if k &lt; 0)</li>
+            <li>f(x + k): horizontal shift left k (right if k &lt; 0)</li>
+            <li>k·f(x): vertical stretch (|k|&gt;1) or compression (|k|&lt;1); k&lt;0 flips over x-axis</li>
+            <li>f(kx): horizontal compression (|k|&gt;1) or stretch (|k|&lt;1); k&lt;0 flips over y-axis</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Starting from y = x²: shift right 3 → y = (x−3)²; shift up 2 → y = (x−3)² + 2; reflect over x-axis → y = −(x−3)² + 2. Vertex moves from (0,0) to (3,2).</p>
+        </div>
+
+        <!-- F-BF.4 -->
+        <div class="topic-section" id="fbf4">
+          <span class="standard-badge">F-BF.4</span>
+          <h2 class="topic-title">Inverse Functions</h2>
+          <p class="standard-text">Find the inverse of a function. Solve an equation of the form f(x) = c for a simple function f that has an inverse and write an expression for the inverse.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Inverse function f⁻¹ reverses the input/output of f: if f(a) = b, then f⁻¹(b) = a</li>
+            <li>To find algebraically: replace f(x) with y, swap x and y, solve for y</li>
+            <li>f and f⁻¹ are reflections over the line y = x</li>
+            <li>f(f⁻¹(x)) = x and f⁻¹(f(x)) = x</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Find the inverse of f(x) = 2x + 3: write y = 2x + 3, swap: x = 2y + 3, solve: y = <span class="fraction"><span class="top">x − 3</span><span class="bottom">2</span></span>. So f⁻¹(x) = <span class="fraction"><span class="top">x − 3</span><span class="bottom">2</span></span>.</p>
+        </div>
+
+        <!-- F-LE.1 -->
+        <div class="topic-section" id="fle1">
+          <span class="standard-badge">F-LE.1</span>
+          <h2 class="topic-title">Linear vs. Exponential Growth</h2>
+          <p class="standard-text">Distinguish between situations that can be modeled with linear functions and with exponential functions. Linear functions grow by equal differences; exponential functions grow by equal factors. Recognize situations with constant rate of change (linear) or constant percent rate of change (exponential).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Linear:</strong> constant additive change (e.g., +5 each step)</li>
+            <li><strong>Exponential:</strong> constant multiplicative change (e.g., ×2 each step)</li>
+            <li>Check differences (linear) or ratios (exponential) in a table</li>
+            <li>"Increases by $50/year" → linear; "increases by 5%/year" → exponential</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Table: n=1,2,3,4 → y=3,6,12,24. Ratios: 6/3=2, 12/6=2, 24/12=2. Constant ratio → exponential model y = 3 · 2<sup>n−1</sup>.</p>
+        </div>
+
+        <!-- F-LE.2 -->
+        <div class="topic-section" id="fle2">
+          <span class="standard-badge">F-LE.2</span>
+          <h2 class="topic-title">Constructing Linear and Exponential Functions</h2>
+          <p class="standard-text">Construct linear and exponential functions, including arithmetic and geometric sequences, given a graph, a description of a relationship, or two input-output pairs (include reading these from a table).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Linear from two points: find slope m = <span class="fraction"><span class="top">y₂−y₁</span><span class="bottom">x₂−x₁</span></span>, then b = y₁ − mx₁</li>
+            <li>Exponential from two points: set up a · b<sup>x</sup> = y for each point, divide to find b</li>
+            <li>From a graph: read the y-intercept and slope (linear) or y-intercept and growth/decay factor</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Points (0, 5) and (3, 40) on an exponential: a = 5 (from x=0), 5 · b³ = 40 → b³ = 8 → b = 2. Function: f(x) = 5 · 2<sup>x</sup>.</p>
+        </div>
+
+        <!-- F-LE.3 -->
+        <div class="topic-section" id="fle3">
+          <span class="standard-badge">F-LE.3</span>
+          <h2 class="topic-title">Comparing Growth Rates</h2>
+          <p class="standard-text">Observe, using graphs and tables, that a quantity increasing exponentially eventually exceeds a quantity increasing linearly, quadratically, or (more generally) as a polynomial function.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Exponential functions eventually outpace any polynomial</li>
+            <li>For small x, polynomial may be larger; but exponential "wins" for large x</li>
+            <li>Example: 2<sup>x</sup> vs. x¹⁰⁰ — eventually 2<sup>x</sup> &gt; x¹⁰⁰</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Compare f(x) = 1000x² and g(x) = 2<sup>x</sup>. At x=10: f=100000, g=1024. At x=30: f=900000, g≈10⁹. For large x, g overtakes and dominates f.</p>
+        </div>
+
+        <!-- F-LE.5 -->
+        <div class="topic-section" id="fle5">
+          <span class="standard-badge">F-LE.5</span>
+          <h2 class="topic-title">Interpreting Parameters in Models</h2>
+          <p class="standard-text">Interpret the parameters in a linear or exponential function in terms of a context.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Linear f(x) = mx + b: m = rate of change (per unit x); b = starting value (at x=0)</li>
+            <li>Exponential f(x) = a · b<sup>x</sup>: a = initial amount; b = growth factor; b−1 = growth rate</li>
+            <li>Decay: b &lt; 1, so 1−b is the decay rate</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Bank account: A(t) = 1000 · 1.04<sup>t</sup>. Parameters: $1000 is the initial deposit; 1.04 means 4% annual growth rate; A(t) is balance after t years.</p>
+        </div>
+
+        <!-- S-ID.1 -->
+        <div class="topic-section" id="sid1">
+          <span class="standard-badge">S-ID.1</span>
+          <h2 class="topic-title">Data Representations</h2>
+          <p class="standard-text">Represent data with plots on the real number line (dot plots, histograms, and box plots).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Dot plot:</strong> each data value shown as a dot above a number line; shows individual values</li>
+            <li><strong>Histogram:</strong> bars show frequency in intervals; good for large data sets</li>
+            <li><strong>Box plot:</strong> shows five-number summary: min, Q1, median, Q3, max</li>
+            <li>Choose display based on data size and what features to highlight</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Data: 2, 3, 3, 5, 7, 8, 10. Five-number summary: min=2, Q1=3, median=5, Q3=8, max=10. Box spans Q1 to Q3 (3–8) with a line at median (5).</p>
+        </div>
+
+        <!-- S-ID.2 -->
+        <div class="topic-section" id="sid2">
+          <span class="standard-badge">S-ID.2</span>
+          <h2 class="topic-title">Comparing Distributions</h2>
+          <p class="standard-text">Use statistics appropriate to the shape of the data distribution to compare center (median, mean) and spread (interquartile range, standard deviation) of two or more different data sets.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Mean:</strong> sum ÷ count; affected by outliers</li>
+            <li><strong>Median:</strong> middle value; robust to outliers</li>
+            <li><strong>IQR:</strong> Q3 − Q1; spread of middle 50%</li>
+            <li><strong>Standard deviation:</strong> average distance from the mean</li>
+            <li>For skewed data or outliers, use median + IQR; for symmetric, use mean + SD</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Class A scores: median 78, IQR 15. Class B scores: median 82, IQR 30. Class B has a higher center but much more spread — scores are more variable.</p>
+        </div>
+
+        <!-- S-ID.3 -->
+        <div class="topic-section" id="sid3">
+          <span class="standard-badge">S-ID.3</span>
+          <h2 class="topic-title">Shape, Center, and Spread</h2>
+          <p class="standard-text">Interpret differences in shape, center, and spread in the context of the data sets, accounting for possible effects of extreme data points (outliers).</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Shape:</strong> symmetric, skewed left, skewed right, uniform, bimodal</li>
+            <li><strong>Skewed right:</strong> tail on right → mean &gt; median</li>
+            <li><strong>Skewed left:</strong> tail on left → mean &lt; median</li>
+            <li><strong>Outlier:</strong> unusually far from rest; pulls mean toward it but not median</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Home prices: mostly $300k–$500k, but one $5M mansion. Distribution skewed right; mean much higher than median. Median better represents a "typical" home price.</p>
+        </div>
+
+        <!-- S-ID.5 -->
+        <div class="topic-section" id="sid5">
+          <span class="standard-badge">S-ID.5</span>
+          <h2 class="topic-title">Two-Way Frequency Tables</h2>
+          <p class="standard-text">Summarize categorical data for two categories in two-way frequency tables. Interpret relative frequencies in the context of the data (including joint, marginal, and conditional relative frequencies). Recognize possible associations and trends in the data.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Joint frequency:</strong> count in a specific row AND column cell</li>
+            <li><strong>Marginal frequency:</strong> row or column totals</li>
+            <li><strong>Conditional relative frequency:</strong> fraction within a row or column (e.g., of males, what fraction plays sports?)</li>
+            <li>Look for association: if conditional frequencies differ by category, there may be an association</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Of 50 students: 15 boys play sports, 10 boys don't; 20 girls play sports, 5 don't. Conditional: 60% of boys play sports, 80% of girls play sports — girls more likely to play sports in this group.</p>
+        </div>
+
+        <!-- S-ID.6 -->
+        <div class="topic-section" id="sid6">
+          <span class="standard-badge">S-ID.6</span>
+          <h2 class="topic-title">Scatter Plots and Lines of Best Fit</h2>
+          <p class="standard-text">Represent data on two quantitative variables on a scatter plot, and describe how the variables are related. Fit a function to the data; use functions fitted to data to solve problems. Informally assess fit by plotting and analyzing residuals. Fit a linear function for scatter plots that suggest a linear association.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Scatter plot:</strong> each point (x, y) represents one data item</li>
+            <li><strong>Trend:</strong> positive (up-right), negative (down-right), or no association</li>
+            <li><strong>Line of best fit (LSRL):</strong> minimizes sum of squared residuals</li>
+            <li><strong>Residual:</strong> actual y − predicted y; random scatter around zero is a good sign</li>
+            <li>Use the model to predict: substitute an x-value into the equation</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Study hours vs. test scores: LSRL is ŷ = 5x + 60. Predicted score for 4 hours: 5(4)+60 = 80. Residual for a student who studied 4 hours and scored 75: 75 − 80 = −5.</p>
+        </div>
+
+        <!-- S-ID.7 -->
+        <div class="topic-section" id="sid7">
+          <span class="standard-badge">S-ID.7</span>
+          <h2 class="topic-title">Interpreting Slope and Intercept in Context</h2>
+          <p class="standard-text">Interpret the slope (rate of change) and the intercept (constant term) of a linear model in the context of the data.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>Slope = rate of change of y per unit increase in x (with units!)</li>
+            <li>Intercept = predicted y when x = 0 (may or may not be meaningful in context)</li>
+            <li>Always interpret using the actual variable names and units</li>
+          </ul>
+          <h3>Example</h3>
+          <p>LSRL: ŷ = 5x + 60 where x = study hours, ŷ = predicted score. Slope: each additional study hour is associated with 5 more points. Intercept: a student who studies 0 hours is predicted to score 60.</p>
+        </div>
+
+        <!-- S-ID.8 -->
+        <div class="topic-section" id="sid8">
+          <span class="standard-badge">S-ID.8</span>
+          <h2 class="topic-title">Correlation Coefficient</h2>
+          <p class="standard-text">Compute (using technology) and interpret the correlation coefficient of a linear fit.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>r (correlation coefficient) ranges from −1 to 1</li>
+            <li>r close to ±1: strong linear association; r close to 0: weak/no linear association</li>
+            <li>Positive r: as x increases, y tends to increase</li>
+            <li>Negative r: as x increases, y tends to decrease</li>
+            <li>r² = coefficient of determination: percent of variation in y explained by x</li>
+          </ul>
+          <h3>Example</h3>
+          <p>r = 0.92 for study hours vs. test score: strong positive linear association. r² = 0.846, meaning about 84.6% of variation in test scores is explained by study hours.</p>
+        </div>
+
+        <!-- S-ID.9 -->
+        <div class="topic-section" id="sid9">
+          <span class="standard-badge">S-ID.9</span>
+          <h2 class="topic-title">Correlation vs. Causation</h2>
+          <p class="standard-text">Distinguish between correlation and causation.</p>
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Correlation:</strong> a statistical relationship between two variables</li>
+            <li><strong>Causation:</strong> one variable directly causes a change in another</li>
+            <li>Correlation does not imply causation — a third variable (confounding variable) may explain both</li>
+            <li>Only a controlled experiment (randomized, with treatment/control groups) can establish causation</li>
+          </ul>
+          <h3>Example</h3>
+          <p>Ice cream sales and drowning rates are positively correlated. Cause? Neither — warm weather (confounding variable) drives both. Banning ice cream would not reduce drownings.</p>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="topics.js"></script>
+</body>
+</html>

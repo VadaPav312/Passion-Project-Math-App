@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U4-A-101",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "What is the slope ($m$) in $y = 3x + 5$?", a: "3", d: "easy" },
+            { q: "What is the y-intercept ($b$) in $y = -2x + 7$?", a: "7", d: "easy" },
+            { q: "Find the slope of a horizontal line.", a: "0", d: "easy" },
+            { q: "True or False: The slope of a vertical line is undefined.", a: "true", d: "easy" },
+            { q: "In $y = mx + b$, what letter represents the slope?", a: "m", d: "easy" },
+            { q: "Find the slope between points $(0,0)$ and $(2,4)$.", a: "2", d: "moderate" },
+            { q: "Write in slope-intercept form: $m=5, b=-2$.", a: "y=5x-2", d: "moderate" },
+            { q: "What is the y-intercept of $2x + y = 10$?", a: "10", d: "moderate" },
+            { q: "Find the x-intercept of $y = 2x - 8$.", a: "4", d: "moderate" },
+            { q: "Calculate slope: Rise is 10, Run is 5.", a: "2", d: "moderate" },
+            { q: "Is the slope of $y = -x + 4$ positive or negative?", a: "negative", d: "moderate" },
+            { q: "Find the slope of the line $y = 8$.", a: "0", d: "moderate" },
+            { q: "What is the slope of a line parallel to $y = 4x - 1$?", a: "4", d: "moderate" },
+            { q: "Find the slope between $(1,2)$ and $(3,2)$.", a: "0", d: "moderate" },
+            { q: "Write $y - 3 = 2(x - 1)$ in slope-intercept form.", a: "y=2x+1", d: "moderate" },
+            { q: "Find the slope between $(-1, 5)$ and $(2, -1)$.", a: "-2", d: "hard" },
+            { q: "Convert to slope-intercept form: $3x + 4y = 12$.", a: "y=-0.75x+3", d: "hard" },
+            { q: "Find the slope of a line perpendicular to $y = 1/2x + 5$.", a: "-2", d: "hard" },
+            { q: "Find the equation of a line through $(0,5)$ with $m=2$.", a: "y=2x+5", d: "hard" },
+            { q: "Find the value of $k$ if $(2, k)$ is on $y = 3x - 1$.", a: "5", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-B-202",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "Find $m$ for $y = -x + 10$.", a: "-1", d: "easy" },
+            { q: "Find $b$ for $y = 5x$.", a: "0", d: "easy" },
+            { q: "Slope is defined as $\\frac{rise}{?}$", a: "run", d: "easy" },
+            { q: "What is the slope of $x = 5$?", a: "undefined", d: "easy" },
+            { q: "If a line goes up from left to right, is slope positive? (yes/no)", a: "yes", d: "easy" },
+            { q: "Find the slope between $(1,1)$ and $(2,3)$.", a: "2", d: "moderate" },
+            { q: "Identify $b$ in $3x + y = 5$.", a: "5", d: "moderate" },
+            { q: "Find the x-intercept of $3x + 4y = 12$.", a: "4", d: "moderate" },
+            { q: "What is the slope of $y = 2/3x - 1$?", a: "2/3", d: "moderate" },
+            { q: "Find the slope between $(5,10)$ and $(5,20)$.", a: "undefined", d: "moderate" },
+            { q: "Are $y=2x$ and $y=2x+5$ parallel? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Write equation: $m=1, b=0$.", a: "y=x", d: "moderate" },
+            { q: "If slope is $-3$ and y-int is $4$, write the equation.", a: "y=-3x+4", d: "moderate" },
+            { q: "Find the slope of $x + y = 0$.", a: "-1", d: "moderate" },
+            { q: "Evaluate the slope if rise is $-4$ and run is $2$.", a: "-2", d: "moderate" },
+            { q: "Find the slope between $(2, -3)$ and $(-2, 5)$.", a: "-2", d: "hard" },
+            { q: "What is the slope of a line perpendicular to $y = -3x + 1$?", a: "1/3", d: "hard" },
+            { q: "Equation of line through $(1,4)$ with $m=3$ in $y=mx+b$.", a: "y=3x+1", d: "hard" },
+            { q: "Find the y-intercept of $y - 2 = 3(x + 1)$.", a: "5", d: "hard" },
+            { q: "Find the x-intercept of $2x - 5y = 10$.", a: "5", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-C-303",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "In $y = 4x - 2$, what is $b$?", a: "-2", d: "easy" },
+            { q: "In $y = 0.5x + 3$, what is $m$?", a: "0.5", d: "easy" },
+            { q: "A line that falls from left to right has a \_\_\_ slope.", a: "negative", d: "easy" },
+            { q: "What is the y-intercept of $y = x$?", a: "0", d: "easy" },
+            { q: "Formula for slope ($m$) is $(y_2 - y_1) / (?)$.", a: "x2-x1", d: "easy" },
+            { q: "Find slope: $(0,5)$ and $(1,10)$.", a: "5", d: "moderate" },
+            { q: "Find x-intercept of $y = x + 5$.", a: "-5", d: "moderate" },
+            { q: "What is the slope of $y = -4$?", a: "0", d: "moderate" },
+            { q: "Write equation: $m=-1/2, b=10$.", a: "y=-1/2x+10", d: "moderate" },
+            { q: "Slope of a line parallel to $y = -x$.", a: "-1", d: "moderate" },
+            { q: "Find $m$ if rise is $1$ and run is $10$.", a: "0.1", d: "moderate" },
+            { q: "Is $(0,0)$ on the line $y = 2x$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Find the slope of $2x - y = 4$.", a: "2", d: "moderate" },
+            { q: "Write $y - 0 = 5(x - 2)$ in slope-intercept form.", a: "y=5x-10", d: "moderate" },
+            { q: "If a line has $m=0$, is it horizontal or vertical?", a: "horizontal", d: "moderate" },
+            { q: "Slope between $(1/2, 1)$ and $(3/2, 4)$.", a: "3", d: "hard" },
+            { q: "Slope of line perpendicular to $x = 4$.", a: "0", d: "hard" },
+            { q: "Find $b$ for line through $(2,3)$ with $m=1$.", a: "1", d: "hard" },
+            { q: "Find x-intercept of $0.5x + 2y = 4$.", a: "8", d: "hard" },
+            { q: "Find the slope of $Ax + By = C$.", a: "-A/B", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-D-404",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "Slope of $y = x + 1$?", a: "1", d: "easy" },
+            { q: "Y-intercept of $y = -3x - 4$?", a: "-4", d: "easy" },
+            { q: "A vertical line has \_\_\_ run.", a: "0", d: "easy" },
+            { q: "Is slope of $y = 2x - 3$ positive? (yes/no)", a: "yes", d: "easy" },
+            { q: "What is $b$ in $y = 10$?", a: "10", d: "easy" },
+            { q: "Slope between $(2,2)$ and $(4,4)$.", a: "1", d: "moderate" },
+            { q: "Find $b$ in $y = 2x + b$ if $(1,5)$ is on the line.", a: "3", d: "moderate" },
+            { q: "Slope of line $2y = 4x + 6$.", a: "2", d: "moderate" },
+            { q: "Find x-intercept of $y = -2x + 10$.", a: "5", d: "moderate" },
+            { q: "Parallel lines have the \_\_\_ slope.", a: "same", d: "moderate" },
+            { q: "Find slope: Rise is $-5$, Run is $-5$.", a: "1", d: "moderate" },
+            { q: "Equation for line with $m=0, b=5$.", a: "y=5", d: "moderate" },
+            { q: "What is the slope of $y + 4 = x$?", a: "1", d: "moderate" },
+            { q: "Is $(1,1)$ on $y = x + 1$? (yes/no)", a: "no", d: "moderate" },
+            { q: "Slope of a line through $(0,0)$ and $(-1,-1)$.", a: "1", d: "moderate" },
+            { q: "Slope between $(10, 5)$ and $(5, 10)$.", a: "-1", d: "hard" },
+            { q: "Slope of line perpendicular to $y = x$.", a: "-1", d: "hard" },
+            { q: "Equation of line through $(0,0)$ with $m=-5$.", a: "y=-5x", d: "hard" },
+            { q: "Find $y$ if $x=4$ on $3x + 2y = 12$.", a: "0", d: "hard" },
+            { q: "Slope of $y = 3(x-1) + 2$.", a: "3", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-E-505",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "In $y = mx + b$, $b$ is the \_\_\_-intercept.", a: "y", d: "easy" },
+            { q: "Slope of $y = -5x$.", a: "-5", d: "easy" },
+            { q: "What is the slope of the x-axis?", a: "0", d: "easy" },
+            { q: "What is the y-intercept of $y = x - 1$?", a: "-1", d: "easy" },
+            { q: "Does $y = 2x + 1$ go through $(0,1)$? (yes/no)", a: "yes", d: "easy" },
+            { q: "Slope between $(0,0)$ and $(5,1)$.", a: "1/5", d: "moderate" },
+            { q: "Slope of line $y = -x - 1$.", a: "-1", d: "moderate" },
+            { q: "Find y-intercept: $x + 2y = 10$.", a: "5", d: "moderate" },
+            { q: "Find x-intercept: $x + 2y = 10$.", a: "10", d: "moderate" },
+            { q: "Write equation: $m=4, b=1$.", a: "y=4x+1", d: "moderate" },
+            { q: "Slope of $y = 0.75x$.", a: "0.75", d: "moderate" },
+            { q: "Perpendicular lines have slopes that are negative \_\_\_.", a: "reciprocals", d: "moderate" },
+            { q: "Slope of $x = -2$.", a: "undefined", d: "moderate" },
+            { q: "Find $m$ if rise is $20$, run is $100$.", a: "0.2", d: "moderate" },
+            { q: "Write $y - 1 = x$ in slope-intercept form.", a: "y=x+1", d: "moderate" },
+            { q: "Slope between $(-2, -2)$ and $(2, 2)$.", a: "1", d: "hard" },
+            { q: "Slope of line perpendicular to $y = -4x$.", a: "1/4", d: "hard" },
+            { q: "Find $b$ for line with $m=2$ through $(1,4)$.", a: "2", d: "hard" },
+            { q: "Equation of line with $m=1/2$ and y-int $-3$.", a: "y=1/2x-3", d: "hard" },
+            { q: "Find x-intercept of $y = 3x + 9$.", a: "-3", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-F-606",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "Slope of $y = 2x + 3$.", a: "2", d: "easy" },
+            { q: "Y-intercept of $y = x + 10$.", a: "10", d: "easy" },
+            { q: "Slope of a vertical line?", a: "undefined", d: "easy" },
+            { q: "In $y=mx+b$, which represents y-intercept?", a: "b", d: "easy" },
+            { q: "Is $(0,5)$ the y-intercept of $y=2x+5$? (yes/no)", a: "yes", d: "easy" },
+            { q: "Slope between $(1,2)$ and $(2,4)$.", a: "2", d: "moderate" },
+            { q: "Slope of $x + y = 10$.", a: "-1", d: "moderate" },
+            { q: "Find x-intercept of $y = 2x - 4$.", a: "2", d: "moderate" },
+            { q: "Find y-intercept of $3x + 2y = 12$.", a: "6", d: "moderate" },
+            { q: "Slope of line parallel to $y = 1/2x$.", a: "1/2", d: "moderate" },
+            { q: "Slope of $y = -3$.", a: "0", d: "moderate" },
+            { q: "Equation for $m=-2, b=4$.", a: "y=-2x+4", d: "moderate" },
+            { q: "If rise is 6 and run is 3, $m=$?", a: "2", d: "moderate" },
+            { q: "Slope of $y = x$.", a: "1", d: "moderate" },
+            { q: "Does $(1,2)$ lie on $y = 2x$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Slope between $(-1, -1)$ and $(1, 3)$.", a: "2", d: "hard" },
+            { q: "Slope of line perpendicular to $y = 2x$.", a: "-1/2", d: "hard" },
+            { q: "Equation of line through $(0, -2)$ with $m=4$.", a: "y=4x-2", d: "hard" },
+            { q: "Find $b$ for $y = -3x + b$ if $(2, 0)$ is on line.", a: "6", d: "hard" },
+            { q: "Slope of $5x - 2y = 10$.", a: "2.5", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-G-707",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "Slope of $y = -4x + 1$.", a: "-4", d: "easy" },
+            { q: "Y-intercept of $y = 3x - 8$.", a: "-8", d: "easy" },
+            { q: "Slope of a horizontal line?", a: "0", d: "easy" },
+            { q: "Rise over run is the definition of \_\_\_.", a: "slope", d: "easy" },
+            { q: "What is $b$ for $y = x$?", a: "0", d: "easy" },
+            { q: "Slope between $(0,0)$ and $(1, -3)$.", a: "-3", d: "moderate" },
+            { q: "Slope of $2x + y = 5$.", a: "-2", d: "moderate" },
+            { q: "Find x-intercept of $y = 4x + 8$.", a: "-2", d: "moderate" },
+            { q: "Find y-intercept of $x - y = 4$.", a: "-4", d: "moderate" },
+            { q: "Slope of line parallel to $y = -5x + 2$.", a: "-5", d: "moderate" },
+            { q: "Slope of $x = 10$.", a: "undefined", d: "moderate" },
+            { q: "Equation for $m=1/3, b=2$.", a: "y=1/3x+2", d: "moderate" },
+            { q: "If rise is 1 and run is 4, $m=$?", a: "0.25", d: "moderate" },
+            { q: "Slope of $y = -x$.", a: "-1", d: "moderate" },
+            { q: "Does $(2,5)$ lie on $y = 2x + 1$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Slope between $(2, 5)$ and $(4, 9)$.", a: "2", d: "hard" },
+            { q: "Slope of line perpendicular to $y = -1/3x$.", a: "3", d: "hard" },
+            { q: "Equation of line through $(0, 4)$ with $m=-1$.", a: "y=-x+4", d: "hard" },
+            { q: "Find $b$ for $y = 5x + b$ if $(1, 10)$ is on line.", a: "5", d: "hard" },
+            { q: "Slope of $3x + 3y = 9$.", a: "-1", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-H-808",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "Slope of $y = 10x - 7$.", a: "10", d: "easy" },
+            { q: "Y-intercept of $y = -x + 2$.", a: "2", d: "easy" },
+            { q: "Slope of $y = 0.5x$.", a: "0.5", d: "easy" },
+            { q: "Is the slope of a vertical line 0? (yes/no)", a: "no", d: "easy" },
+            { q: "In $(x, y)$, which is the independent variable?", a: "x", d: "easy" },
+            { q: "Slope between $(2,1)$ and $(3,5)$.", a: "4", d: "moderate" },
+            { q: "Slope of $x - y = 0$.", a: "1", d: "moderate" },
+            { q: "Find x-intercept of $y = -x + 6$.", a: "6", d: "moderate" },
+            { q: "Find y-intercept of $4x + y = 8$.", a: "8", d: "moderate" },
+            { q: "Slope of line parallel to $y = 3x$.", a: "3", d: "moderate" },
+            { q: "Slope of $y = 15$.", a: "0", d: "moderate" },
+            { q: "Equation for $m=-5, b=0$.", a: "y=-5x", d: "moderate" },
+            { q: "If rise is $-2$ and run is $4$, $m=$?", a: "-0.5", d: "moderate" },
+            { q: "Slope of $y = x + 4$.", a: "1", d: "moderate" },
+            { q: "Does $(0,0)$ lie on $y = x + 1$? (yes/no)", a: "no", d: "moderate" },
+            { q: "Slope between $(-2, 4)$ and $(1, 1)$.", a: "-1", d: "hard" },
+            { q: "Slope of line perpendicular to $y = -x$.", a: "1", d: "hard" },
+            { q: "Equation of line through $(1, 1)$ with $m=1$.", a: "y=x", d: "hard" },
+            { q: "Find $b$ for $y = 2x + b$ if $(3, 10)$ is on line.", a: "4", d: "hard" },
+            { q: "Slope of $x + 2y = 4$.", a: "-0.5", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-I-909",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "Slope of $y = x$.", a: "1", d: "easy" },
+            { q: "Y-intercept of $y = 2x - 1$.", a: "-1", d: "easy" },
+            { q: "Slope of $y = -2$.", a: "0", d: "easy" },
+            { q: "The y-intercept occurs where \_\_\_ = 0.", a: "x", d: "easy" },
+            { q: "The x-intercept occurs where \_\_\_ = 0.", a: "y", d: "easy" },
+            { q: "Slope between $(0,0)$ and $(2, -2)$.", a: "-1", d: "moderate" },
+            { q: "Slope of $3x + y = 10$.", a: "-3", d: "moderate" },
+            { q: "Find x-intercept of $y = 5x - 10$.", a: "2", d: "moderate" },
+            { q: "Find y-intercept of $x + y = 7$.", a: "7", d: "moderate" },
+            { q: "Slope of line parallel to $y = -1/4x$.", a: "-1/4", d: "moderate" },
+            { q: "Slope of $x = -5$.", a: "undefined", d: "moderate" },
+            { q: "Equation for $m=2, b=-3$.", a: "y=2x-3", d: "moderate" },
+            { q: "If rise is 10 and run is 2, $m=$?", a: "5", d: "moderate" },
+            { q: "Slope of $y = -2x$.", a: "-2", d: "moderate" },
+            { q: "Does $(1,5)$ lie on $y = 5x$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Slope between $(5, 2)$ and $(7, 3)$.", a: "0.5", d: "hard" },
+            { q: "Slope of line perpendicular to $y = 4x$.", a: "-1/4", d: "hard" },
+            { q: "Equation of line through $(0, 0)$ with $m=10$.", a: "y=10x", d: "hard" },
+            { q: "Find $b$ for $y = x + b$ if $(5, 5)$ is on line.", a: "0", d: "hard" },
+            { q: "Slope of $4x - y = 2$.", a: "4", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-J-010",
+        title: "Unit 4: Linear Equations & Graphs",
+        questions: [
+            { q: "Slope of $y = -3x + 5$.", a: "-3", d: "easy" },
+            { q: "Y-intercept of $y = x - 4$.", a: "-4", d: "easy" },
+            { q: "Slope of $y = 0$.", a: "0", d: "easy" },
+            { q: "Is the slope of $x=2$ defined? (yes/no)", a: "no", d: "easy" },
+            { q: "In $y=mx+b$, $m$ is the \_\_\_.", a: "slope", d: "easy" },
+            { q: "Slope between $(1,1)$ and $(3,5)$.", a: "2", d: "moderate" },
+            { q: "Slope of $x + 2y = 8$.", a: "-0.5", d: "moderate" },
+            { q: "Find x-intercept of $y = 3x - 9$.", a: "3", d: "moderate" },
+            { q: "Find y-intercept of $2x + y = 6$.", a: "6", d: "moderate" },
+            { q: "Slope of line parallel to $y = x + 5$.", a: "1", d: "moderate" },
+            { q: "Slope of $x = 0$ (the y-axis).", a: "undefined", d: "moderate" },
+            { q: "Equation for $m=-1, b=2$.", a: "y=-x+2", d: "moderate" },
+            { q: "If rise is 8 and run is 1, $m=$?", a: "8", d: "moderate" },
+            { q: "Slope of $y = -0.5x$.", a: "-0.5", d: "moderate" },
+            { q: "Does $(2,4)$ lie on $y = x + 2$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Slope between $(0, 5)$ and $(5, 0)$.", a: "-1", d: "hard" },
+            { q: "Slope of line perpendicular to $y = -2x$.", a: "1/2", d: "hard" },
+            { q: "Equation of line through $(2, 2)$ with $m=3$.", a: "y=3x-4", d: "hard" },
+            { q: "Find $b$ for $y = -x + b$ if $(0, 0)$ is on line.", a: "0", d: "hard" },
+            { q: "Slope of $2x - 2y = 10$.", a: "1", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

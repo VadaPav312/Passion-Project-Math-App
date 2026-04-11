@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U10-A-101",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "What is the shape of an absolute value graph?", a: "V", d: "easy" },
+            { q: "Evaluate | -5 |.", a: "5", d: "easy" },
+            { q: "What is the vertex of f(x) = |x|?", a: "(0,0)", d: "easy" },
+            { q: "Solve |x| = 7.", a: "7, -7", d: "easy" },
+            { q: "In f(x) = |x| + 3, does the graph move up or down?", a: "up", d: "easy" },
+            { q: "Solve |x| = -2.", a: "no solution", d: "moderate" },
+            { q: "What is the vertex of f(x) = |x - 4| + 2?", a: "(4,2)", d: "moderate" },
+            { q: "If a piecewise function has 'x < 2', is the circle open or closed at 2?", a: "open", d: "moderate" },
+            { q: "Evaluate f(3) if f(x) = {x+1 for x<2, 2x for x>=2}.", a: "6", d: "moderate" },
+            { q: "Does f(x) = -|x| open up or down?", a: "down", d: "moderate" },
+            { q: "Find the x-intercepts of f(x) = |x| - 5.", a: "5, -5", d: "moderate" },
+            { q: "True or False: |x + 2| moves the graph 2 units to the right.", a: "false", d: "moderate" },
+            { q: "What is the range of f(x) = |x|?", a: "y >= 0", d: "moderate" },
+            { q: "Solve |x + 1| = 5.", a: "4, -6", d: "moderate" },
+            { q: "A piecewise function is defined by different ___ over different intervals.", a: "rules", d: "moderate" },
+            { q: "Solve |2x - 4| = 6.", a: "5, -1", d: "hard" },
+            { q: "Find the vertex of f(x) = 2|x + 5| - 1.", a: "(-5,-1)", d: "hard" },
+            { q: "What is the domain of all absolute value functions?", a: "all real numbers", d: "hard" },
+            { q: "Solve |x| < 3.", a: "-3 < x < 3", d: "hard" },
+            { q: "Evaluate f(0) for f(x) = {x^2 for x<0, x+5 for x>=0}.", a: "5", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-B-202",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate | 10 - 15 |.", a: "5", d: "easy" },
+            { q: "Vertex of f(x) = |x| - 8.", a: "(0,-8)", d: "easy" },
+            { q: "Does f(x) = 3|x| make the 'V' wider or narrower?", a: "narrower", d: "easy" },
+            { q: "Solve |x| = 0.", a: "0", d: "easy" },
+            { q: "Symbol for 'absolute value of x'.", a: "|x|", d: "easy" },
+            { q: "What is the vertex of f(x) = |x + 7|?", a: "(-7,0)", d: "moderate" },
+            { q: "Evaluate f(-1) if f(x) = {2x for x<0, 5 for x>=0}.", a: "-2", d: "moderate" },
+            { q: "If |x| > 4, is the graph shaded inside or outside the values?", a: "outside", d: "moderate" },
+            { q: "Solve |x - 10| = 2.", a: "12, 8", d: "moderate" },
+            { q: "Range of f(x) = |x| + 4.", a: "y >= 4", d: "moderate" },
+            { q: "In f(x) = a|x-h|+k, what does 'h' represent?", a: "horizontal shift", d: "moderate" },
+            { q: "Is f(x) = |x| an even or odd function?", a: "even", d: "moderate" },
+            { q: "Solve |x/2| = 4.", a: "8, -8", d: "moderate" },
+            { q: "Piecewise: at x=5, which part do you use for 'x <= 5'?", a: "that part", d: "moderate" },
+            { q: "Does y = -2|x| have a maximum or minimum?", a: "maximum", d: "moderate" },
+            { q: "Solve |3x + 1| = 10.", a: "3, -11/3", d: "hard" },
+            { q: "Vertex of f(x) = -|x - 1| + 4.", a: "(1,4)", d: "hard" },
+            { q: "Solve |x - 3| + 2 = 5.", a: "6, 0", d: "hard" },
+            { q: "Domain of f(x) = {x for x>0}.", a: "x > 0", d: "hard" },
+            { q: "What is the slope of the right side of y = |3x|?", a: "3", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-C-303",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate | -2 | + | 3 |.", a: "5", d: "easy" },
+            { q: "Vertex of f(x) = |x + 2|.", a: "(-2,0)", d: "easy" },
+            { q: "Solve |x| = 1.", a: "1, -1", d: "easy" },
+            { q: "Does f(x) = 0.5|x| make the 'V' wider or narrower?", a: "wider", d: "easy" },
+            { q: "True or False: Absolute value is distance from zero.", a: "true", d: "easy" },
+            { q: "What is the y-intercept of f(x) = |x| + 2?", a: "2", d: "moderate" },
+            { q: "Evaluate f(5) if f(x) = {x for x<10, 0 for x>=10}.", a: "5", d: "moderate" },
+            { q: "Solve |x + 3| = 0.", a: "-3", d: "moderate" },
+            { q: "In f(x) = |x| - k, if k=5, the graph moves ___.", a: "down 5", d: "moderate" },
+            { q: "Range of f(x) = -|x|.", a: "y <= 0", d: "moderate" },
+            { q: "Is the vertex of y = |x-1|-1 in Quadrant 4?", a: "yes", d: "moderate" },
+            { q: "Solve |2x| = 10.", a: "5, -5", d: "moderate" },
+            { q: "In piecewise, a 'solid dot' means the value is ___.", a: "included", d: "moderate" },
+            { q: "Find f(2) for f(x) = |x - 5|.", a: "3", d: "moderate" },
+            { q: "If a < 0 in y = a|x|, the graph opens ___.", a: "down", d: "moderate" },
+            { q: "Solve |x + 4| = -1.", a: "no solution", d: "hard" },
+            { q: "Write |x| as a piecewise function for x < 0.", a: "-x", d: "hard" },
+            { q: "Solve |x - 2| > 5.", a: "x > 7 or x < -3", d: "hard" },
+            { q: "Evaluate f(2) for f(x) = {x+1, x<2; x+10, x>=2}.", a: "12", d: "hard" },
+            { q: "X-intercept of f(x) = |x - 3|.", a: "3", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-D-404",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate -| -4 |.", a: "-4", d: "easy" },
+            { q: "Vertex of f(x) = |x| + 1.", a: "(0,1)", d: "easy" },
+            { q: "Solve |x| = 100.", a: "100, -100", d: "easy" },
+            { q: "Does f(x) = |x+4| move left or right?", a: "left", d: "easy" },
+            { q: "Can the absolute value of a number be negative?", a: "no", d: "easy" },
+            { q: "What is the vertex of f(x) = |x - 1| - 1?", a: "(1,-1)", d: "moderate" },
+            { q: "Solve |x - 5| = 5.", a: "10, 0", d: "moderate" },
+            { q: "Evaluate f(0) if f(x) = {10, x<0; 20, x>=0}.", a: "20", d: "moderate" },
+            { q: "Range of f(x) = |x+2|-3.", a: "y >= -3", d: "moderate" },
+            { q: "If f(x) = |x|, what is f(-10)?", a: "10", d: "moderate" },
+            { q: "Does y = 4|x| have a steeper slope than y = |x|?", a: "yes", d: "moderate" },
+            { q: "Solve |x| + 2 = 10.", a: "8, -8", d: "moderate" },
+            { q: "Piecewise functions are also called ___ functions.", a: "split", d: "moderate" },
+            { q: "Where is the 'corner' of an absolute value graph?", a: "vertex", d: "moderate" },
+            { q: "Is (0,0) a solution to y > |x|?", a: "no", d: "moderate" },
+            { q: "Solve |2x + 6| = 0.", a: "-3", d: "hard" },
+            { q: "Find the y-intercept of f(x) = |x - 4| + 1.", a: "5", d: "hard" },
+            { q: "Solve |x| <= 2.", a: "-2 <= x <= 2", d: "hard" },
+            { q: "Find the value of k if f(x) = |x| + k passes through (0, 4).", a: "4", d: "hard" },
+            { q: "Slope of the left side of y = |x|.", a: "-1", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-E-505",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate | 0 |.", a: "0", d: "easy" },
+            { q: "Vertex of f(x) = |x - 10|.", a: "(10,0)", d: "easy" },
+            { q: "Solve |x| = 4.", a: "4, -4", d: "easy" },
+            { q: "Does f(x) = -|x| have a minimum?", a: "no", d: "easy" },
+            { q: "A piecewise graph can have a ___ at the split point.", a: "jump", d: "easy" },
+            { q: "Find the vertex of f(x) = |x + 3| + 3.", a: "(-3,3)", d: "moderate" },
+            { q: "Evaluate f(4) if f(x) = {x/2, x is even; x, x is odd}.", a: "2", d: "moderate" },
+            { q: "Solve |x + 2| = 8.", a: "6, -10", d: "moderate" },
+            { q: "Range of f(x) = -|x| + 2.", a: "y <= 2", d: "moderate" },
+            { q: "If |x| = x, is x positive or negative?", a: "positive", d: "moderate" },
+            { q: "Does |x - 5| move the graph right 5?", a: "yes", d: "moderate" },
+            { q: "Evaluate f(-3) for f(x) = |x + 1|.", a: "2", d: "moderate" },
+            { q: "Solve |3x| = 9.", a: "3, -3", d: "moderate" },
+            { q: "Is a piecewise function always continuous?", a: "no", d: "moderate" },
+            { q: "Vertex of y = |x| + 10.", a: "(0,10)", d: "moderate" },
+            { q: "Solve |x - 1| = 2x.", a: "1/3", d: "hard" },
+            { q: "What are the x-intercepts of f(x) = -|x| + 4?", a: "4, -4", d: "hard" },
+            { q: "Solve |x + 5| > -2.", a: "all real numbers", d: "hard" },
+            { q: "Find f(1) if f(x) = {x+1, x<1; 5, x>=1}.", a: "5", d: "hard" },
+            { q: "Equation of |x| shifted left 2 and up 3.", a: "|x+2|+3", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-F-606",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate | 15 |.", a: "15", d: "easy" },
+            { q: "Vertex of f(x) = |x+5|-2.", a: "(-5,-2)", d: "easy" },
+            { q: "Solve |x| = 0.5.", a: "0.5, -0.5", d: "easy" },
+            { q: "Does y = |x| - 2 have a y-intercept of -2?", a: "yes", d: "easy" },
+            { q: "Shape of y = -|x|.", a: "inverted V", d: "easy" },
+            { q: "Evaluate f(2) if f(x) = {x^3, x<3; 0, x>=3}.", a: "8", d: "moderate" },
+            { q: "Solve |x - 4| = 1.", a: "5, 3", d: "moderate" },
+            { q: "Range of f(x) = |x - 5|.", a: "y >= 0", d: "moderate" },
+            { q: "Vertex of f(x) = |x + 1| + 1.", a: "(-1,1)", d: "moderate" },
+            { q: "Does |x + 10| move left 10?", a: "yes", d: "moderate" },
+            { q: "Evaluate f(-5) if f(x) = |x|.", a: "5", d: "moderate" },
+            { q: "Solve |x| + 5 = 5.", a: "0", d: "moderate" },
+            { q: "Is the range of |x| + k always y >= k?", a: "yes", d: "moderate" },
+            { q: "Solve |x/3| = 2.", a: "6, -6", d: "moderate" },
+            { q: "Does f(x) = 10|x| open up?", a: "yes", d: "moderate" },
+            { q: "Solve |2x - 1| = 5.", a: "3, -2", d: "hard" },
+            { q: "Find f(3) if f(x) = {2x, x<3; x+7, x>=3}.", a: "10", d: "hard" },
+            { q: "Solve |x| < -1.", a: "no solution", d: "hard" },
+            { q: "Find the x-intercept of f(x) = |x+2|-4.", a: "2, -6", d: "hard" },
+            { q: "Slope of the right side of y = |x-5|+2.", a: "1", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-G-707",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate | -100 |.", a: "100", d: "easy" },
+            { q: "Vertex of f(x) = |x|.", a: "(0,0)", d: "easy" },
+            { q: "Solve |x| = 9.", a: "9, -9", d: "easy" },
+            { q: "Does f(x) = |x| + 5 move up?", a: "yes", d: "easy" },
+            { q: "Is |x| always non-negative?", a: "yes", d: "easy" },
+            { q: "Vertex of f(x) = |x - 3| + 4.", a: "(3,4)", d: "moderate" },
+            { q: "Evaluate f(0) if f(x) = {x-5, x<=0; x+5, x>0}.", a: "-5", d: "moderate" },
+            { q: "Solve |x + 6| = 10.", a: "4, -16", d: "moderate" },
+            { q: "Range of f(x) = |x| - 1.", a: "y >= -1", d: "moderate" },
+            { q: "Does f(x) = -3|x| open down?", a: "yes", d: "moderate" },
+            { q: "Solve |x| = -5.", a: "no solution", d: "moderate" },
+            { q: "Evaluate f(-2) for f(x) = |x - 2|.", a: "4", d: "moderate" },
+            { q: "Is f(x) = |x| a function?", a: "yes", d: "moderate" },
+            { q: "Solve |4x| = 20.", a: "5, -5", d: "moderate" },
+            { q: "Vertex of y = |x+1|.", a: "(-1,0)", d: "moderate" },
+            { q: "Solve |x - 7| + 3 = 10.", a: "14, 0", d: "hard" },
+            { q: "Find the y-intercept of f(x) = -|x + 2| + 6.", a: "4", d: "hard" },
+            { q: "Solve |x| >= 5.", a: "x >= 5 or x <= -5", d: "hard" },
+            { q: "Find f(10) if f(x) = {x, x<10; 2x, x>=10}.", a: "20", d: "hard" },
+            { q: "What is the axis of symmetry for f(x) = |x-2|?", a: "x=2", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-H-808",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate | 8 - 12 |.", a: "4", d: "easy" },
+            { q: "Vertex of f(x) = |x+1|.", a: "(-1,0)", d: "easy" },
+            { q: "Solve |x| = 2.", a: "2, -2", d: "easy" },
+            { q: "Does |x-1| move right?", a: "yes", d: "easy" },
+            { q: "Absolute value measures ___.", a: "distance", d: "easy" },
+            { q: "Vertex of f(x) = |x - 5| - 5.", a: "(5,-5)", d: "moderate" },
+            { q: "Evaluate f(1) for f(x) = {x, x<1; 10, x>=1}.", a: "10", d: "moderate" },
+            { q: "Solve |x - 1| = 0.", a: "1", d: "moderate" },
+            { q: "Range of f(x) = |x| + 1.", a: "y >= 1", d: "moderate" },
+            { q: "Is the graph of |x| symmetric?", a: "yes", d: "moderate" },
+            { q: "Solve |x| + 1 = 2.", a: "1, -1", d: "moderate" },
+            { q: "Does f(x) = 1/4|x| look wide?", a: "yes", d: "moderate" },
+            { q: "Evaluate f(-4) for f(x) = |x+4|.", a: "0", d: "moderate" },
+            { q: "Solve |x+5| = 1.", a: "-4, -6", d: "moderate" },
+            { q: "Vertex of y = |x-9|+2.", a: "(9,2)", d: "moderate" },
+            { q: "Solve |3x - 6| = 12.", a: "6, -2", d: "hard" },
+            { q: "What is the x-intercept of f(x) = |x| - 10?", a: "10, -10", d: "hard" },
+            { q: "Solve |x - 4| < 2.", a: "2 < x < 6", d: "hard" },
+            { q: "Find f(-2) if f(x) = {x^2, x<0; x, x>=0}.", a: "4", d: "hard" },
+            { q: "Minimum value of f(x) = |x+3|+7.", a: "7", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-I-909",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate | -3 | * 2.", a: "6", d: "easy" },
+            { q: "Vertex of f(x) = |x| - 4.", a: "(0,-4)", d: "easy" },
+            { q: "Solve |x| = 15.", a: "15, -15", d: "easy" },
+            { q: "Does -|x| open up?", a: "no", d: "easy" },
+            { q: "Can a distance be negative?", a: "no", d: "easy" },
+            { q: "Vertex of f(x) = |x + 4| - 2.", a: "(-4,-2)", d: "moderate" },
+            { q: "Evaluate f(3) for f(x) = {x+1, x<5; x, x>=5}.", a: "4", d: "moderate" },
+            { q: "Solve |x + 8| = 2.", a: "-6, -10", d: "moderate" },
+            { q: "Range of f(x) = |x - 1| + 3.", a: "y >= 3", d: "moderate" },
+            { q: "If a = 5 in y = a|x|, is it narrow?", a: "yes", d: "moderate" },
+            { q: "Solve |x| - 4 = 0.", a: "4, -4", d: "moderate" },
+            { q: "Evaluate f(5) for f(x) = |x - 5|.", a: "0", d: "moderate" },
+            { q: "Does |x+3| move left or right?", a: "left", d: "moderate" },
+            { q: "Is |x| always equal to |-x|?", a: "yes", d: "moderate" },
+            { q: "Vertex of y = |x-1|.", a: "(1,0)", d: "moderate" },
+            { q: "Solve |2x + 4| = 10.", a: "3, -7", d: "hard" },
+            { q: "Find the y-intercept of f(x) = |x + 1| - 5.", a: "-4", d: "hard" },
+            { q: "Solve |x| > 0.", a: "x != 0", d: "hard" },
+            { q: "Find f(5) if f(x) = {x+2, x<=4; x-2, x>4}.", a: "3", d: "hard" },
+            { q: "Axis of symmetry for f(x) = |x+10|.", a: "x=-10", d: "hard" }
+        ]
+    },
+    {
+        id: "U10-J-010",
+        title: "Unit 10: Absolute Value & Piecewise",
+        questions: [
+            { q: "Evaluate | -1 | + | -1 |.", a: "2", d: "easy" },
+            { q: "Vertex of f(x) = |x - 1|.", a: "(1,0)", d: "easy" },
+            { q: "Solve |x| = 11.", a: "11, -11", d: "easy" },
+            { q: "Does |x| + 2 move down?", a: "no", d: "easy" },
+            { q: "Is |x| = x for x = -2?", a: "no", d: "easy" },
+            { q: "Vertex of f(x) = |x + 6| + 1.", a: "(-6,1)", d: "moderate" },
+            { q: "Evaluate f(2) for f(x) = {5, x<2; 10, x>=2}.", a: "10", d: "moderate" },
+            { q: "Solve |x - 3| = 4.", a: "7, -1", d: "moderate" },
+            { q: "Range of f(x) = -|x| - 5.", a: "y <= -5", d: "moderate" },
+            { q: "If |x| = 5, then x is ___.", a: "5 or -5", d: "moderate" },
+            { q: "Does |x-10| move right?", a: "yes", d: "moderate" },
+            { q: "Evaluate f(-1) for f(x) = |x+1| - 1.", a: "-1", d: "moderate" },
+            { q: "Solve |5x| = 25.", a: "5, -5", d: "moderate" },
+            { q: "Can piecewise functions have 3 parts?", a: "yes", d: "moderate" },
+            { q: "Vertex of y = |x| - 1.", a: "(0,-1)", d: "moderate" },
+            { q: "Solve |x + 2| = 3x.", a: "1", d: "hard" },
+            { q: "Find x-intercept of f(x) = |x| - 1.", a: "1, -1", d: "hard" },
+            { q: "Solve |x - 1| >= 2.", a: "x >= 3 or x <= -1", d: "hard" },
+            { q: "Find f(0) if f(x) = {x+1, x<0; x-1, x>=0}.", a: "-1", d: "hard" },
+            { q: "Slope of the right side of y = 2|x|.", a: "2", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

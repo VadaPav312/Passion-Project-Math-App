@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U5-A-101",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Identify the slope in $y - 3 = 2(x - 1)$. ", a: "2", d: "easy" },
+            { q: "What is the y-intercept of $y = 4x - 5$?", a: "-5", d: "easy" },
+            { q: "In $Ax + By = C$, what form is this called?", a: "standard form", d: "easy" },
+            { q: "True or False: $y = 3$ is a linear equation.", a: "true", d: "easy" },
+            { q: "What is the slope of $x = 10$?", a: "undefined", d: "easy" },
+            { q: "Convert $y - 1 = 3(x - 2)$ to slope-intercept form.", a: "y=3x-5", d: "moderate" },
+            { q: "Find the x-intercept of $2x + 3y = 12$.", a: "6", d: "moderate" },
+            { q: "Find the y-intercept of $2x + 3y = 12$.", a: "4", d: "moderate" },
+            { q: "Write the equation in point-slope form: $m=4$, point $(1,2)$.", a: "y-2=4(x-1)", d: "moderate" },
+            { q: "What is the slope of the line $3x + y = 10$?", a: "-3", d: "moderate" },
+            { q: "Convert $y = 2x + 3$ to standard form ($Ax+By=C$).", a: "-2x+y=3", d: "moderate" },
+            { q: "Identify the point $(x_1, y_1)$ from $y + 4 = 5(x - 3)$.", a: "(3,-4)", d: "moderate" },
+            { q: "Find the slope of a line parallel to $y = -x + 4$.", a: "-1", d: "moderate" },
+            { q: "Find the slope of $y = 1/2x - 10$.", a: "0.5", d: "moderate" },
+            { q: "Is $(2, 5)$ a solution to $y = 2x + 1$?", a: "yes", d: "moderate" },
+            { q: "Write the equation of a line through $(2,3)$ and $(4,7)$ in slope-intercept form.", a: "y=2x-1", d: "hard" },
+            { q: "Convert $y = 3/4x - 2$ to standard form with integer coefficients.", a: "3x-4y=8", d: "hard" },
+            { q: "Find the slope of a line perpendicular to $2x - 4y = 8$.", a: "-2", d: "hard" },
+            { q: "Write the equation of a horizontal line passing through $(-5, 12)$.", a: "y=12", d: "hard" },
+            { q: "Find the value of $A$ in $Ax + 2y = 10$ if the x-intercept is 5.", a: "2", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-B-202",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "What is $m$ in $y - 5 = -4(x + 2)$?", a: "-4", d: "easy" },
+            { q: "What is $b$ in $y = -x + 1$?", a: "1", d: "easy" },
+            { q: "Standard form requires $A$ and $B$ to not both be \_\_\_.", a: "zero", d: "easy" },
+            { q: "Is $y = x^2$ a linear equation? (yes/no)", a: "no", d: "easy" },
+            { q: "Find the slope of $y = 7$.", a: "0", d: "easy" },
+            { q: "Convert $y + 2 = 5(x - 1)$ to slope-intercept form.", a: "y=5x-7", d: "moderate" },
+            { q: "Find the x-intercept of $4x - y = 8$.", a: "2", d: "moderate" },
+            { q: "Find the y-intercept of $4x - y = 8$.", a: "-8", d: "moderate" },
+            { q: "Write in point-slope: $m=-1$, point $(0,5)$.", a: "y-5=-1(x-0)", d: "moderate" },
+            { q: "Slope of $x - 2y = 6$.", a: "0.5", d: "moderate" },
+            { q: "Convert $y = -3x - 4$ to standard form.", a: "3x+y=-4", d: "moderate" },
+            { q: "Identify the point from $y - 10 = 2(x + 7)$.", a: "(-7,10)", d: "moderate" },
+            { q: "Slope of a line perpendicular to $y = 3x$.", a: "-1/3", d: "moderate" },
+            { q: "Does $(1,1)$ solve $2x + 2y = 4$?", a: "yes", d: "moderate" },
+            { q: "Find the slope of $2y = 6x + 4$.", a: "3", d: "moderate" },
+            { q: "Equation of line through $(1,5)$ and $(3,11)$ in $y=mx+b$.", a: "y=3x+2", d: "hard" },
+            { q: "Standard form of $y = 1/2x + 5$ (no fractions).", a: "x-2y=-10", d: "hard" },
+            { q: "Line through $(4,4)$ with $m=0$.", a: "y=4", d: "hard" },
+            { q: "Find $k$ if $(k, 3)$ is on $y = 2x - 5$.", a: "4", d: "hard" },
+            { q: "Slope of $5x + 5y = 20$.", a: "-1", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-C-303",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Point-slope form: $y - y_1 = m(x - \_\_\_)$.", a: "x1", d: "easy" },
+            { q: "Slope of $y = 2x$.", a: "2", d: "easy" },
+            { q: "Y-intercept of $y = 10$.", a: "10", d: "easy" },
+            { q: "Is $3x + 2y = 6$ in standard form?", a: "yes", d: "easy" },
+            { q: "Slope of a vertical line.", a: "undefined", d: "easy" },
+            { q: "Convert $y - 3 = -2(x + 4)$ to $y=mx+b$.", a: "y=-2x-5", d: "moderate" },
+            { q: "Find the x-intercept of $x + y = 10$.", a: "10", d: "moderate" },
+            { q: "Find the y-intercept of $x + y = 10$.", a: "10", d: "moderate" },
+            { q: "Write in point-slope: $m=1/2$, point $(2,2)$.", a: "y-2=1/2(x-2)", d: "moderate" },
+            { q: "Slope of $4x + 2y = 8$.", a: "-2", d: "moderate" },
+            { q: "Convert $y = x - 7$ to standard form.", a: "x-y=7", d: "moderate" },
+            { q: "Point from $y + 1 = -(x - 5)$.", a: "(5,-1)", d: "moderate" },
+            { q: "Slope parallel to $y = 5x - 2$.", a: "5", d: "moderate" },
+            { q: "Does $(0,0)$ satisfy $y = x$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Identify $m$ and $b$ for $y = -3x$. (Format: m,b)", a: "-3,0", d: "moderate" },
+            { q: "Line through $(-1, 4)$ and $(1, 2)$ in $y=mx+b$.", a: "y=-x+3", d: "hard" },
+            { q: "Standard form of $y = -2/3x + 1$ (no fractions).", a: "2x+3y=3", d: "hard" },
+            { q: "Equation of a vertical line through $(7, -2)$.", a: "x=7", d: "hard" },
+            { q: "Find $b$ if $y = 3x + b$ passes through $(1, 5)$.", a: "2", d: "hard" },
+            { q: "Slope of a line perpendicular to $x + y = 4$.", a: "1", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-D-404",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Slope of $y = -5x + 2$.", a: "-5", d: "easy" },
+            { q: "Y-intercept of $y = x$.", a: "0", d: "easy" },
+            { q: "The 'm' in $y=mx+b$ stands for \_\_\_.", a: "slope", d: "easy" },
+            { q: "Is $x = 4$ a horizontal line? (yes/no)", a: "no", d: "easy" },
+            { q: "Point-slope form of $m=2$ at $(0,0)$.", a: "y=2x", d: "easy" },
+            { q: "Convert $y + 5 = 4(x + 1)$ to $y=mx+b$.", a: "y=4x-1", d: "moderate" },
+            { q: "X-intercept of $3x - 2y = 12$.", a: "4", d: "moderate" },
+            { q: "Y-intercept of $3x - 2y = 12$.", a: "-6", d: "moderate" },
+            { q: "Write in point-slope: $m=3$, point $(-2, -4)$.", a: "y+4=3(x+2)", d: "moderate" },
+            { q: "Slope of $5x - y = 3$.", a: "5", d: "moderate" },
+            { q: "Standard form of $y = 2x - 10$.", a: "2x-y=10", d: "moderate" },
+            { q: "Point from $y - 6 = 0.5(x + 2)$.", a: "(-2,6)", d: "moderate" },
+            { q: "Slope perpendicular to $y = -1/2x + 1$.", a: "2", d: "moderate" },
+            { q: "Is $(3, 10)$ on the line $y = 3x + 1$?", a: "yes", d: "moderate" },
+            { q: "Slope of $y = -x$.", a: "-1", d: "moderate" },
+            { q: "Line through $(0, 2)$ and $(2, 6)$ in $y=mx+b$.", a: "y=2x+2", d: "hard" },
+            { q: "Standard form of $y = 0.25x - 3$ (no fractions).", a: "x-4y=12", d: "hard" },
+            { q: "Equation of line through $(5, 5)$ with $m=1$.", a: "y=x", d: "hard" },
+            { q: "Find $m$ of line through $(1, 2)$ and $(1, 10)$.", a: "undefined", d: "hard" },
+            { q: "Slope of $Ax + By = C$.", a: "-A/B", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-E-505",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Find $b$ for $y = 2x - 7$.", a: "-7", d: "easy" },
+            { q: "Find $m$ for $y = x + 4$.", a: "1", d: "easy" },
+            { q: "Name of $y - y_1 = m(x - x_1)$.", a: "point-slope form", d: "easy" },
+            { q: "Slope of a horizontal line.", a: "0", d: "easy" },
+            { q: "Y-intercept of $x + y = 5$.", a: "5", d: "easy" },
+            { q: "Convert $y - 0 = 2(x + 3)$ to $y=mx+b$.", a: "y=2x+6", d: "moderate" },
+            { q: "X-intercept of $x - 5y = 10$.", a: "10", d: "moderate" },
+            { q: "Y-intercept of $x - 5y = 10$.", a: "-2", d: "moderate" },
+            { q: "Write in point-slope: $m=-5$, point $(1, -1)$.", a: "y+1=-5(x-1)", d: "moderate" },
+            { q: "Slope of $2x + 4y = 8$.", a: "-0.5", d: "moderate" },
+            { q: "Standard form of $y = -x + 5$.", a: "x+y=5", d: "moderate" },
+            { q: "Point from $y + 7 = 3(x - 0)$.", a: "(0,-7)", d: "moderate" },
+            { q: "Slope parallel to $x = 5$.", a: "undefined", d: "moderate" },
+            { q: "Is $(2, 2)$ on $y = x$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Slope of $y = 3/4x$.", a: "0.75", d: "moderate" },
+            { q: "Line through $(2, 10)$ and $(4, 20)$ in $y=mx+b$.", a: "y=5x", d: "hard" },
+            { q: "Standard form of $y = 2/5x + 2$.", a: "2x-5y=-10", d: "hard" },
+            { q: "Equation of line through $(0, 0)$ with $m=-1$.", a: "y=-x", d: "hard" },
+            { q: "Find $b$ for $y = -2x + b$ through $(3, 3)$.", a: "9", d: "hard" },
+            { q: "Slope perpendicular to $y = 5$.", a: "undefined", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-F-606",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Slope of $y - 1 = 3(x - 1)$.", a: "3", d: "easy" },
+            { q: "Y-intercept of $y = -2x$.", a: "0", d: "easy" },
+            { q: "Is $y = 5x + 1$ in slope-intercept form?", a: "yes", d: "easy" },
+            { q: "Slope of the line $x = -2$.", a: "undefined", d: "easy" },
+            { q: "Standard form of $x + y = 0$.", a: "x+y=0", d: "easy" },
+            { q: "Convert $y + 4 = -1(x - 2)$ to $y=mx+b$.", a: "y=-x-2", d: "moderate" },
+            { q: "X-intercept of $5x + 2y = 20$.", a: "4", d: "moderate" },
+            { q: "Y-intercept of $5x + 2y = 20$.", a: "10", d: "moderate" },
+            { q: "Point-slope: $m=2/3$, point $(3, 0)$.", a: "y=2/3(x-3)", d: "moderate" },
+            { q: "Slope of $x + y = 5$.", a: "-1", d: "moderate" },
+            { q: "Standard form of $y = 3x - 2$.", a: "3x-y=2", d: "moderate" },
+            { q: "Point from $y - 2 = 4x$.", a: "(0,2)", d: "moderate" },
+            { q: "Slope perpendicular to $y = x$.", a: "-1", d: "moderate" },
+            { q: "Does $(5, 0)$ solve $y = x - 5$?", a: "yes", d: "moderate" },
+            { q: "Slope of $y = -0.2x$.", a: "-0.2", d: "moderate" },
+            { q: "Line through $(1, 1)$ and $(2, 3)$ in $y=mx+b$.", a: "y=2x-1", d: "hard" },
+            { q: "Standard form of $y = -1/4x + 1$.", a: "x+4y=4", d: "hard" },
+            { q: "Equation of horizontal line through $(0, 0)$.", a: "y=0", d: "hard" },
+            { q: "Find $y$ if $x=2$ for $3x + 4y = 10$.", a: "1", d: "hard" },
+            { q: "Slope of line parallel to $y = 2$.", a: "0", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-G-707",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Identify $m$ in $y = -3x + 10$.", a: "-3", d: "easy" },
+            { q: "Identify $b$ in $y = 2x - 4$.", a: "-4", d: "easy" },
+            { q: "Form of $y - 2 = 5(x - 3)$.", a: "point-slope", d: "easy" },
+            { q: "Slope of the x-axis.", a: "0", d: "easy" },
+            { q: "Is $(0,0)$ on $y = 2x$? (yes/no)", a: "yes", d: "easy" },
+            { q: "Convert $y - 1 = 2(x + 5)$ to $y=mx+b$.", a: "y=2x+11", d: "moderate" },
+            { q: "X-intercept of $2x - y = 6$.", a: "3", d: "moderate" },
+            { q: "Y-intercept of $2x - y = 6$.", a: "-6", d: "moderate" },
+            { q: "Point-slope: $m=-2$, point $(4, 1)$.", a: "y-1=-2(x-4)", d: "moderate" },
+            { q: "Slope of $3x - 3y = 9$.", a: "1", d: "moderate" },
+            { q: "Standard form of $y = x + 1$.", a: "x-y=-1", d: "moderate" },
+            { q: "Point from $y + 5 = -2(x + 1)$.", a: "(-1,-5)", d: "moderate" },
+            { q: "Slope parallel to $y = 1/2x$.", a: "0.5", d: "moderate" },
+            { q: "Does $(-1, -1)$ satisfy $y = 2x + 1$?", a: "yes", d: "moderate" },
+            { q: "Slope of $y = 4x - 1$.", a: "4", d: "moderate" },
+            { q: "Line through $(0, 5)$ and $(5, 0)$ in $y=mx+b$.", a: "y=-x+5", d: "hard" },
+            { q: "Standard form of $y = 0.6x + 2$.", a: "3x-5y=-10", d: "hard" },
+            { q: "Equation of vertical line through $(-1, -1)$.", a: "x=-1", d: "hard" },
+            { q: "Find $b$ for $y = 4x + b$ through $(2, 10)$.", a: "2", d: "hard" },
+            { q: "Slope perpendicular to $x + 2y = 4$.", a: "2", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-H-808",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Slope of $y = x$.", a: "1", d: "easy" },
+            { q: "Y-intercept of $y = -5$.", a: "-5", d: "easy" },
+            { q: "Point-slope: $y - 3 = 4(x - \_\_\_)$.", a: "0", d: "easy" },
+            { q: "Is $x = 0$ a linear equation? (yes/no)", a: "yes", d: "easy" },
+            { q: "Standard form of $x - y = 2$.", a: "x-y=2", d: "easy" },
+            { q: "Convert $y + 1 = 3(x - 3)$ to $y=mx+b$.", a: "y=3x-10", d: "moderate" },
+            { q: "X-intercept of $x + 4y = 8$.", a: "8", d: "moderate" },
+            { q: "Y-intercept of $x + 4y = 8$.", a: "2", d: "moderate" },
+            { q: "Point-slope: $m=10$, point $(1, 1)$.", a: "y-1=10(x-1)", d: "moderate" },
+            { q: "Slope of $y = 10x - 5$.", a: "10", d: "moderate" },
+            { q: "Standard form of $y = -2x + 3$.", a: "2x+y=3", d: "moderate" },
+            { q: "Point from $y - 4 = (x + 8)$.", a: "(-8,4)", d: "moderate" },
+            { q: "Slope perpendicular to $y = -x$.", a: "1", d: "moderate" },
+            { q: "Does $(2, 4)$ solve $y = 2x$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Slope of $y = -5$.", a: "0", d: "moderate" },
+            { q: "Line through $(1, 2)$ and $(2, 1)$ in $y=mx+b$.", a: "y=-x+3", d: "hard" },
+            { q: "Standard form of $y = 1/3x - 1$.", a: "x-3y=3", d: "hard" },
+            { q: "Equation of line through $(5, 0)$ with $m=-2$.", a: "y=-2x+10", d: "hard" },
+            { q: "Find $x$ if $y=4$ for $x - y = 10$.", a: "14", d: "hard" },
+            { q: "Slope perpendicular to $y = 2x + 1$.", a: "-0.5", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-I-909",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Identify $m$ in $y = 0.5x$.", a: "0.5", d: "easy" },
+            { q: "Identify $b$ in $y = 3x + 1$.", a: "1", d: "easy" },
+            { q: "Form of $2x - y = 4$.", a: "standard", d: "easy" },
+            { q: "Slope of $y = -x + 5$.", a: "-1", d: "easy" },
+            { q: "Is a circle a linear equation?", a: "no", d: "easy" },
+            { q: "Convert $y - 5 = -2(x - 1)$ to $y=mx+b$.", a: "y=-2x+7", d: "moderate" },
+            { q: "X-intercept of $3x + y = 9$.", a: "3", d: "moderate" },
+            { q: "Y-intercept of $3x + y = 9$.", a: "9", d: "moderate" },
+            { q: "Point-slope: $m=-1$, point $(2, 2)$.", a: "y-2=-(x-2)", d: "moderate" },
+            { q: "Slope of $4x - 2y = 10$.", a: "2", d: "moderate" },
+            { q: "Standard form of $y = 4x - 5$.", a: "4x-y=5", d: "moderate" },
+            { q: "Point from $y + 3 = 5(x - 4)$.", a: "(4,-3)", d: "moderate" },
+            { q: "Slope parallel to $y = -2x + 1$.", a: "-2", d: "moderate" },
+            { q: "Does $(1, 2)$ solve $y = 3x - 1$? (yes/no)", a: "yes", d: "moderate" },
+            { q: "Slope of $y = 1/4x$.", a: "0.25", d: "moderate" },
+            { q: "Line through $(0, 0)$ and $(1, 4)$ in $y=mx+b$.", a: "y=4x", d: "hard" },
+            { q: "Standard form of $y = -3/2x + 4$.", a: "3x+2y=8", d: "hard" },
+            { q: "Equation of line through $(2, 2)$ with $m=0$.", a: "y=2", d: "hard" },
+            { q: "Find $b$ for $y = 1/2x + b$ through $(4, 5)$.", a: "3", d: "hard" },
+            { q: "Slope perpendicular to $y = -4x$.", a: "0.25", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-J-010",
+        title: "Unit 5: Forms of Linear Equations",
+        questions: [
+            { q: "Slope of $y - 4 = 2(x + 3)$.", a: "2", d: "easy" },
+            { q: "Y-intercept of $y = x - 10$.", a: "-10", d: "easy" },
+            { q: "Name of $y = mx + b$.", a: "slope-intercept form", d: "easy" },
+            { q: "Slope of $x = 5$.", a: "undefined", d: "easy" },
+            { q: "Is $(1, 1)$ on $y = x$? (yes/no)", a: "yes", d: "easy" },
+            { q: "Convert $y + 2 = 3(x + 1)$ to $y=mx+b$.", a: "y=3x+1", d: "moderate" },
+            { q: "X-intercept of $x - y = 4$.", a: "4", d: "moderate" },
+            { q: "Y-intercept of $x - y = 4$.", a: "-4", d: "moderate" },
+            { q: "Point-slope: $m=5$, point $(0, -2)$.", a: "y+2=5x", d: "moderate" },
+            { q: "Slope of $2x + y = 0$.", a: "-2", d: "moderate" },
+            { q: "Standard form of $y = -2x - 2$.", a: "2x+y=-2", d: "moderate" },
+            { q: "Point from $y - 1 = -4(x + 5)$.", a: "(-5,1)", d: "moderate" },
+            { q: "Slope perpendicular to $y = 2x$.", a: "-0.5", d: "moderate" },
+            { q: "Does $(0, 4)$ solve $x + y = 4$?", a: "yes", d: "moderate" },
+            { q: "Slope of $y = -3$.", a: "0", d: "moderate" },
+            { q: "Line through $(1, 5)$ and $(2, 7)$ in $y=mx+b$.", a: "y=2x+3", d: "hard" },
+            { q: "Standard form of $y = 1/5x - 2$.", a: "x-5y=10", d: "hard" },
+            { q: "Equation of line through $(3, 3)$ with $m=1$.", a: "y=x", d: "hard" },
+            { q: "Find $y$ if $x=10$ for $y = 0.5x + 2$.", a: "7", d: "hard" },
+            { q: "Slope perpendicular to $y = -x - 1$.", a: "1", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

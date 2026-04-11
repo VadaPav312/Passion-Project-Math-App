@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Math Curriculum</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e293b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --white: #ffffff;
+        }
+
+        body { font-family: 'Inter', sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); }
+        
+        /* Sidebar */
+        nav { width: 280px; background: var(--secondary); color: white; display: flex; flex-direction: column; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        nav h1 { padding: 20px; font-size: 1.5rem; background: #0f172a; margin: 0; text-align: center; }
+        .nav-links { flex: 1; overflow-y: auto; padding: 10px; }
+        .nav-item { padding: 12px 15px; cursor: pointer; border-radius: 6px; margin-bottom: 5px; transition: 0.2s; font-weight: 500; }
+        .nav-item:hover { background: #334155; }
+        .nav-item.active { background: var(--primary); }
+
+        /* Content */
+        main { flex: 1; overflow-y: auto; padding: 40px; }
+        .subject-page { display: none; max-width: 900px; margin: 0 auto; }
+        .subject-page.active { display: block; }
+
+        .lesson { background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        h2 { color: var(--secondary); border-left: 5px solid var(--primary); padding-left: 15px; margin-top: 0; }
+        
+        /* Interactive Quiz */
+        .quiz-box { background: #eff6ff; border: 2px solid #bfdbfe; padding: 20px; border-radius: 8px; margin-top: 20px; }
+        input[type="text"], input[type="number"] { padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; width: 100px; margin: 10px 0; }
+        button { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #1d4ed8; }
+        .feedback { margin-top: 10px; font-weight: bold; min-height: 1.2em; }
+        .correct { color: #16a34a; }
+        .wrong { color: #dc2626; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h1>Math Academy</h1>
+    <div class="nav-links">
+        <div class="nav-item active" onclick="showSubject('alg1')">Algebra 1</div>
+        <div class="nav-item" onclick="showSubject('geo')">Geometry</div>
+        <div class="nav-item" onclick="showSubject('alg2')">Algebra 2</div>
+        <div class="nav-item" onclick="showSubject('precalc')">Pre-Calculus</div>
+        <div class="nav-item" onclick="showSubject('calc1')">Calculus 1</div>
+        <div class="nav-item" onclick="showSubject('calc2')">Calculus 2</div>
+        <div class="nav-item" onclick="showSubject('calc3')">Calculus 3</div>
+        <div class="nav-item" onclick="showSubject('linalg')">Linear Algebra</div>
+    </div>
+</nav>
+
+<main>
+    <div id="alg1" class="subject-page active">
+        <h1>Algebra 1</h1>
+        <div class="lesson">
+            <h2>Lesson 1: Solving Linear Equations</h2>
+            <p>To solve for $x$, you must perform the same operation on both sides of the equation to isolate the variable.</p>
+            <p>Example: $3x + 5 = 20 \rightarrow 3x = 15 \rightarrow x = 5$</p>
+            <div class="quiz-box">
+                <p><strong>Quiz:</strong> Solve for $x$: $4x - 7 = 21$</p>
+                <input type="number" id="q-alg1-1">
+                <button onclick="checkAnswer('q-alg1-1', 7, 'f-alg1-1')">Check</button>
+                <div id="f-alg1-1" class="feedback"></div>
+            </div>
+        </div>
+        <div class="lesson">
+            <h2>Lesson 2: The Distributive Property</h2>
+            <p>Expand: $a(b + c) = ab + ac$.</p>
+            <div class="quiz-box">
+                <p><strong>Quiz:</strong> What is the coefficient of $x$ in $5(2x + 3)$?</p>
+                <input type="number" id="q-alg1-2">
+                <button onclick="checkAnswer('q-alg1-2', 10, 'f-alg1-2')">Check</button>
+                <div id="f-alg1-2" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="geo" class="subject-page">
+        <h1>Geometry</h1>
+        
+        <div class="lesson">
+            <h2>Lesson 1: Pythagorean Theorem</h2>
+            <p>In a right triangle, the square of the hypotenuse is equal to the sum of the squares of the legs: $a^2 + b^2 = c^2$.</p>
+            <div class="quiz-box">
+                <p><strong>Quiz:</strong> If $a=3$ and $b=4$, what is $c$?</p>
+                <input type="number" id="q-geo-1">
+                <button onclick="checkAnswer('q-geo-1', 5, 'f-geo-1')">Check</button>
+                <div id="f-geo-1" class="feedback"></div>
+            </div>
+        </div>
+        <div class="lesson">
+            <h2>Lesson 2: Area of Circles</h2>
+            <p>The area is given by $A = \pi r^2$. (Use $\pi \approx 3.14$ for calculations).</p>
+            <div class="quiz-box">
+                <p><strong>Quiz:</strong> Find the area of a circle with radius $r=10$ (Use 314).</p>
+                <input type="number" id="q-geo-2">
+                <button onclick="checkAnswer('q-geo-2', 314, 'f-geo-2')">Check</button>
+                <div id="f-geo-2" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="precalc" class="subject-page">
+        <h1>Pre-Calculus</h1>
+        
+
+[Image of the unit circle]
+
+        <div class="lesson">
+            <h2>Lesson 1: Unit Circle Basics</h2>
+            <p>Points on the unit circle are defined as $(\cos \theta, \sin \theta)$.</p>
+            <div class="quiz-box">
+                <p><strong>Quiz:</strong> What is $\sin(90^\circ)$?</p>
+                <input type="number" id="q-pre-1">
+                <button onclick="checkAnswer('q-pre-1', 1, 'f-pre-1')">Check</button>
+                <div id="f-pre-1" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="calc1" class="subject-page">
+        <h1>Calculus 1</h1>
+        <div class="lesson">
+            <h2>Lesson 1: The Power Rule</h2>
+            <p>The derivative of $x^n$ is $nx^{n-1}$.</p>
+            <div class="quiz-box">
+                <p><strong>Quiz:</strong> What is the derivative of $x^5$?</p>
+                <input type="text" id="q-c1-1" placeholder="e.g. 5x^4">
+                <button onclick="checkStringAnswer('q-c1-1', '5x^4', 'f-c1-1')">Check</button>
+                <div id="f-c1-1" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="calc3" class="subject-page">
+        <h1>Calculus 3</h1>
+        
+
+[Image of a 3D coordinate system]
+
+        <div class="lesson">
+            <h2>Lesson 1: Partial Derivatives</h2>
+            <p>To find $f_x$, treat $y$ as a constant and differentiate with respect to $x$.</p>
+            <div class="quiz-box">
+                <p><strong>Quiz:</strong> If $f(x,y) = x^2y$, what is $f_x$?</p>
+                <input type="text" id="q-c3-1" placeholder="e.g. 2xy">
+                <button onclick="checkStringAnswer('q-c3-1', '2xy', 'f-c3-1')">Check</button>
+                <div id="f-c3-1" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="linalg" class="subject-page">
+        <h1>Linear Algebra</h1>
+        <div class="lesson">
+            <h2>Lesson 1: Determinants of 2x2 Matrices</h2>
+            <p>For matrix $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$, $\det(A) = ad - bc$.</p>
+            <div class="quiz-box">
+                <p><strong>Quiz:</strong> Find det(A) for $\begin{bmatrix} 3 & 2 \\ 1 & 4 \end{bmatrix}$</p>
+                <input type="number" id="q-la-1">
+                <button onclick="checkAnswer('q-la-1', 10, 'f-la-1')">Check</button>
+                <div id="f-la-1" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+
+<script>
+    function showSubject(id) {
+        // Switch Page
+        document.querySelectorAll('.subject-page').forEach(page => page.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        
+        // Switch Nav
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    function checkAnswer(inputId, correct, feedbackId) {
+        const val = parseFloat(document.getElementById(inputId).value);
+        const fb = document.getElementById(feedbackId);
+        if (val === correct) {
+            fb.innerHTML = "✓ Correct!";
+            fb.className = "feedback correct";
+        } else {
+            fb.innerHTML = "✗ Try again.";
+            fb.className = "feedback wrong";
+        }
+    }
+
+    function checkStringAnswer(inputId, correct, feedbackId) {
+        const val = document.getElementById(inputId).value.replace(/\s+/g, '').toLowerCase();
+        const fb = document.getElementById(feedbackId);
+        if (val === correct.replace(/\s+/g, '').toLowerCase()) {
+            fb.innerHTML = "✓ Correct!";
+            fb.className = "feedback correct";
+        } else {
+            fb.innerHTML = "✗ Try again.";
+            fb.className = "feedback wrong";
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U3-A-101",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "Similar figures have the same shape but different \_\_\_.", a: "size", d: "easy" },
+            { q: "What is the symbol for similarity?", a: "~", d: "easy" },
+            { q: "In similar triangles, corresponding angles are \_\_\_.", a: "congruent", d: "easy" },
+            { q: "In similar triangles, corresponding sides are \_\_\_.", a: "proportional", d: "easy" },
+            { q: "What does AA stand for in triangle similarity?", a: "angle-angle", d: "easy" },
+            { q: "If the scale factor is 1, the figures are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "A dilation with k=3 is an enlargement or reduction?", a: "enlargement", d: "moderate" },
+            { q: "If triangle ABC ~ DEF, then AB/DE = BC/\_\_\_.", a: "EF", d: "moderate" },
+            { q: "Does SAS similarity require the sides to be equal?", a: "no", d: "moderate" },
+            { q: "The ratio of corresponding linear measurements is the \_\_\_.", a: "scale factor", d: "moderate" },
+            { q: "If two angles of one triangle match two of another, they are \_\_\_.", a: "similar", d: "moderate" },
+            { q: "If k=2, the new perimeter is \_\_\_ times the original.", a: "2", d: "moderate" },
+            { q: "Can SSS be used to prove similarity?", a: "yes", d: "moderate" },
+            { q: "Are all equilateral triangles similar?", a: "yes", d: "moderate" },
+            { q: "Are all rectangles similar?", a: "no", d: "moderate" },
+            { q: "If the scale factor is 1/2, the new area is \_\_\_ of the old.", a: "1/4", d: "hard" },
+            { q: "Geometric Mean of 4 and 9?", a: "6", d: "hard" },
+            { q: "A line parallel to one side of a triangle divides the other two proportionally. Name this theorem.", a: "side-splitter", d: "hard" },
+            { q: "If triangle ABC ~ DEF and k=3, what is the ratio of their areas?", a: "9:1", d: "hard" },
+            { q: "In a right triangle, the altitude to the hypotenuse creates \_\_\_ similar triangles.", a: "3", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-B-202",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "Are corresponding angles of similar triangles equal?", a: "yes", d: "easy" },
+            { q: "Ratio of image to pre-image is called \_\_\_.", a: "scale factor", d: "easy" },
+            { q: "AA~ requires how many pairs of congruent angles?", a: "2", d: "easy" },
+            { q: "If k < 1, the dilation is a \_\_\_.", a: "reduction", d: "easy" },
+            { q: "True or False: All squares are similar.", a: "true", d: "easy" },
+            { q: "Side A=5 and side B=10. Scale factor from A to B?", a: "2", d: "moderate" },
+            { q: "Does AAA prove similarity?", a: "yes", d: "moderate" },
+            { q: "In SAS~, the angle must be \_\_\_.", a: "included", d: "moderate" },
+            { q: "If triangle ABC ~ XYZ, then angle B = \_\_\_.", a: "angle Y", d: "moderate" },
+            { q: "A scale factor of 0.5 is a \_\_\_.", a: "reduction", d: "moderate" },
+            { q: "The ratio of perimeters is \_\_\_ the scale factor.", a: "equal to", d: "moderate" },
+            { q: "Can you use HL for similarity?", a: "yes", d: "moderate" },
+            { q: "A mapping that preserves shape but not size is a \_\_\_.", a: "similarity transformation", d: "moderate" },
+            { q: "Are all circles similar?", a: "yes", d: "moderate" },
+            { q: "If k=4, the area increases by a factor of \_\_\_.", a: "16", d: "moderate" },
+            { q: "Solve for x: 3/4 = x/12.", a: "9", d: "hard" },
+            { q: "The Angle \_\_\_ Theorem divides the opposite side proportionally.", a: "bisector", d: "hard" },
+            { q: "If area ratio is 4:9, what is the scale factor?", a: "2/3", d: "hard" },
+            { q: "Geometric Mean of 2 and 8?", a: "4", d: "hard" },
+            { q: "SAS similarity requires one angle and two proportional \_\_\_.", a: "sides", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-C-303",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "What theorem uses two angles to prove similarity?", a: "AA", d: "easy" },
+            { q: "Does dilation change angle measures?", a: "no", d: "easy" },
+            { q: "Is congruence a special case of similarity?", a: "yes", d: "easy" },
+            { q: "The 'k' in (kx, ky) represents \_\_\_.", a: "scale factor", d: "easy" },
+            { q: "Are similar figures the same size?", a: "no", d: "easy" },
+            { q: "If k=1/3, is it an enlargement or reduction?", a: "reduction", d: "moderate" },
+            { q: "Side lengths in similar figures are in the same \_\_\_.", a: "ratio", d: "moderate" },
+            { q: "If ABC ~ DEF, then angle A maps to \_\_\_.", a: "angle D", d: "moderate" },
+            { q: "SSS similarity requires sides to be \_\_\_.", a: "proportional", d: "moderate" },
+            { q: "Scale factor to turn 10 into 5?", a: "0.5", d: "moderate" },
+            { q: "If ratio of sides is a:b, ratio of areas is \_\_\_.", a: "a^2:b^2", d: "moderate" },
+            { q: "Are all isosceles triangles similar?", a: "no", d: "moderate" },
+            { q: "Dilation (x, y) to (3x, 3y). What is k?", a: "3", d: "moderate" },
+            { q: "If 2 angles are 30 and 70, the 3rd is \_\_\_.", a: "80", d: "moderate" },
+            { q: "Can a reflection be part of a similarity transformation?", a: "yes", d: "moderate" },
+            { q: "A shadow problem uses \_\_\_ triangle similarity.", a: "AA", d: "hard" },
+            { q: "Geometric mean of 3 and 27?", a: "9", d: "hard" },
+            { q: "If k=2.5, a 4-inch side becomes \_\_\_.", a: "10", d: "hard" },
+            { q: "Volume ratio of similar solids with scale factor k?", a: "k^3", d: "hard" },
+            { q: "Area ratio is 25/49. Scale factor?", a: "5/7", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-D-404",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "Does a dilation preserve parallel lines?", a: "yes", d: "easy" },
+            { q: "If figures are similar, are they also congruent?", a: "no", d: "easy" },
+            { q: "Scale factor for an identity transformation?", a: "1", d: "easy" },
+            { q: "Angle-Angle similarity abbreviation?", a: "AA", d: "easy" },
+            { q: "Do similar triangles have equal perimeters?", a: "no", d: "easy" },
+            { q: "If k=1.2, is it an enlargement or reduction?", a: "enlargement", d: "moderate" },
+            { q: "Ratio of 6:18 simplified?", a: "1/3", d: "moderate" },
+            { q: "Solve for x: x/5 = 12/10.", a: "6", d: "moderate" },
+            { q: "Are all right triangles similar?", a: "no", d: "moderate" },
+            { q: "Corresponding sides of ~ triangles are \_\_\_.", a: "proportional", d: "moderate" },
+            { q: "If perimeter ratio is 3:4, what is the side ratio?", a: "3:4", d: "moderate" },
+            { q: "Triangle midsegment is \_\_\_ the length of the base.", a: "1/2", d: "moderate" },
+            { q: "Can you have a negative scale factor in basic geometry?", a: "no", d: "moderate" },
+            { q: "If k=2, the area is multiplied by \_\_\_.", a: "4", d: "moderate" },
+            { q: "The symbol ~ means \_\_\_.", a: "similar", d: "moderate" },
+            { q: "Find Geometric Mean of 5 and 20.", a: "10", d: "hard" },
+            { q: "If side ratio is 2:5, area ratio is \_\_\_.", a: "4:25", d: "hard" },
+            { q: "In a right triangle, altitude to hypotenuse is the \_\_\_ mean of the segments.", a: "geometric", d: "hard" },
+            { q: "Scale factor to map (12, 16) to (3, 4)?", a: "0.25", d: "hard" },
+            { q: "Side-Splitter Theorem is also called Triangle \_\_\_ Theorem.", a: "proportionality", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-E-505",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "Is a dilation a rigid motion?", a: "no", d: "easy" },
+            { q: "What remains the same in a dilation?", a: "angles", d: "easy" },
+            { q: "SSS similarity uses proportional \_\_\_.", a: "sides", d: "easy" },
+            { q: "If ABC ~ XYZ, then AC/XZ = AB/\_\_\_.", a: "XY", d: "easy" },
+            { q: "Scale factor to double the size?", a: "2", d: "easy" },
+            { q: "Solve for x: 2/x = 8/20.", a: "5", d: "moderate" },
+            { q: "If k=0.75, it is a \_\_\_.", a: "reduction", d: "moderate" },
+            { q: "Are all isosceles right triangles similar?", a: "yes", d: "moderate" },
+            { q: "Ratio of areas is 1:100. Scale factor?", a: "1/10", d: "moderate" },
+            { q: "AA similarity requires \_\_\_ congruent angles.", a: "2", d: "moderate" },
+            { q: "Do similar triangles have the same orientation?", a: "yes", d: "moderate" },
+            { q: "A scale factor of 1 results in \_\_\_ figures.", a: "congruent", d: "moderate" },
+            { q: "If k=5, perimeter increases by factor of \_\_\_.", a: "5", d: "moderate" },
+            { q: "Sides are 3, 4, 5 and 6, 8, 10. Are they similar?", a: "yes", d: "moderate" },
+            { q: "Corresponding angles are always \_\_\_.", a: "equal", d: "moderate" },
+            { q: "Geometric mean of 1 and 100?", a: "10", d: "hard" },
+            { q: "If side ratio is 1:3, volume ratio is \_\_\_.", a: "1:27", d: "hard" },
+            { q: "Theorem: An angle bisector divides the triangle \_\_\_.", a: "proportionally", d: "hard" },
+            { q: "Solve for x: (x+1)/2 = 6/3.", a: "3", d: "hard" },
+            { q: "If two triangles are similar, their altitudes are \_\_\_.", a: "proportional", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-F-606",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "Enlargement k value is \_\_\_ than 1.", a: "greater", d: "easy" },
+            { q: "Reduction k value is \_\_\_ than 1.", a: "less", d: "easy" },
+            { q: "What is the similarity shortcut for angles?", a: "AA", d: "easy" },
+            { q: "Are similar triangles congruent?", a: "no", d: "easy" },
+            { q: "Ratio of 10 to 50 simplified?", a: "1/5", d: "easy" },
+            { q: "If k=10, area is multiplied by \_\_\_.", a: "100", d: "moderate" },
+            { q: "Are all rhombuses similar?", a: "no", d: "moderate" },
+            { q: "Solve for x: 7/14 = x/10.", a: "5", d: "moderate" },
+            { q: "If ABC ~ DEF, angle C = 40, what is angle F?", a: "40", d: "moderate" },
+            { q: "Ratio of perimeters if k=2/3?", a: "2/3", d: "moderate" },
+            { q: "Does SAS~ need proportional sides?", a: "yes", d: "moderate" },
+            { q: "Dilation from origin (x, y) to (0.2x, 0.2y). k?", a: "0.2", d: "moderate" },
+            { q: "Triangle with sides 5, 5, 5. Similar to 10, 10, 10?", a: "yes", d: "moderate" },
+            { q: "Congruent triangles have a scale factor of \_\_\_.", a: "1", d: "moderate" },
+            { q: "Similar figures are the same \_\_\_.", a: "shape", d: "moderate" },
+            { q: "Geometric mean of 8 and 18?", a: "12", d: "hard" },
+            { q: "Area ratio is 16/81. Side ratio?", a: "4/9", d: "hard" },
+            { q: "Volume ratio is 8/125. Scale factor?", a: "2/5", d: "hard" },
+            { q: "If k=4, a volume of 2 becomes \_\_\_.", a: "128", d: "hard" },
+            { q: "Can SSS similarity use 3 angles?", a: "no", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-G-707",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "AA similarity needs how many angles?", a: "2", d: "easy" },
+            { q: "Is similarity a rigid transformation?", a: "no", d: "easy" },
+            { q: "Symbol for proportional?", a: "=", d: "easy" },
+            { q: "Scale factor for 4 to 12?", a: "3", d: "easy" },
+            { q: "Do similar shapes have equal angles?", a: "yes", d: "easy" },
+            { q: "If k=0.1, is it an enlargement?", a: "no", d: "moderate" },
+            { q: "Solve x: 5/x = 10/4.", a: "2", d: "moderate" },
+            { q: "Are all regular hexagons similar?", a: "yes", d: "moderate" },
+            { q: "If area ratio is 9:16, side ratio is \_\_\_.", a: "3:4", d: "moderate" },
+            { q: "In SAS~, is the angle congruent?", a: "yes", d: "moderate" },
+            { q: "Does k=1 change the size?", a: "no", d: "moderate" },
+            { q: "If k=3, perimeter is \_\_\_ times larger.", a: "3", d: "moderate" },
+            { q: "If ABC ~ XYZ, then angle Z = angle \_\_\_.", a: "C", d: "moderate" },
+            { q: "Are 3:4:5 and 9:12:15 triangles similar?", a: "yes", d: "moderate" },
+            { q: "Side-Splitter theorem uses \_\_\_ lines.", a: "parallel", d: "moderate" },
+            { q: "Geometric mean of 6 and 24?", a: "12", d: "hard" },
+            { q: "If k=1/2, area is multiplied by \_\_\_.", a: "1/4", d: "hard" },
+            { q: "Solve for x: 3/x = x/12.", a: "6", d: "hard" },
+            { q: "Volume ratio if k=10?", a: "1000", d: "hard" },
+            { q: "If scale factor is a/b, area ratio is \_\_\_.", a: "a^2/b^2", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-H-808",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "SAS similarity abbreviation?", a: "SAS~", d: "easy" },
+            { q: "If figures are similar, side ratios are \_\_\_.", a: "equal", d: "easy" },
+            { q: "k > 1 means \_\_\_.", a: "enlargement", d: "easy" },
+            { q: "k < 1 means \_\_\_.", a: "reduction", d: "easy" },
+            { q: "Is AA a similarity postulate?", a: "yes", d: "easy" },
+            { q: "Solve x: x/8 = 3/2.", a: "12", d: "moderate" },
+            { q: "If k=2, area ratio is \_\_\_.", a: "4:1", d: "moderate" },
+            { q: "Are all parabolas similar?", a: "yes", d: "moderate" },
+            { q: "If perimeter ratio is 5:1, side ratio is \_\_\_.", a: "5:1", d: "moderate" },
+            { q: "Dilation (x, y) to (x/2, y/2). k?", a: "0.5", d: "moderate" },
+            { q: "SSS similarity uses how many sides?", a: "3", d: "moderate" },
+            { q: "If ABC ~ DEF, side BC matches side \_\_\_.", a: "EF", d: "moderate" },
+            { q: "Do dilations preserve angle measure?", a: "yes", d: "moderate" },
+            { q: "Can a similarity transformation include a slide?", a: "yes", d: "moderate" },
+            { q: "Are all right isosceles triangles similar?", a: "yes", d: "moderate" },
+            { q: "Geometric mean of 2 and 32?", a: "8", d: "hard" },
+            { q: "If side ratio is 3:4, volume ratio is \_\_\_.", a: "27:64", d: "hard" },
+            { q: "Area ratio is 49/100. Scale factor?", a: "7/10", d: "hard" },
+            { q: "Solve for x: (2x)/10 = 4/5.", a: "4", d: "hard" },
+            { q: "Triangle Midsegment Theorem: segment is \_\_\_ to the third side.", a: "parallel", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-I-909",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "AA similarity requires 2 \_\_\_.", a: "angles", d: "easy" },
+            { q: "Does similarity preserve shape?", a: "yes", d: "easy" },
+            { q: "Scale factor for 20 to 4?", a: "0.2", d: "easy" },
+            { q: "Is a square similar to a rectangle?", a: "no", d: "easy" },
+            { q: "What is k if image = pre-image?", a: "1", d: "easy" },
+            { q: "Solve x: 4/10 = 6/x.", a: "15", d: "moderate" },
+            { q: "If k=1/4, area ratio is \_\_\_.", a: "1/16", d: "moderate" },
+            { q: "Are all equilateral triangles similar?", a: "yes", d: "moderate" },
+            { q: "If side ratio is 2:3, perimeter ratio is \_\_\_.", a: "2:3", d: "moderate" },
+            { q: "Dilation (x, y) to (4x, 4y). k?", a: "4", d: "moderate" },
+            { q: "Can SSS similarity use 3 sides?", a: "yes", d: "moderate" },
+            { q: "If ABC ~ XYZ, side AC matches side \_\_\_.", a: "XZ", d: "moderate" },
+            { q: "Do dilations preserve parallelism?", a: "yes", d: "moderate" },
+            { q: "A 90 degree turn is a \_\_\_.", a: "rotation", d: "moderate" },
+            { q: "Are all circles similar?", a: "yes", d: "moderate" },
+            { q: "Geometric mean of 4 and 16?", a: "8", d: "hard" },
+            { q: "If side ratio is 1:5, volume ratio is \_\_\_.", a: "1:125", d: "hard" },
+            { q: "Area ratio is 36/49. Scale factor?", a: "6/7", d: "hard" },
+            { q: "Solve for x: x/3 = 12/x.", a: "6", d: "hard" },
+            { q: "Midsegment of a triangle is \_\_\_ the base.", a: "half", d: "hard" }
+        ]
+    },
+    {
+        id: "U3-J-010",
+        title: "Unit 3: Similarity",
+        questions: [
+            { q: "Does k=0.5 shrink the image?", a: "yes", d: "easy" },
+            { q: "Does k=2 grow the image?", a: "yes", d: "easy" },
+            { q: "How many sides in SSS similarity?", a: "3", d: "easy" },
+            { q: "Are corresponding angles equal?", a: "yes", d: "easy" },
+            { q: "Ratio of 3 to 15 simplified?", a: "1/5", d: "easy" },
+            { q: "Solve x: 9/x = 3/4.", a: "12", d: "moderate" },
+            { q: "If k=3, area ratio is \_\_\_.", a: "9", d: "moderate" },
+            { q: "Are all squares similar?", a: "yes", d: "moderate" },
+            { q: "If perimeter ratio is 1:4, side ratio is \_\_\_.", a: "1:4", d: "moderate" },
+            { q: "Dilation (x, y) to (5x, 5y). k?", a: "5", d: "moderate" },
+            { q: "Can AA similarity use 2 angles?", a: "yes", d: "moderate" },
+            { q: "If ABC ~ DEF, side AB matches side \_\_\_.", a: "DE", d: "moderate" },
+            { q: "Do dilations preserve collinearity?", a: "yes", d: "moderate" },
+            { q: "A flip over a line is a \_\_\_.", a: "reflection", d: "moderate" },
+            { q: "Are all regular pentagons similar?", a: "yes", d: "moderate" },
+            { q: "Geometric mean of 9 and 16?", a: "12", d: "hard" },
+            { q: "If side ratio is 2:5, volume ratio is \_\_\_.", a: "8:125", d: "hard" },
+            { q: "Area ratio is 64/121. Scale factor?", a: "8/11", d: "hard" },
+            { q: "Solve for x: x/4 = 9/x.", a: "6", d: "hard" },
+            { q: "A dilation center is usually the \_\_\_.", a: "origin", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

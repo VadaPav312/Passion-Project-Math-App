@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U4-A-101",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "In a right triangle, a^2 + b^2 = \_\_\_.", a: "c^2", d: "easy" },
+            { q: "What is the longest side of a right triangle?", a: "hypotenuse", d: "easy" },
+            { q: "SOH CAH TOA: What does the S stand for?", a: "sine", d: "easy" },
+            { q: "What is the ratio for Tangent?", a: "opposite/adjacent", d: "easy" },
+            { q: "Find the hypotenuse if legs are 3 and 4.", a: "5", d: "easy" },
+            { q: "In a 45-45-90 triangle, the legs are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "Cos(A) is the ratio of Adjacent over \_\_\_.", a: "hypotenuse", d: "moderate" },
+            { q: "Find the missing leg if hypotenuse is 13 and one leg is 5.", a: "12", d: "moderate" },
+            { q: "The hypotenuse of a 45-45-90 triangle with leg 's' is \_\_\_.", a: "s*sqrt(2)", d: "moderate" },
+            { q: "What is the value of Sin(90)?", a: "1", d: "moderate" },
+            { q: "What is the value of Tan(45)?", a: "1", d: "moderate" },
+            { q: "In a 30-60-90 triangle, the hypotenuse is \_\_\_ times the short leg.", a: "2", d: "moderate" },
+            { q: "Which trig function is Opposite over Hypotenuse?", a: "sine", d: "moderate" },
+            { q: "Find the hypotenuse if legs are 8 and 15.", a: "17", d: "moderate" },
+            { q: "The angle of \_\_\_ is the angle looking up from a horizontal line.", a: "elevation", d: "moderate" },
+            { q: "Find the long leg of a 30-60-90 triangle if the short leg is 5.", a: "5*sqrt(3)", d: "hard" },
+            { q: "If Sin(A) = 0.5, what is angle A in degrees?", a: "30", d: "hard" },
+            { q: "The Law of \_\_\_ relates all three sides and one angle.", a: "cosines", d: "hard" },
+            { q: "Calculate the hypotenuse if legs are 1 and 1.", a: "sqrt(2)", d: "hard" },
+            { q: "In a right triangle, the two acute angles are \_\_\_.", a: "complementary", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-B-202",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "What is the ratio for Cosine?", a: "adjacent/hypotenuse", d: "easy" },
+            { q: "The Pythagorean Theorem only works on \_\_\_ triangles.", a: "right", d: "easy" },
+            { q: "Find the hypotenuse if legs are 6 and 8.", a: "10", d: "easy" },
+            { q: "The angle of \_\_\_ is looking down from a horizontal line.", a: "depression", d: "easy" },
+            { q: "Tan is Opposite over \_\_\_.", a: "adjacent", d: "easy" },
+            { q: "In a 30-60-90 triangle, the short leg is opposite which angle?", a: "30", d: "moderate" },
+            { q: "Find the missing leg if c=10 and a=6.", a: "8", d: "moderate" },
+            { q: "True or False: Sin(A) can be greater than 1.", a: "false", d: "moderate" },
+            { q: "Is 5, 12, 13 a Pythagorean Triple?", a: "yes", d: "moderate" },
+            { q: "If the legs of a right triangle are equal, the angles are \_\_\_.", a: "45", d: "moderate" },
+            { q: "What is the inverse of Tan used to find?", a: "angle", d: "moderate" },
+            { q: "What is the decimal for Sin(30)?", a: "0.5", d: "moderate" },
+            { q: "In a 30-60-90 triangle, the long leg is short leg times \_\_\_.", a: "sqrt(3)", d: "moderate" },
+            { q: "If c^2 > a^2 + b^2, the triangle is \_\_\_.", a: "obtuse", d: "moderate" },
+            { q: "If c^2 < a^2 + b^2, the triangle is \_\_\_.", a: "acute", d: "moderate" },
+            { q: "A ladder leans against a wall. The ladder is the \_\_\_.", a: "hypotenuse", d: "hard" },
+            { q: "Find the leg of a 45-45-90 triangle if the hypotenuse is 10.", a: "5*sqrt(2)", d: "hard" },
+            { q: "What is the value of Cos(60)?", a: "0.5", d: "hard" },
+            { q: "Find c if a=7 and b=24.", a: "25", d: "hard" },
+            { q: "The Law of \_\_\_ is a/SinA = b/SinB.", a: "sines", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-C-303",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "Pythagorean Theorem: c is always the \_\_\_.", a: "hypotenuse", d: "easy" },
+            { q: "What is the ratio for Sine?", a: "opposite/hypotenuse", d: "easy" },
+            { q: "Find the hypotenuse if legs are 9 and 12.", a: "15", d: "easy" },
+            { q: "SOH CAH TOA: 'A' stands for \_\_\_.", a: "adjacent", d: "easy" },
+            { q: "In a 45-45-90, if a leg is 7, the other leg is \_\_\_.", a: "7", d: "easy" },
+            { q: "In a 30-60-90, the short leg is half the \_\_\_.", a: "hypotenuse", d: "moderate" },
+            { q: "Find the missing leg if c=25 and b=7.", a: "24", d: "moderate" },
+            { q: "Is 8, 15, 17 a Pythagorean Triple?", a: "yes", d: "moderate" },
+            { q: "Tan(A) = 1. What is angle A?", a: "45", d: "moderate" },
+            { q: "Which trig ratio does not use the hypotenuse?", a: "tangent", d: "moderate" },
+            { q: "What is the square of the hypotenuse if legs are 2 and 3?", a: "13", d: "moderate" },
+            { q: "Angle of elevation equals angle of \_\_\_.", a: "depression", d: "moderate" },
+            { q: "If Sin(A) = Cos(B), then A + B = \_\_\_.", a: "90", d: "moderate" },
+            { q: "The short leg of a 30-60-90 is 10. Hypotenuse?", a: "20", d: "moderate" },
+            { q: "Geometric Mean of 4 and 16?", a: "8", d: "moderate" },
+            { q: "Find the altitude of an equilateral triangle with side 2.", a: "sqrt(3)", d: "hard" },
+            { q: "Cos(0) equals \_\_\_.", a: "1", d: "hard" },
+            { q: "A 45-45-90 triangle is also known as an \_\_\_ right triangle.", a: "isosceles", d: "hard" },
+            { q: "Inverse sine is often written as \_\_\_.", a: "arcsin", d: "hard" },
+            { q: "Find c if a=20 and b=21.", a: "29", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-D-404",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "Opposite over Adjacent is \_\_\_.", a: "tangent", d: "easy" },
+            { q: "Hypotenuse^2 = leg1^2 + \_\_\_.", a: "leg2^2", d: "easy" },
+            { q: "Find hypotenuse if legs are 5 and 12.", a: "13", d: "easy" },
+            { q: "Special right triangle with two 45 degree angles?", a: "45-45-90", d: "easy" },
+            { q: "In SOH CAH TOA, 'H' stands for \_\_\_.", a: "hypotenuse", d: "easy" },
+            { q: "Short leg of 30-60-90 is 4. Long leg?", a: "4*sqrt(3)", d: "moderate" },
+            { q: "Cos(A) = Adjacent / \_\_\_.", a: "hypotenuse", d: "moderate" },
+            { q: "Triangle with sides 3, 4, 6 is (acute/right/obtuse)?", a: "obtuse", d: "moderate" },
+            { q: "Is 7, 24, 25 a triple?", a: "yes", d: "moderate" },
+            { q: "What is Tan(60)?", a: "sqrt(3)", d: "moderate" },
+            { q: "If two legs are 10, hypotenuse is \_\_\_.", a: "10*sqrt(2)", d: "moderate" },
+            { q: "Sin(45) in simplest radical form?", a: "sqrt(2)/2", d: "moderate" },
+            { q: "Reciprocal of Sine (advanced)?", a: "cosecant", d: "moderate" },
+            { q: "Angle of depression is measured from the \_\_\_.", a: "horizontal", d: "moderate" },
+            { q: "Side opposite the 60 degree angle?", a: "long leg", d: "moderate" },
+            { q: "Find missing leg if c=17 and a=8.", a: "15", d: "hard" },
+            { q: "Cos(45) equals \_\_\_.", a: "sqrt(2)/2", d: "hard" },
+            { q: "Triangle with sides 7, 8, 9 is (acute/right/obtuse)?", a: "acute", d: "hard" },
+            { q: "In 30-60-90, short leg to hypotenuse ratio?", a: "1:2", d: "hard" },
+            { q: "Sin^2(x) + Cos^2(x) = \_\_\_.", a: "1", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-E-505",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "Which side is opposite the right angle?", a: "hypotenuse", d: "easy" },
+            { q: "Find c if a=12 and b=16.", a: "20", d: "easy" },
+            { q: "Sin is \_\_\_ / Hypotenuse.", a: "opposite", d: "easy" },
+            { q: "Sum of acute angles in a right triangle?", a: "90", d: "easy" },
+            { q: "Pythagorean Theorem: a^2 + b^2 = \_\_\_.", a: "c^2", d: "easy" },
+            { q: "Long leg of 30-60-90 is 9*sqrt(3). Short leg?", a: "9", d: "moderate" },
+            { q: "Tan(A) is Opposite / \_\_\_.", a: "adjacent", d: "moderate" },
+            { q: "Is 9, 40, 41 a triple?", a: "yes", d: "moderate" },
+            { q: "Cos(30) value?", a: "sqrt(3)/2", d: "moderate" },
+            { q: "Hypotenuse of 45-45-90 is 6. Leg?", a: "3*sqrt(2)", d: "moderate" },
+            { q: "If Tan(A) = 0.75, ratio of opp/adj is \_\_\_.", a: "3/4", d: "moderate" },
+            { q: "Inverse cosine is used to find \_\_\_.", a: "angles", d: "moderate" },
+            { q: "Side opposite 30 degrees is \_\_\_ the hypotenuse.", a: "half", d: "moderate" },
+            { q: "Does SOH CAH TOA work for non-right triangles?", a: "no", d: "moderate" },
+            { q: "Area of a right triangle is 0.5 * leg1 * \_\_\_.", a: "leg2", d: "moderate" },
+            { q: "Find b if a=11 and c=61.", a: "60", d: "hard" },
+            { q: "Tan(90) is \_\_\_.", a: "undefined", d: "hard" },
+            { q: "Short leg is 1. Hypotenuse is \_\_\_.", a: "2", d: "hard" },
+            { q: "The reciprocal of Cosine (advanced)?", a: "secant", d: "hard" },
+            { q: "Law of Sines uses \_\_\_ ratios.", a: "proportional", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-F-606",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "Hypotenuse of a 3-4-5 triangle?", a: "5", d: "easy" },
+            { q: "Cos = \_\_\_ / Hypotenuse.", a: "adjacent", d: "easy" },
+            { q: "Is 1, 1, 2 a right triangle?", a: "no", d: "easy" },
+            { q: "Special triangle with a 'short' and 'long' leg?", a: "30-60-90", d: "easy" },
+            { q: "Acronym for trig ratios?", a: "soh cah toa", d: "easy" },
+            { q: "Hypotenuse of a 30-60-90 is 14. Short leg?", a: "7", d: "moderate" },
+            { q: "Legs are 5. Hypotenuse?", a: "5*sqrt(2)", d: "moderate" },
+            { q: "Find b if a=8 and c=10.", a: "6", d: "moderate" },
+            { q: "Sin(60) value?", a: "sqrt(3)/2", d: "moderate" },
+            { q: "Is 10, 24, 26 a triple?", a: "yes", d: "moderate" },
+            { q: "Tan(30) value?", a: "sqrt(3)/3", d: "moderate" },
+            { q: "Angle formed by horizontal and line of sight up?", a: "elevation", d: "moderate" },
+            { q: "If c^2 = a^2 + b^2, the angle is \_\_\_ degrees.", a: "90", d: "moderate" },
+            { q: "Short leg is 2. Long leg?", a: "2*sqrt(3)", d: "moderate" },
+            { q: "Sine of 0 degrees?", a: "0", d: "moderate" },
+            { q: "Find c if a=48 and b=14.", a: "50", d: "hard" },
+            { q: "If Cos(A) = 0.8, then A is approx \_\_\_ degrees.", a: "37", d: "hard" },
+            { q: "Long leg to hypotenuse ratio in 30-60-90?", a: "sqrt(3):2", d: "hard" },
+            { q: "Tangent of a 45 degree angle?", a: "1", d: "hard" },
+            { q: "Reciprocal of Tangent (advanced)?", a: "cotangent", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-G-707",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "a^2 + b^2 = c^2 is the \_\_\_ Theorem.", a: "pythagorean", d: "easy" },
+            { q: "Ratio for Sine?", a: "opposite/hypotenuse", d: "easy" },
+            { q: "Find c if legs are 15 and 20.", a: "25", d: "easy" },
+            { q: "Legs are equal in a \_\_\_ triangle.", a: "45-45-90", d: "easy" },
+            { q: "Which side is Adjacent to angle A but not the hypotenuse?", a: "leg", d: "easy" },
+            { q: "Hypotenuse is 20 in a 30-60-90. Long leg?", a: "10*sqrt(3)", d: "moderate" },
+            { q: "If legs are 1 and 2, hypotenuse is \_\_\_.", a: "sqrt(5)", d: "moderate" },
+            { q: "Is 20, 21, 29 a triple?", a: "yes", d: "moderate" },
+            { q: "Sin(A) = 1/2. Angle A?", a: "30", d: "moderate" },
+            { q: "Tan = Opp / \_\_\_.", a: "adj", d: "moderate" },
+            { q: "Hypotenuse of 45-45-90 with leg 4?", a: "4*sqrt(2)", d: "moderate" },
+            { q: "Cosine of 90 degrees?", a: "0", d: "moderate" },
+            { q: "Short leg is x. Long leg is \_\_\_.", a: "x*sqrt(3)", d: "moderate" },
+            { q: "Side opposite 45 degrees?", a: "leg", d: "moderate" },
+            { q: "Does the Pythagorean Theorem work for scalene right triangles?", a: "yes", d: "moderate" },
+            { q: "Find missing leg if c=41 and a=9.", a: "40", d: "hard" },
+            { q: "Value of Tan(0)?", a: "0", d: "hard" },
+            { q: "If Sin(x) = Cos(x), then x = \_\_\_.", a: "45", d: "hard" },
+            { q: "Longest side in a 30-60-90?", a: "hypotenuse", d: "hard" },
+            { q: "Can a leg be longer than the hypotenuse?", a: "no", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-H-808",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "SOH: Sine = \_\_\_ / Hypotenuse.", a: "opposite", d: "easy" },
+            { q: "CAH: Cosine = Adjacent / \_\_\_.", a: "hypotenuse", d: "easy" },
+            { q: "TOA: Tangent = \_\_\_ / Adjacent.", a: "opposite", d: "easy" },
+            { q: "Find hypotenuse if legs are 7 and 24.", a: "25", d: "easy" },
+            { q: "Is 3, 4, 5 the most famous triple?", a: "yes", d: "easy" },
+            { q: "Leg of 45-45-90 is 8. Hypotenuse?", a: "8*sqrt(2)", d: "moderate" },
+            { q: "Hypotenuse of 30-60-90 is 10. Short leg?", a: "5", d: "moderate" },
+            { q: "Find a if b=12 and c=13.", a: "5", d: "moderate" },
+            { q: "Is 12, 16, 20 a triple?", a: "yes", d: "moderate" },
+            { q: "Tan(A) = Opp / Adj. Correct?", a: "yes", d: "moderate" },
+            { q: "Short leg of 30-60-90 is 3. Hypotenuse?", a: "6", d: "moderate" },
+            { q: "Value of Sin(90)?", a: "1", d: "moderate" },
+            { q: "Is 6, 7, 8 a right triangle?", a: "no", d: "moderate" },
+            { q: "If c^2 = a^2 + b^2, the triangle is \_\_\_.", a: "right", d: "moderate" },
+            { q: "Angle of elevation is measured from the \_\_\_ line.", a: "horizontal", d: "moderate" },
+            { q: "Find leg if c=sqrt(2) in a 45-45-90.", a: "1", d: "hard" },
+            { q: "Cos(30) is the same as Sin(\_\_\_).", a: "60", d: "hard" },
+            { q: "Tan(60) is equal to \_\_\_.", a: "sqrt(3)", d: "hard" },
+            { q: "Short leg to long leg ratio in 30-60-90?", a: "1:sqrt(3)", d: "hard" },
+            { q: "Find c if a=1 and b=sqrt(3).", a: "2", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-I-909",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "A leg of 10 and 10 has a hypotenuse of \_\_\_.", a: "10*sqrt(2)", d: "easy" },
+            { q: "Cosine is ratio of \_\_\_ to hypotenuse.", a: "adjacent", d: "easy" },
+            { q: "Pythagorean Theorem: a and b are the \_\_\_.", a: "legs", d: "easy" },
+            { q: "Hypotenuse of 5-12-\_\_\_ triple?", a: "13", d: "easy" },
+            { q: "Trig function for looking down?", a: "depression", d: "easy" },
+            { q: "Short leg of 30-60-90 is 6. Long leg?", a: "6*sqrt(3)", d: "moderate" },
+            { q: "Sin(45) = \_\_\_.", a: "sqrt(2)/2", d: "moderate" },
+            { q: "Find b if a=15 and c=17.", a: "8", d: "moderate" },
+            { q: "Is 8, 10, 12 a right triangle?", a: "no", d: "moderate" },
+            { q: "Tan(45) = \_\_\_.", a: "1", d: "moderate" },
+            { q: "Short leg is half of which side?", a: "hypotenuse", d: "moderate" },
+            { q: "If a=b, then it is a \_\_\_ degree triangle.", a: "45", d: "moderate" },
+            { q: "Is 11, 60, 61 a triple?", a: "yes", d: "moderate" },
+            { q: "Cos(60) = \_\_\_.", a: "0.5", d: "moderate" },
+            { q: "Adjacent side is next to the \_\_\_.", a: "angle", d: "moderate" },
+            { q: "Find altitude of equilateral triangle with side 10.", a: "5*sqrt(3)", d: "hard" },
+            { q: "If Tan(A) = sqrt(3), angle A = \_\_\_.", a: "60", d: "hard" },
+            { q: "Sin(30) is the same as Cos(\_\_\_).", a: "60", d: "hard" },
+            { q: "Pythagorean inequality c^2 < a^2 + b^2 is \_\_\_.", a: "acute", d: "hard" },
+            { q: "Hypotenuse of 30-60-90 is x. Short leg?", a: "x/2", d: "hard" }
+        ]
+    },
+    {
+        id: "U4-J-010",
+        title: "Unit 4: Right Triangles & Trigonometry",
+        questions: [
+            { q: "Ratio for Tangent?", a: "opposite/adjacent", d: "easy" },
+            { q: "Ratio for Sine?", a: "opposite/hypotenuse", d: "easy" },
+            { q: "Ratio for Cosine?", a: "adjacent/hypotenuse", d: "easy" },
+            { q: "Hypotenuse of 8-15-\_\_\_ triple?", a: "17", d: "easy" },
+            { q: "Is 3-4-5 a right triangle?", a: "yes", d: "easy" },
+            { q: "Long leg of 30-60-90 is 2*sqrt(3). Short leg?", a: "2", d: "moderate" },
+            { q: "Leg of 45-45-90 is 1. Hypotenuse?", a: "sqrt(2)", d: "moderate" },
+            { q: "Find missing leg if c=10 and b=6.", a: "8", d: "moderate" },
+            { q: "Sin(0) = \_\_\_.", a: "0", d: "moderate" },
+            { q: "Cos(0) = \_\_\_.", a: "1", d: "moderate" },
+            { q: "Is 9, 12, 15 a right triangle?", a: "yes", d: "moderate" },
+            { q: "Does Tan use the hypotenuse?", a: "no", d: "moderate" },
+            { q: "In 30-60-90, hypotenuse to long leg ratio?", a: "2:sqrt(3)", d: "moderate" },
+            { q: "Hypotenuse of 20-21-\_\_\_ triple?", a: "29", d: "moderate" },
+            { q: "The word for a set of 3 integers that satisfy a^2+b^2=c^2.", a: "triple", d: "moderate" },
+            { q: "If c=10 and a=b in a right triangle, a = \_\_\_.", a: "5*sqrt(2)", d: "hard" },
+            { q: "Tan(30) is approximately \_\_\_.", a: "0.577", d: "hard" },
+            { q: "If Cos(x) = 0, x = \_\_\_.", a: "90", d: "hard" },
+            { q: "Law of Cosines: c^2 = a^2 + b^2 - \_\_\_.", a: "2abcosC", d: "hard" },
+            { q: "Short leg is 1/2 of hypotenuse in which triangle?", a: "30-60-90", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

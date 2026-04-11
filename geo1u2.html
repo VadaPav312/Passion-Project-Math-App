@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U2-A-101",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "If two triangles are congruent, their corresponding parts are \_\_\_.", a: "congruent", d: "easy" },
+            { q: "What does SSS stand for?", a: "side-side-side", d: "easy" },
+            { q: "True or False: AAA is a valid congruence theorem.", a: "false", d: "easy" },
+            { q: "If triangle ABC is congruent to DEF, which side corresponds to BC?", a: "EF", d: "easy" },
+            { q: "What does CPCTC stand for?", a: "corresponding parts of congruent triangles are congruent", d: "easy" },
+            { q: "Two sides and the included angle define which theorem?", a: "SAS", d: "moderate" },
+            { q: "What theorem requires a right angle, a hypotenuse, and a side?", a: "HL", d: "moderate" },
+            { q: "Two angles and the side between them define \_\_\_.", a: "ASA", d: "moderate" },
+            { q: "In a proof, what is the starting information called?", a: "given", d: "moderate" },
+            { q: "Is SSA a valid way to prove triangle congruence?", a: "no", d: "moderate" },
+            { q: "If angle A = 40 and angle B = 60, what is angle C?", a: "80", d: "moderate" },
+            { q: "Which theorem uses two angles and a non-included side?", a: "AAS", d: "moderate" },
+            { q: "An isosceles triangle has how many congruent sides?", a: "2", d: "moderate" },
+            { q: "If triangle ABC is congruent to XYZ, then angle B is congruent to \_\_\_.", a: "angle Y", d: "moderate" },
+            { q: "Can HL be used on an obtuse triangle?", a: "no", d: "moderate" },
+            { q: "Vertical angles are always \_\_\_.", a: "congruent", d: "hard" },
+            { q: "To use SAS, the angle must be \_\_\_ between the two sides.", a: "included", d: "hard" },
+            { q: "A property where a segment is congruent to itself is called \_\_\_.", a: "reflexive", d: "hard" },
+            { q: "If two angles of a triangle are congruent, the sides \_\_\_ them are congruent.", a: "opposite", d: "hard" },
+            { q: "The theorem that states an equilateral triangle is also equiangular is \_\_\_.", a: "corollary", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-B-202",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "Corresponding parts of congruent triangles are \_\_\_.", a: "congruent", d: "easy" },
+            { q: "If 3 sides of one triangle match 3 sides of another, it is \_\_\_.", a: "SSS", d: "easy" },
+            { q: "What is the acronym for the hypotenuse-leg theorem?", a: "HL", d: "easy" },
+            { q: "If triangle CAT is congruent to DOG, segment AT matches \_\_\_.", a: "OG", d: "easy" },
+            { q: "Does SSA work for congruence?", a: "no", d: "easy" },
+            { q: "Two angles and the included side is \_\_\_.", a: "ASA", d: "moderate" },
+            { q: "The angle between two sides is called the \_\_\_ angle.", a: "included", d: "moderate" },
+            { q: "Base angles of an isosceles triangle are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "What property states a=a?", a: "reflexive", d: "moderate" },
+            { q: "A triangle with all sides equal is \_\_\_.", a: "equilateral", d: "moderate" },
+            { q: "In a right triangle, the side opposite the 90 degree angle is the \_\_\_.", a: "hypotenuse", d: "moderate" },
+            { q: "Can you prove congruence with only 3 angles (AAA)?", a: "no", d: "moderate" },
+            { q: "If triangle ABC is congruent to DEF, angle C = \_\_\_.", a: "angle F", d: "moderate" },
+            { q: "If two sides are equal, the triangle is \_\_\_.", a: "isosceles", d: "moderate" },
+            { q: "Congruent figures have the same shape and \_\_\_.", a: "size", d: "moderate" },
+            { q: "What theorem uses two angles and the following side?", a: "AAS", d: "hard" },
+            { q: "A segment connecting a vertex to the midpoint of the opposite side is a \_\_\_.", a: "median", d: "hard" },
+            { q: "A line that divides an angle into two congruent angles is an \_\_\_.", a: "angle bisector", d: "hard" },
+            { q: "Points on the \_\_\_ of a segment are equidistant from the endpoints.", a: "perpendicular bisector", d: "hard" },
+            { q: "Is AAS the same as SAA?", a: "yes", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-C-303",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "Name the theorem: Side-Angle-Side.", a: "SAS", d: "easy" },
+            { q: "If triangle ABC = XYZ, then segment AB = \_\_\_.", a: "XY", d: "easy" },
+            { q: "How many parts of a triangle are there (sides + angles)?", a: "6", d: "easy" },
+            { q: "Is SSS a valid theorem?", a: "yes", d: "easy" },
+            { q: "A triangle with no congruent sides is \_\_\_.", a: "scalene", d: "easy" },
+            { q: "What is the reason we use AFTER proving triangles are congruent?", a: "CPCTC", d: "moderate" },
+            { q: "Two angles and a non-included side is \_\_\_.", a: "AAS", d: "moderate" },
+            { q: "Angles opposite the congruent sides of an isosceles triangle are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "To use HL, the triangle must be \_\_\_.", a: "right", d: "moderate" },
+            { q: "The 'included side' is used in which theorem?", a: "ASA", d: "moderate" },
+            { q: "Does SAS preserve the size of the triangle?", a: "yes", d: "moderate" },
+            { q: "An equilateral triangle has three angles of \_\_\_ degrees.", a: "60", d: "moderate" },
+            { q: "If angle 1 and 2 are vertical angles, they are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "Is HL a special case of SSA?", a: "yes", d: "moderate" },
+            { q: "Congruent triangles have equal \_\_\_ and perimeter.", a: "area", d: "moderate" },
+            { q: "What do we call the sides adjacent to the right angle in a right triangle?", a: "legs", d: "hard" },
+            { q: "A \_\_\_ is a statement that can be proven.", a: "theorem", d: "hard" },
+            { q: "The \_\_\_ of a proof is the final statement to be reached.", a: "conclusion", d: "hard" },
+            { q: "What theorem is used if three sides of one triangle are equal to three of another?", a: "SSS", d: "hard" },
+            { q: "In the rule SSS, does the order of sides matter?", a: "no", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-D-404",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "What is the 'Included Angle' for sides AB and BC?", a: "angle B", d: "easy" },
+            { q: "What theorem is Angle-Angle-Side?", a: "AAS", d: "easy" },
+            { q: "True or False: Congruent triangles are always similar.", a: "true", d: "easy" },
+            { q: "If triangle ABC = DEF, then AC = \_\_\_.", a: "DF", d: "easy" },
+            { q: "What tool do we use to write out steps in Geometry?", a: "proof", d: "easy" },
+            { q: "Can we use SSA to prove congruence?", a: "no", d: "moderate" },
+            { q: "The longest side of a right triangle is the \_\_\_.", a: "hypotenuse", d: "moderate" },
+            { q: "Angles that sum to 180 are \_\_\_.", a: "supplementary", d: "moderate" },
+            { q: "If segment AB is congruent to AB, it is the \_\_\_ property.", a: "reflexive", d: "moderate" },
+            { q: "Is AAS a shortcut for congruence?", a: "yes", d: "moderate" },
+            { q: "Triangles with the same shape but different sizes are \_\_\_.", a: "similar", d: "moderate" },
+            { q: "How many angles must be congruent for AAA?", a: "3", d: "moderate" },
+            { q: "Is SAS used for congruence or similarity?", a: "congruence", d: "moderate" },
+            { q: "What is the included side for angles A and B?", a: "segment AB", d: "moderate" },
+            { q: "An equiangular triangle is always \_\_\_.", a: "equilateral", d: "moderate" },
+            { q: "State the theorem that uses 2 sides and a middle angle.", a: "SAS", d: "hard" },
+            { q: "What theorem applies ONLY to right triangles?", a: "HL", d: "hard" },
+            { q: "Segments that bisect each other meet at their \_\_\_.", a: "midpoint", d: "hard" },
+            { q: "The sum of angles in any triangle is \_\_\_ degrees.", a: "180", d: "hard" },
+            { q: "CPCTC is used (before/after) proving congruence.", a: "after", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-E-505",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "Side-Side-Side abbreviation?", a: "SSS", d: "easy" },
+            { q: "Triangle congruence means they are exactly the \_\_\_.", a: "same", d: "easy" },
+            { q: "If triangle LMN = OPQ, then angle M = \_\_\_.", a: "angle P", d: "easy" },
+            { q: "The angle in SAS must be the \_\_\_ angle.", a: "included", d: "easy" },
+            { q: "True or False: SSS is a congruence shortcut.", a: "true", d: "easy" },
+            { q: "Does AAA prove congruence?", a: "no", d: "moderate" },
+            { q: "Hypotenuse-Leg abbreviation?", a: "HL", d: "moderate" },
+            { q: "Angle-Side-Angle abbreviation?", a: "ASA", d: "moderate" },
+            { q: "The side in ASA is the \_\_\_ side.", a: "included", d: "moderate" },
+            { q: "In a proof, 'Vertical Angles are Congruent' is a \_\_\_.", a: "reason", d: "moderate" },
+            { q: "Is AAS a valid congruence theorem?", a: "yes", d: "moderate" },
+            { q: "Two shapes that are congruent have equal \_\_\_.", a: "area", d: "moderate" },
+            { q: "A right triangle has one angle of \_\_\_ degrees.", a: "90", d: "moderate" },
+            { q: "If triangle ABC = XYZ, then BC = \_\_\_.", a: "YZ", d: "moderate" },
+            { q: "What is the property used when a side is shared?", a: "reflexive", d: "moderate" },
+            { q: "If 2 angles of a triangle are congruent, it is \_\_\_.", a: "isosceles", d: "hard" },
+            { q: "What follows 'If triangle 1 = triangle 2' in a CPCTC proof?", a: "parts are congruent", d: "hard" },
+            { q: "A line that cuts a segment in half at 90 degrees is a \_\_\_.", a: "perpendicular bisector", d: "hard" },
+            { q: "Third Angle Theorem says if 2 angles match, the \_\_\_ also matches.", a: "third angle", d: "hard" },
+            { q: "HL stands for \_\_\_.", a: "hypotenuse leg", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-F-606",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "What does ASA stand for?", a: "angle-side-angle", d: "easy" },
+            { q: "Which triangle has all angles 60?", a: "equilateral", d: "easy" },
+            { q: "What is the symbol for congruent?", a: "~=", d: "easy" },
+            { q: "Congruent parts are equal in \_\_\_.", a: "measure", d: "easy" },
+            { q: "If triangle ABC = PQR, what is angle C?", a: "angle R", d: "easy" },
+            { q: "What is the leg of an isosceles triangle?", a: "congruent side", d: "moderate" },
+            { q: "SSS, SAS, ASA, AAS, and \_\_\_ are the 5 theorems.", a: "HL", d: "moderate" },
+            { q: "The vertex angle of an isosceles triangle is between the \_\_\_.", a: "legs", d: "moderate" },
+            { q: "Can you prove congruence with SSA?", a: "no", d: "moderate" },
+            { q: "What theorem is used for right triangles only?", a: "HL", d: "moderate" },
+            { q: "If 3 sides are equal, it's a(n) \_\_\_ triangle.", a: "equilateral", d: "moderate" },
+            { q: "If triangle ABC = DEF, which angle is between DE and EF?", a: "angle E", d: "moderate" },
+            { q: "Does SAS work if the angle is not included?", a: "no", d: "moderate" },
+            { q: "Are vertical angles congruent?", a: "yes", d: "moderate" },
+            { q: "The sum of a triangle's angles is \_\_\_.", a: "180", d: "moderate" },
+            { q: "In a 2-column proof, the left side contains \_\_\_.", a: "statements", d: "hard" },
+            { q: "The \_\_\_ Property says if a=b and b=c, then a=c.", a: "transitive", d: "hard" },
+            { q: "Is AAS the same as ASA?", a: "no", d: "hard" },
+            { q: "Isosceles Triangle Theorem: If 2 sides are =, \_\_\_ angles are =.", a: "base", d: "hard" },
+            { q: "CPCTC is a reason to prove \_\_\_ are congruent.", a: "corresponding parts", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-G-707",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "Is SSS a congruence theorem?", a: "yes", d: "easy" },
+            { q: "How many sides does a triangle have?", a: "3", d: "easy" },
+            { q: "If triangle ABC = XYZ, then BC = \_\_\_.", a: "YZ", d: "easy" },
+            { q: "Abbreviation for Side-Angle-Side?", a: "SAS", d: "easy" },
+            { q: "Does size change in congruent triangles?", a: "no", d: "easy" },
+            { q: "Abbreviation for Angle-Angle-Side?", a: "AAS", d: "moderate" },
+            { q: "Can HL be used for any right triangle?", a: "yes", d: "moderate" },
+            { q: "Is AAA a congruence shortcut?", a: "no", d: "moderate" },
+            { q: "The angle between two sides is the \_\_\_ angle.", a: "included", d: "moderate" },
+            { q: "Side between two angles is the \_\_\_ side.", a: "included", d: "moderate" },
+            { q: "Vertical angles are always \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "Base angles of isosceles triangles are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "In a proof, 'AB = AB' uses the \_\_\_ property.", a: "reflexive", d: "moderate" },
+            { q: "If triangle ABC = DEF, segment AC = \_\_\_.", a: "DF", d: "moderate" },
+            { q: "Does SAS require a right angle?", a: "no", d: "moderate" },
+            { q: "What shortcut uses two angles and the side in between?", a: "ASA", d: "hard" },
+            { q: "Triangles with 3 congruent sides are \_\_\_.", a: "equilateral", d: "hard" },
+            { q: "CPCTC stands for \_\_\_ parts of congruent triangles...", a: "corresponding", d: "hard" },
+            { q: "An equilateral triangle is also \_\_\_.", a: "equiangular", d: "hard" },
+            { q: "SSS requires three \_\_\_.", a: "sides", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-H-808",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "Is ASA a congruence theorem?", a: "yes", d: "easy" },
+            { q: "Congruent triangles have the same size and \_\_\_.", a: "shape", d: "easy" },
+            { q: "If triangle ABC = DEF, then BC = \_\_\_.", a: "EF", d: "easy" },
+            { q: "How many degrees are in a triangle?", a: "180", d: "easy" },
+            { q: "HL stands for Hypotenuse and \_\_\_.", a: "leg", d: "easy" },
+            { q: "The angle in SAS must be \_\_\_.", a: "included", d: "moderate" },
+            { q: "Two angles and a non-included side is \_\_\_.", a: "AAS", d: "moderate" },
+            { q: "Can we use AAA for congruence?", a: "no", d: "moderate" },
+            { q: "What property says angle A = angle A?", a: "reflexive", d: "moderate" },
+            { q: "If 2 sides of a triangle are equal, it's \_\_\_.", a: "isosceles", d: "moderate" },
+            { q: "The side across from the right angle is the \_\_\_.", a: "hypotenuse", d: "moderate" },
+            { q: "If triangle XYZ = ABC, then angle Z = \_\_\_.", a: "angle C", d: "moderate" },
+            { q: "Vertical angles share a \_\_\_.", a: "vertex", d: "moderate" },
+            { q: "Is HL for right triangles only?", a: "yes", d: "moderate" },
+            { q: "Are corresponding parts of congruent triangles equal?", a: "yes", d: "moderate" },
+            { q: "What shortcut involves 3 sides?", a: "SSS", d: "hard" },
+            { q: "The \_\_\_ theorem uses 2 angles and a following side.", a: "AAS", d: "hard" },
+            { q: "Can you use SAS on an obtuse triangle?", a: "yes", d: "hard" },
+            { q: "The point that divides a segment into 2 equal parts is the \_\_\_.", a: "midpoint", d: "hard" },
+            { q: "Two triangles are congruent if all corresponding \_\_\_ match.", a: "parts", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-I-909",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "Is HL a valid theorem?", a: "yes", d: "easy" },
+            { q: "Congruent triangles are \_\_\_ in size.", a: "equal", d: "easy" },
+            { q: "Abbreviation for Side-Side-Side?", a: "SSS", d: "easy" },
+            { q: "What's the included angle for XY and YZ?", a: "angle Y", d: "easy" },
+            { q: "A right triangle has a \_\_\_ degree angle.", a: "90", d: "easy" },
+            { q: "SAS means Side \_\_\_ Side.", a: "angle", d: "moderate" },
+            { q: "Two angles and the middle side is \_\_\_.", a: "ASA", d: "moderate" },
+            { q: "Is AAS the same as SAA?", a: "yes", d: "moderate" },
+            { q: "Vertical angles are \_\_\_.", a: "congruent", d: "moderate" },
+            { q: "What property says x = x?", a: "reflexive", d: "moderate" },
+            { q: "Side opposite the right angle is the \_\_\_.", a: "hypotenuse", d: "moderate" },
+            { q: "Can AAA prove triangles are the same size?", a: "no", d: "moderate" },
+            { q: "If triangle ABC = DEF, segment AB = \_\_\_.", a: "DE", d: "moderate" },
+            { q: "Is SSA a theorem?", a: "no", d: "moderate" },
+            { q: "CPCTC is only used \_\_\_ congruence is proven.", a: "after", d: "moderate" },
+            { q: "What do we call the 5 congruence shortcuts?", a: "postulates", d: "hard" },
+            { q: "In HL, 'L' stands for \_\_\_.", a: "leg", d: "hard" },
+            { q: "A triangle with all sides congruent is \_\_\_.", a: "equilateral", d: "hard" },
+            { q: "Does ASA preserve perimeter?", a: "yes", d: "hard" },
+            { q: "What theorem is used for 3 sides?", a: "SSS", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-J-010",
+        title: "Unit 2: Congruence",
+        questions: [
+            { q: "What is the acronym for Angle-Side-Angle?", a: "ASA", d: "easy" },
+            { q: "What theorem uses 3 sides?", a: "SSS", d: "easy" },
+            { q: "Congruent triangles are identical. True or False?", a: "true", d: "easy" },
+            { q: "If triangle ABC = XYZ, angle A = \_\_\_.", a: "angle X", d: "easy" },
+            { q: "Is HL a shortcut?", a: "yes", d: "easy" },
+            { q: "SAS needs an \_\_\_ angle.", a: "included", d: "moderate" },
+            { q: "ASA needs an \_\_\_ side.", a: "included", d: "moderate" },
+            { q: "What theorem uses 2 angles and a non-included side?", a: "AAS", d: "moderate" },
+            { q: "Is AAA a valid congruence theorem?", a: "no", d: "moderate" },
+            { q: "Does SSA work?", a: "no", d: "moderate" },
+            { q: "In a right triangle, the other sides are called \_\_\_.", a: "legs", d: "moderate" },
+            { q: "Base angles of an isosceles triangle are \_\_\_.", a: "equal", d: "moderate" },
+            { q: "If segment AB = CD and CD = EF, then AB = EF. Property?", a: "transitive", d: "moderate" },
+            { q: "Reflexive property means a segment equals \_\_\_.", a: "itself", d: "moderate" },
+            { q: "CPCTC: Corresponding Parts of Congruent \_\_\_.", a: "triangles", d: "moderate" },
+            { q: "Can we use SAS on a scalene triangle?", a: "yes", d: "hard" },
+            { q: "What is the acronym for the 5th theorem (right triangles)?", a: "HL", d: "hard" },
+            { q: "Vertex angle is the angle between the \_\_\_.", a: "legs", d: "hard" },
+            { q: "If 3 angles are 60, the triangle is \_\_\_.", a: "equilateral", d: "hard" },
+            { q: "Congruence requires equal side lengths and equal \_\_\_.", a: "angles", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

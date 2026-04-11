@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U2-A-101",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve for $x$: $x + 12 = 20$", a: "8", d: "easy" },
+            { q: "Solve for $y$: $y - 5 = -12$", a: "-7", d: "easy" },
+            { q: "Solve for $m$: $3m = 27$", a: "9", d: "easy" },
+            { q: "Solve for $k$: $k/4 = 8$", a: "32", d: "easy" },
+            { q: "Is $x = 5$ a solution to $2x + 1 = 11$? (yes/no)", a: "yes", d: "easy" },
+            { q: "Solve: $2x + 5 = 15$", a: "5", d: "moderate" },
+            { q: "Solve: $3(x - 4) = 12$", a: "8", d: "moderate" },
+            { q: "Solve: $5x - 8 = 2x + 10$", a: "6", d: "moderate" },
+            { q: "Solve: $x/2 + 7 = 11$", a: "8", d: "moderate" },
+            { q: "Solve: $-(x + 4) = 10$", a: "-14", d: "moderate" },
+            { q: "Solve: $4x + 2x - 5 = 19$", a: "4", d: "moderate" },
+            { q: "Solve: $8 = 2(x - 1)$", a: "5", d: "moderate" },
+            { q: "Solve: $x + 1.5 = 4.5$", a: "3", d: "moderate" },
+            { q: "In $x > 2$, is 2 a solution? (yes/no)", a: "no", d: "moderate" },
+            { q: "Solve: $2x < 10$ (Format: x<#)", a: "x<5", d: "moderate" },
+            { q: "Solve: $3(2x - 4) = 2(x + 10)$", a: "8", d: "hard" },
+            { q: "Solve for $w$ in $P = 2l + 2w$", a: "(P-2l)/2", d: "hard" },
+            { q: "Solve: $2/3x - 5 = 7$", a: "18", d: "hard" },
+            { q: "Solve: $-2(x - 5) > 10$", a: "x<0", d: "hard" },
+            { q: "Solve: $4x + 7 = 4x + 7$ (all/none)", a: "all", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-B-202",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x - 10 = 2$", a: "12", d: "easy" },
+            { q: "Solve: $4x = -20$", a: "-5", d: "easy" },
+            { q: "Solve: $x/5 = 3$", a: "15", d: "easy" },
+            { q: "Solve: $x + 9 = 5$", a: "-4", d: "easy" },
+            { q: "Solve: $-x = 10$", a: "-10", d: "easy" },
+            { q: "Solve: $4x - 1 = 11$", a: "3", d: "moderate" },
+            { q: "Solve: $2(x + 5) = 20$", a: "5", d: "moderate" },
+            { q: "Solve: $7x = 4x + 9$", a: "3", d: "moderate" },
+            { q: "Solve: $x/3 - 1 = 4$", a: "15", d: "moderate" },
+            { q: "Solve: $10 - x = 4$", a: "6", d: "moderate" },
+            { q: "Solve: $x + x + 2 = 10$", a: "4", d: "moderate" },
+            { q: "Solve: $3(2x) = 24$", a: "4", d: "moderate" },
+            { q: "Solve: $0.5x = 4$", a: "8", d: "moderate" },
+            { q: "Solve: $x + 7 \\le 10$", a: "x<=3", d: "moderate" },
+            { q: "Solve: $-3x < 9$", a: "x>-3", d: "moderate" },
+            { q: "Solve: $5(x - 2) - 3x = 2(x - 5)$ (all/none)", a: "all", d: "hard" },
+            { q: "Solve for $y$: $2x + y = 10$", a: "10-2x", d: "hard" },
+            { q: "Solve: $(x+4)/2 = 10$", a: "16", d: "hard" },
+            { q: "Solve: $4(x - 1) = 2x + 10$", a: "7", d: "hard" },
+            { q: "Solve: $x/4 + x/2 = 6$", a: "8", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-C-303",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x + 15 = 5$", a: "-10", d: "easy" },
+            { q: "Solve: $x/2 = 10$", a: "20", d: "easy" },
+            { q: "Solve: $5x = 50$", a: "10", d: "easy" },
+            { q: "Solve: $x - 7 = -7$", a: "0", d: "easy" },
+            { q: "Solve: $-2x = 10$", a: "-5", d: "easy" },
+            { q: "Solve: $3x + 4 = 19$", a: "5", d: "moderate" },
+            { q: "Solve: $10 - 2x = 0$", a: "5", d: "moderate" },
+            { q: "Solve: $4(x + 1) = 12$", a: "2", d: "moderate" },
+            { q: "Solve: $x/5 + 2 = 6$", a: "20", d: "moderate" },
+            { q: "Solve: $x + 3 = 2x - 4$", a: "7", d: "moderate" },
+            { q: "Solve: $2x - 8 = x$", a: "8", d: "moderate" },
+            { q: "Solve: $3(x - 2) = 9$", a: "5", d: "moderate" },
+            { q: "Solve: $x/10 = 0.5$", a: "5", d: "moderate" },
+            { q: "Solve: $x - 5 > 2$", a: "x>7", d: "moderate" },
+            { q: "Solve: $x/(-2) < 4$", a: "x>-8", d: "moderate" },
+            { q: "Solve: $2(3x + 1) = 4(x + 2)$", a: "3", d: "hard" },
+            { q: "Solve for $h$: $V = lwh$", a: "V/lw", d: "hard" },
+            { q: "Solve: $3/4x + 1 = 10$", a: "12", d: "hard" },
+            { q: "Solve: $2(x + 3) = 2x + 6$ (all/none)", a: "all", d: "hard" },
+            { q: "Solve: $5x + 2 > 3x + 10$", a: "x>4", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-D-404",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x + 3 = -2$", a: "-5", d: "easy" },
+            { q: "Solve: $x - 4 = 4$", a: "8", d: "easy" },
+            { q: "Solve: $10x = 0$", a: "0", d: "easy" },
+            { q: "Solve: $x/3 = -2$", a: "-6", d: "easy" },
+            { q: "Solve: $2x = 1$", a: "0.5", d: "easy" },
+            { q: "Solve: $5x - 10 = 40$", a: "10", d: "moderate" },
+            { q: "Solve: $2(x - 5) = 10$", a: "10", d: "moderate" },
+            { q: "Solve: $x/4 - 3 = 2$", a: "20", d: "moderate" },
+            { q: "Solve: $3x + 7 = x + 11$", a: "2", d: "moderate" },
+            { q: "Solve: $-(x - 3) = 7$", a: "-4", d: "moderate" },
+            { q: "Solve: $0.2x = 10$", a: "50", d: "moderate" },
+            { q: "Solve: $2x + 3x = 25$", a: "5", d: "moderate" },
+            { q: "Solve: $x + 1/2 = 1$", a: "0.5", d: "moderate" },
+            { q: "Solve: $2x \\ge 16$", a: "x>=8", d: "moderate" },
+            { q: "Solve: $x - 10 < -15$", a: "x<-5", d: "moderate" },
+            { q: "Solve: $4(x + 2) = 2(x - 4)$", a: "-8", d: "hard" },
+            { q: "Solve for $x$: $ax + b = c$", a: "(c-b)/a", d: "hard" },
+            { q: "Solve: $1/2x - 1/4x = 2$", a: "8", d: "hard" },
+            { q: "Solve: $3x + 5 = 3x - 2$ (all/none)", a: "none", d: "hard" },
+            { q: "Solve: $-5x + 3 \\le -12$", a: "x>=3", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-E-505",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x + 20 = 15$", a: "-5", d: "easy" },
+            { q: "Solve: $x - 1 = -1$", a: "0", d: "easy" },
+            { q: "Solve: $-3x = -21$", a: "7", d: "easy" },
+            { q: "Solve: $x/10 = 4$", a: "40", d: "easy" },
+            { q: "Is 4 a solution to $x + 2 = 6$? (yes/no)", a: "yes", d: "easy" },
+            { q: "Solve: $2x - 1 = 9$", a: "5", d: "moderate" },
+            { q: "Solve: $5(x + 2) = 30$", a: "4", d: "moderate" },
+            { q: "Solve: $x/3 + 5 = 10$", a: "15", d: "moderate" },
+            { q: "Solve: $4x + 1 = 3x + 5$", a: "4", d: "moderate" },
+            { q: "Solve: $12 - x = 20$", a: "-8", d: "moderate" },
+            { q: "Solve: $3x + 2x + x = 12$", a: "2", d: "moderate" },
+            { q: "Solve: $2(x - 1) = x + 4$", a: "6", d: "moderate" },
+            { q: "Solve: $x + 0.75 = 2$", a: "1.25", d: "moderate" },
+            { q: "Solve: $x/(-5) > 2$", a: "x<-10", d: "moderate" },
+            { q: "Solve: $3x - 1 < 11$", a: "x<4", d: "moderate" },
+            { q: "Solve: $2(x - 3) + 4 = 3(x + 1)$", a: "-5", d: "hard" },
+            { q: "Solve for $y$: $Ax + By = C$", a: "(C-Ax)/B", d: "hard" },
+            { q: "Solve: $0.1x + 0.2x = 3$", a: "10", d: "hard" },
+            { q: "Solve: $x/2 + x/3 = 5$", a: "6", d: "hard" },
+            { q: "Solve: $2(x - 4) \\ge 4x + 2$", a: "x<=-5", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-F-606",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x + 7 = 0$", a: "-7", d: "easy" },
+            { q: "Solve: $x - 5 = 5$", a: "10", d: "easy" },
+            { q: "Solve: $8x = 64$", a: "8", d: "easy" },
+            { q: "Solve: $x/6 = -1$", a: "-6", d: "easy" },
+            { q: "Solve: $-x = -5$", a: "5", d: "easy" },
+            { q: "Solve: $3x + 10 = 40$", a: "10", d: "moderate" },
+            { q: "Solve: $2(x - 3) = 14$", a: "10", d: "moderate" },
+            { q: "Solve: $x/2 - 4 = 6$", a: "20", d: "moderate" },
+            { q: "Solve: $5x = 2x + 12$", a: "4", d: "moderate" },
+            { q: "Solve: $20 - 2x = 10$", a: "5", d: "moderate" },
+            { q: "Solve: $x + 2x = 18$", a: "6", d: "moderate" },
+            { q: "Solve: $3(x + 4) = 2x + 15$", a: "3", d: "moderate" },
+            { q: "Solve: $x - 0.2 = 0.8$", a: "1", d: "moderate" },
+            { q: "Solve: $2x + 4 \\le 10$", a: "x<=3", d: "moderate" },
+            { q: "Solve: $-x/3 > 2$", a: "x<-6", d: "moderate" },
+            { q: "Solve: $4(x - 2) - x = 2(x + 5)$", a: "18", d: "hard" },
+            { q: "Solve for $C$: $F = 1.8C + 32$", a: "(F-32)/1.8", d: "hard" },
+            { q: "Solve: $x/4 + 1 = x/2$", a: "4", d: "hard" },
+            { q: "Solve: $5(x + 1) = 5x + 5$ (all/none)", a: "all", d: "hard" },
+            { q: "Solve: $3x - 7 < 5x + 1$", a: "x>-4", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-G-707",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x + 100 = 101$", a: "1", d: "easy" },
+            { q: "Solve: $x - 2 = -8$", a: "-6", d: "easy" },
+            { q: "Solve: $12x = 144$", a: "12", d: "easy" },
+            { q: "Solve: $x/7 = 0$", a: "0", d: "easy" },
+            { q: "Solve: $x + x = 10$", a: "5", d: "easy" },
+            { q: "Solve: $4x - 8 = 16$", a: "6", d: "moderate" },
+            { q: "Solve: $3(x + 1) = 18$", a: "5", d: "moderate" },
+            { q: "Solve: $x/5 + 10 = 12$", a: "10", d: "moderate" },
+            { q: "Solve: $6x + 2 = 4x + 10$", a: "4", d: "moderate" },
+            { q: "Solve: $15 - 3x = 0$", a: "5", d: "moderate" },
+            { q: "Solve: $2(x + 5) = x + 15$", a: "5", d: "moderate" },
+            { q: "Solve: $x/2 = 1.5$", a: "3", d: "moderate" },
+            { q: "Solve: $1.2x = 6$", a: "5", d: "moderate" },
+            { q: "Solve: $x - 4 < -2$", a: "x<2", d: "moderate" },
+            { q: "Solve: $2x \\ge -10$", a: "x>=-5", d: "moderate" },
+            { q: "Solve: $2(3x - 1) + x = 5(x + 2)$", a: "6", d: "hard" },
+            { q: "Solve for $b_2$: $A = 0.5h(b_1 + b_2)$", a: "2A/h-b1", d: "hard" },
+            { q: "Solve: $2/5x - 4 = 6$", a: "25", d: "hard" },
+            { q: "Solve: $2x + 1 = 2x - 1$ (all/none)", a: "none", d: "hard" },
+            { q: "Solve: $-3(x - 2) \\le 12$", a: "x>=-2", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-H-808",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x + 1.2 = 2$", a: "0.8", d: "easy" },
+            { q: "Solve: $x - 0.5 = 1.5$", a: "2", d: "easy" },
+            { q: "Solve: $0.1x = 7$", a: "70", d: "easy" },
+            { q: "Solve: $x/3 = -3$", a: "-9", d: "easy" },
+            { q: "Is 0 a solution to $x + 5 = 5$? (yes/no)", a: "yes", d: "easy" },
+            { q: "Solve: $10x + 5 = 85$", a: "8", d: "moderate" },
+            { q: "Solve: $2(x + 10) = 40$", a: "10", d: "moderate" },
+            { q: "Solve: $x/4 - 1 = 3$", a: "16", d: "moderate" },
+            { q: "Solve: $3x + x = 2x + 10$", a: "5", d: "moderate" },
+            { q: "Solve: $100 - x = 50$", a: "50", d: "moderate" },
+            { q: "Solve: $x + x + x = 30$", a: "10", d: "moderate" },
+            { q: "Solve: $4(x - 2) = 2x$", a: "4", d: "moderate" },
+            { q: "Solve: $x/0.5 = 20$", a: "10", d: "moderate" },
+            { q: "Solve: $x + 3 > -1$", a: "x>-4", d: "moderate" },
+            { q: "Solve: $x/(-1) \\le 5$", a: "x>=-5", d: "moderate" },
+            { q: "Solve: $5(x + 2) = 2(2x - 1)$", a: "-12", d: "hard" },
+            { q: "Solve for $r$: $C = 2\\pi r$", a: "C/(2pi)", d: "hard" },
+            { q: "Solve: $x/2 + 1/4 = 1$", a: "1.5", d: "hard" },
+            { q: "Solve: $3(x + 2) = 3x + 6$ (all/none)", a: "all", d: "hard" },
+            { q: "Solve: $-2x + 5 < x - 4$", a: "x>3", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-I-909",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x + 11 = 22$", a: "11", d: "easy" },
+            { q: "Solve: $x - 8 = -8$", a: "0", d: "easy" },
+            { q: "Solve: $20x = 100$", a: "5", d: "easy" },
+            { q: "Solve: $x/2 = -7$", a: "-14", d: "easy" },
+            { q: "Solve: $3x = 1$", a: "1/3", d: "easy" },
+            { q: "Solve: $7x - 7 = 42$", a: "7", d: "moderate" },
+            { q: "Solve: $4(x - 5) = 0$", a: "5", d: "moderate" },
+            { q: "Solve: $x/3 + 2 = 5$", a: "9", d: "moderate" },
+            { q: "Solve: $2x + 5 = x + 10$", a: "5", d: "moderate" },
+            { q: "Solve: $50 - 5x = 25$", a: "5", d: "moderate" },
+            { q: "Solve: $2(x + 4) = 16$", a: "4", d: "moderate" },
+            { q: "Solve: $x + 2 = 1.5$", a: "-0.5", d: "moderate" },
+            { q: "Solve: $3x = 0.9$", a: "0.3", d: "moderate" },
+            { q: "Solve: $x + 1 > 1$", a: "x>0", d: "moderate" },
+            { q: "Solve: $x/(-4) < -1$", a: "x>4", d: "moderate" },
+            { q: "Solve: $3(x + 4) = 5(x - 2)$", a: "11", d: "hard" },
+            { q: "Solve for $m$: $y = mx + b$", a: "(y-b)/x", d: "hard" },
+            { q: "Solve: $0.5x - 2 = 3$", a: "10", d: "hard" },
+            { q: "Solve: $2(x - 1) = 2x + 5$ (all/none)", a: "none", d: "hard" },
+            { q: "Solve: $x/2 + 7 \\le 5$", a: "x<=-4", d: "hard" }
+        ]
+    },
+    {
+        id: "U2-J-010",
+        title: "Unit 2: Equations & Inequalities",
+        questions: [
+            { q: "Solve: $x + 5 = -5$", a: "-10", d: "easy" },
+            { q: "Solve: $x - 100 = 0$", a: "100", d: "easy" },
+            { q: "Solve: $6x = -36$", a: "-6", d: "easy" },
+            { q: "Solve: $x/8 = 2$", a: "16", d: "easy" },
+            { q: "Solve: $x + 4 = 4$", a: "0", d: "easy" },
+            { q: "Solve: $2x + 8 = 20$", a: "6", d: "moderate" },
+            { q: "Solve: $5(x - 1) = 20$", a: "5", d: "moderate" },
+            { q: "Solve: $x/10 - 2 = 3$", a: "50", d: "moderate" },
+            { q: "Solve: $10x = 5x + 25$", a: "5", d: "moderate" },
+            { q: "Solve: $100 - 10x = 0$", a: "10", d: "moderate" },
+            { q: "Solve: $3(x + 2) = x + 10$", a: "2", d: "moderate" },
+            { q: "Solve: $x + 0.1 = 1$", a: "0.9", d: "moderate" },
+            { q: "Solve: $4x = 2$", a: "0.5", d: "moderate" },
+            { q: "Solve: $x - 7 \\ge -7$", a: "x>=0", d: "moderate" },
+            { q: "Solve: $3x < -9$", a: "x<-3", d: "moderate" },
+            { q: "Solve: $2(4x - 3) = 3(2x + 4)$", a: "9", d: "hard" },
+            { q: "Solve for $h$: $A = bh$", a: "A/b", d: "hard" },
+            { q: "Solve: $3/5x + 2 = 8$", a: "10", d: "hard" },
+            { q: "Solve: $-(x + 5) = -x - 5$ (all/none)", a: "all", d: "hard" },
+            { q: "Solve: $1 - 2x > 11$", a: "x<-5", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

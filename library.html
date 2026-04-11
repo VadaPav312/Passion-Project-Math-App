@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathAssist | Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: rgba(30, 41, 59, 0.4);
+      --accent: #2dd4bf;
+      --accent-glow: rgba(45, 212, 191, 0.3);
+      --accent-2: #f59e0b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 0% 0%, rgba(45, 212, 191, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Header matching the Homepage */
+    header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /* Glassmorphism Effect */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  /* Uses your background variable with transparency */
+  background: rgba(15, 23, 42, 0.75); 
+  /* Subtle bottom border using your accent color */
+  border-bottom: 1px solid rgba(45, 212, 191, 0.1);
+  padding: 1rem 6vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.3s ease;
+}
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1.3rem;
+      display: flex; gap: 10px; align-items: center;
+    }
+
+    .logo-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 6px; }
+
+    nav { display: flex; gap: 12px; }
+    nav a {
+      color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600;
+      padding: 8px 14px; border-radius: 8px; transition: 0.2s;
+    }
+    nav a:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem 6vw 4rem; }
+
+    .hero { text-align: center; padding: 2rem 0 3rem; }
+    .hero h1 { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 3.5rem); 
+      background: linear-gradient(to bottom, #fff, #94a3b8);
+      background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Library Grid */
+    .buttons-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+      gap: 30px; 
+    }
+    
+    .button-card {
+      background: var(--card);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px; 
+      padding: 40px;
+      display: flex; 
+      flex-direction: column;
+      text-align: left;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Top Accent Line (Color set by inline variable) */
+    .button-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--card-accent, var(--accent));
+    }
+
+    .button-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--card-accent, var(--accent));
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .button-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .button-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      flex-grow: 1;
+    }
+
+    .button-link {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+      transition: 0.3s;
+      align-self: flex-start;
+    }
+
+    .button-link:hover {
+      background: #fff;
+      color: var(--bg);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      .button-card { padding: 25px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo"><div class="logo-icon"></div>MathAssist</div>
+    <nav>
+      <a href="index.html">Homepage</a>
+      <a href="tests.html" style="color: #fff; background: rgba(255,255,255,0.05);">Practice Tests</a>
+      <a href="practice.html">Practice Problems</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Resource Library</h1>
+      <p style="color: var(--muted)">Explore comprehensive mathematical concepts and tools.</p>
+    </section>
+
+    <div class="buttons-grid">
+      <div class="button-card" style="--card-accent: #3498db;">
+        <h3>Algebra 1</h3>
+        <p>All California Common Core standards — number and quantity, expressions, equations, functions, linear and exponential models, and statistics. 44 topics across 8 domains.</p>
+        <a href="algebra1.html" class="button-link">Explore Course</a>
+      </div>
+
+      <div class="button-card" style="--card-accent: #2ecc71;">
+        <h3>Geometry</h3>
+        <p>All California Common Core standards — congruence, similarity, trigonometry, circles, coordinate geometry, measurement, and modeling. 37 topics across 6 domains.</p>
+        <a href="geometry.html" class="button-link">Explore Course</a>
+      </div>
+
+      <div class="button-card" style="--card-accent: #9b59b6;">
+        <h3>Algebra 2</h3>
+        <p>All California Common Core standards — complex numbers, polynomials, rational expressions, advanced functions, trigonometry, and probability. 55 topics across 10 domains.</p>
+        <a href="algebra2.html" class="button-link">Explore Course</a>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

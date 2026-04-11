@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U6-A-101",
+        title: "Unit 6: Analytical Geometry",
+        note: "For circle equations, use '^2' for squared. For pi, type 'pi'. Use '/' for fractions.",
+        questions: [
+            { q: "The \_\_\_ formula is used to find the length of a segment.", a: "distance", d: "easy" },
+            { q: "The formula ((x1+x2)/2, (y1+y2)/2) finds the \_\_\_.", a: "midpoint", d: "easy" },
+            { q: "What is the slope of a horizontal line?", a: "0", d: "easy" },
+            { q: "What is the slope of a vertical line?", a: "undefined", d: "easy" },
+            { q: "Parallel lines have the \_\_\_ slope.", a: "same", d: "easy" },
+            { q: "Perpendicular slopes are negative \_\_\_.", a: "reciprocals", d: "moderate" },
+            { q: "Find the midpoint of (0,0) and (4,10).", a: "(2,5)", d: "moderate" },
+            { q: "Find the distance between (0,0) and (3,4).", a: "5", d: "moderate" },
+            { q: "Standard equation of a circle: (x-h)^2 + (y-k)^2 = \_\_\_.", a: "r^2", d: "moderate" },
+            { q: "In the circle equation, (h, k) represents the \_\_\_.", a: "center", d: "moderate" },
+            { q: "What is the slope of a line parallel to y = 3x + 5?", a: "3", d: "moderate" },
+            { q: "What is the slope of a line perpendicular to 2?", a: "-1/2", d: "moderate" },
+            { q: "The point that divides a segment into a 1:1 ratio is the \_\_\_.", a: "midpoint", d: "moderate" },
+            { q: "Radius of the circle (x-3)^2 + (y+4)^2 = 25?", a: "5", d: "moderate" },
+            { q: "Slope formula: (y2 - y1) / (\_\_\_).", a: "x2 - x1", d: "moderate" },
+            { q: "Find the distance between (1,2) and (1,7).", a: "5", d: "hard" },
+            { q: "Find the point 1/4 of the way from (0,0) to (8,12).", a: "(2,3)", d: "hard" },
+            { q: "Equation of circle with center (0,0) and radius 3?", a: "x^2+y^2=9", d: "hard" },
+            { q: "A quadrilateral with opposite sides parallel and equal is a \_\_\_.", a: "parallelogram", d: "hard" },
+            { q: "If the product of two slopes is -1, the lines are \_\_\_.", a: "perpendicular", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-B-202",
+        title: "Unit 6: Analytical Geometry",
+        note: "For circle equations, use '^2' for squared. For pi, type 'pi'. Use '/' for fractions.",
+        questions: [
+            { q: "Is the distance formula based on the Pythagorean Theorem?", a: "yes", d: "easy" },
+            { q: "Midpoint of (2,2) and (6,6)?", a: "(4,4)", d: "easy" },
+            { q: "Slope of y = -5x + 2?", a: "-5", d: "easy" },
+            { q: "Equation of a circle centered at origin with radius r?", a: "x^2+y^2=r^2", d: "easy" },
+            { q: "Slope of a line parallel to xnd axis (horizontal)?", a: "0", d: "easy" },
+            { q: "Slope of y = x?", a: "1", d: "moderate" },
+            { q: "Slope of a line perpendicular to -1/3?", a: "3", d: "moderate" },
+            { q: "Distance between (2,3) and (2,-3)?", a: "6", d: "moderate" },
+            { q: "Center of (x+5)^2 + (y-1)^2 = 49?", a: "(-5,1)", d: "moderate" },
+            { q: "Partitioning a segment: finding a point that \_\_\_ a line.", a: "divides", d: "moderate" },
+            { q: "If slope is 4/5, the perpendicular slope is \_\_\_.", a: "-5/4", d: "moderate" },
+            { q: "A square has perpendicular diagonals. True/False?", a: "true", d: "moderate" },
+            { q: "Find the midpoint of (-3, 4) and (3, -4).", a: "(0,0)", d: "moderate" },
+            { q: "The distance from center to any point on a circle is the \_\_\_.", a: "radius", d: "moderate" },
+            { q: "Equation of circle with center (2, -3) and r=4?", a: "(x-2)^2+(y+3)^2=16", d: "moderate" },
+            { q: "Find the point 1/2 way between (1,1) and (7,9).", a: "(4,5)", d: "hard" },
+            { q: "Slope of a line through (1,2) and (3,6)?", a: "2", d: "hard" },
+            { q: "Radius of x^2 + y^2 = 100?", a: "10", d: "hard" },
+            { q: "Midpoint of (x1, y1) and (x2, y2)?", a: "((x1+x2)/2,(y1+y2)/2)", d: "hard" },
+            { q: "A rectangle has \_\_\_ adjacent sides.", a: "perpendicular", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-C-303",
+        title: "Unit 6: Analytical Geometry",
+        note: "For circle equations, use '^2' for squared. For pi, type 'pi'. Use '/' for fractions.",
+        questions: [
+            { q: "Distance between (0,0) and (6,0)?", a: "6", d: "easy" },
+            { q: "Center of x^2 + y^2 = 25?", a: "(0,0)", d: "easy" },
+            { q: "Slope of y = 1/2x - 4?", a: "1/2", d: "easy" },
+            { q: "Parallel lines \_\_\_ intersect.", a: "never", d: "easy" },
+            { q: "The midpoint is the \_\_\_ of the two endpoints.", a: "average", d: "easy" },
+            { q: "Find distance between (0,0) and (5,12).", a: "13", d: "moderate" },
+            { q: "Slope of line through (0,0) and (2,8)?", a: "4", d: "moderate" },
+            { q: "Are y=2x and y=-1/2x perpendicular?", a: "yes", d: "moderate" },
+            { q: "Radius of (x-1)^2 + (y-1)^2 = 1?", a: "1", d: "moderate" },
+            { q: "Find midpoint of (10, 20) and (30, 40).", a: "(20,30)", d: "moderate" },
+            { q: "Slope of y = 7?", a: "0", d: "moderate" },
+            { q: "Slope of x = 4?", a: "undefined", d: "moderate" },
+            { q: "If center is (1,2) and r=5, find the circle equation.", a: "(x-1)^2+(y-2)^2=25", d: "moderate" },
+            { q: "Does (3,4) lie on x^2 + y^2 = 25?", a: "yes", d: "moderate" },
+            { q: "A rhombus has \_\_\_ sides.", a: "congruent", d: "moderate" },
+            { q: "Partition (0,0) and (10,0) into 4:1 ratio.", a: "(8,0)", d: "hard" },
+            { q: "Distance between (-1,-1) and (2,3)?", a: "5", d: "hard" },
+            { q: "Perpendicular slope to 0?", a: "undefined", d: "hard" },
+            { q: "Midpoint of (a, b) and (c, d)?", a: "((a+c)/2,(b+d)/2)", d: "hard" },
+            { q: "Center of (x-h)^2 + (y-k)^2 = r^2?", a: "(h,k)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-D-404",
+        title: "Unit 6: Analytical Geometry",
+        note: "For circle equations, use '^2' for squared.",
+        questions: [
+            { q: "Parallel lines have \_\_\_ slopes.", a: "equal", d: "easy" },
+            { q: "Distance formula: sqrt((x2-x1)^2 + (\_\_\_)^2).", a: "y2-y1", d: "easy" },
+            { q: "Slope of y = 3?", a: "0", d: "easy" },
+            { q: "Midpoint of (0,0) and (0,10)?", a: "(0,5)", d: "easy" },
+            { q: "Center of (x-4)^2 + y^2 = 9?", a: "(4,0)", d: "easy" },
+            { q: "Slope of y = -x + 10?", a: "-1", d: "moderate" },
+            { q: "Slope perpendicular to 5?", a: "-1/5", d: "moderate" },
+            { q: "Distance between (1,1) and (4,5)?", a: "5", d: "moderate" },
+            { q: "Radius of x^2 + y^2 = 144?", a: "12", d: "moderate" },
+            { q: "Midpoint of (5,5) and (15,15)?", a: "(10,10)", d: "moderate" },
+            { q: "Slope of line through (1,1) and (2,2)?", a: "1", d: "moderate" },
+            { q: "Find center: (x+2)^2 + (y+3)^2 = 10.", a: "(-2,-3)", d: "moderate" },
+            { q: "Equation for circle at (0,0) with r=1?", a: "x^2+y^2=1", d: "moderate" },
+            { q: "Parallel or Perpendicular: y=3x and y=3x+1?", a: "parallel", d: "moderate" },
+            { q: "Shape with vertices (0,0), (2,0), (2,2), (0,2)?", a: "square", d: "moderate" },
+            { q: "Distance between (0,0) and (8,15)?", a: "17", d: "hard" },
+            { q: "Partition (0,0) to (6,9) in 2:1 ratio.", a: "(4,6)", d: "hard" },
+            { q: "Equation of circle: center (5,0), r=2.", a: "(x-5)^2+y^2=4", d: "hard" },
+            { q: "Midpoint of (-10, 5) and (0, 5)?", a: "(-5,5)", d: "hard" },
+            { q: "Point-slope form: y - y1 = m(\_\_\_).", a: "x - x1", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-E-505",
+        title: "Unit 6: Analytical Geometry",
+        note: "For circle equations, use '^2' for squared.",
+        questions: [
+            { q: "Standard form of a line: Ax + By = \_\_\_.", a: "C", d: "easy" },
+            { q: "Distance from (3,4) to origin?", a: "5", d: "easy" },
+            { q: "Midpoint of (1,1) and (3,3)?", a: "(2,2)", d: "easy" },
+            { q: "Slope of y = 4x?", a: "4", d: "easy" },
+            { q: "Center of (x-1)^2 + (y-1)^2 = 1?", a: "(1,1)", d: "easy" },
+            { q: "Radius of x^2 + y^2 = 81?", a: "9", d: "moderate" },
+            { q: "Slope perpendicular to 1/4?", a: "-4", d: "moderate" },
+            { q: "Distance between (0,5) and (0,-5)?", a: "10", d: "moderate" },
+            { q: "Midpoint of (-2, -2) and (2, 2)?", a: "(0,0)", d: "moderate" },
+            { q: "Slope of a vertical line?", a: "undefined", d: "moderate" },
+            { q: "Equation: circle at (0,4) with r=3.", a: "x^2+(y-4)^2=9", d: "moderate" },
+            { q: "Slope of y = -2/3x + 1?", a: "-2/3", d: "moderate" },
+            { q: "Are y=x and y=-x perpendicular?", a: "yes", d: "moderate" },
+            { q: "Find midpoint: (4,8) and (6,12).", a: "(5,10)", d: "moderate" },
+            { q: "A circle's equation is based on the \_\_\_ formula.", a: "distance", d: "moderate" },
+            { q: "Distance between (1,2) and (4,6)?", a: "5", d: "hard" },
+            { q: "Partition (0,0) to (5,10) in 1:4 ratio.", a: "(1,2)", d: "hard" },
+            { q: "Circle with center (-2, 2) and radius 1?", a: "(x+2)^2+(y-2)^2=1", d: "hard" },
+            { q: "Slope between (2,3) and (5,3)?", a: "0", d: "hard" },
+            { q: "In y = mx + b, b is the \_\_\_.", a: "y-intercept", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-F-606",
+        title: "Unit 6: Analytical Geometry",
+        note: "Coordinate geometry tests.",
+        questions: [
+            { q: "Slope of x = -2?", a: "undefined", d: "easy" },
+            { q: "Distance between (0,0) and (0,7)?", a: "7", d: "easy" },
+            { q: "Midpoint of (10,10) and (20,20)?", a: "(15,15)", d: "easy" },
+            { q: "Radius of x^2 + y^2 = 4?", a: "2", d: "easy" },
+            { q: "Center of (x+3)^2 + y^2 = 16?", a: "(-3,0)", d: "easy" },
+            { q: "Slope perpendicular to -1?", a: "1", d: "moderate" },
+            { q: "Slope parallel to y = 1/3x?", a: "1/3", d: "moderate" },
+            { q: "Midpoint of (0,4) and (8,0)?", a: "(4,2)", d: "moderate" },
+            { q: "Distance between (1,1) and (1,10)?", a: "9", d: "moderate" },
+            { q: "Equation: circle at origin, r=10.", a: "x^2+y^2=100", d: "moderate" },
+            { q: "Slope between (1,2) and (2,4)?", a: "2", d: "moderate" },
+            { q: "Find center: x^2 + (y-5)^2 = 20.", a: "(0,5)", d: "moderate" },
+            { q: "Perpendicular lines form \_\_\_ angles.", a: "right", d: "moderate" },
+            { q: "Slope of y = -3x?", a: "-3", d: "moderate" },
+            { q: "Is distance always positive?", a: "yes", d: "moderate" },
+            { q: "Distance from (0,0) to (-3,-4)?", a: "5", d: "hard" },
+            { q: "Partition (0,0) to (9,0) in 2:1 ratio.", a: "(6,0)", d: "hard" },
+            { q: "Find midpoint of (1/2, 1) and (3/2, 5).", a: "(1,3)", d: "hard" },
+            { q: "Radius of (x-2)^2 + (y+2)^2 = 2?", a: "sqrt(2)", d: "hard" },
+            { q: "Circle center (h, k) with point (x, y) uses \_\_\_ formula.", a: "distance", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-G-707",
+        title: "Unit 6: Analytical Geometry",
+        note: "Coordinate basics.",
+        questions: [
+            { q: "Slope of y-axis?", a: "undefined", d: "easy" },
+            { q: "Slope of x-axis?", a: "0", d: "easy" },
+            { q: "Distance between (2,2) and (5,2)?", a: "3", d: "easy" },
+            { q: "Midpoint of (0,0) and (10,0)?", a: "(5,0)", d: "easy" },
+            { q: "Center of x^2 + (y+2)^2 = 1?", a: "(0,-2)", d: "easy" },
+            { q: "Radius of x^2 + y^2 = 400?", a: "20", d: "moderate" },
+            { q: "Slope of y = 10x - 1?", a: "10", d: "moderate" },
+            { q: "Slope perpendicular to 2/5?", a: "-5/2", d: "moderate" },
+            { q: "Distance between (0,0) and (-5,12)?", a: "13", d: "moderate" },
+            { q: "Midpoint of (1,5) and (3,11)?", a: "(2,8)", d: "moderate" },
+            { q: "Equation: circle center (1,1), r=2.", a: "(x-1)^2+(y-1)^2=4", d: "moderate" },
+            { q: "Parallel lines have \_\_\_ intersection points.", a: "0", d: "moderate" },
+            { q: "Slope through (0,0) and (5,5)?", a: "1", d: "moderate" },
+            { q: "Are y=5 and x=2 perpendicular?", a: "yes", d: "moderate" },
+            { q: "Point (0,0) is called the \_\_\_.", a: "origin", d: "moderate" },
+            { q: "Distance between (2,3) and (5,7)?", a: "5", d: "hard" },
+            { q: "Partition (1,1) to (5,5) in 1:1 ratio.", a: "(3,3)", d: "hard" },
+            { q: "Find r for x^2 + y^2 = 50.", a: "sqrt(50)", d: "hard" },
+            { q: "Equation of circle: center (0,-5), r=6.", a: "x^2+(y+5)^2=36", d: "hard" },
+            { q: "Diagonals of a \_\_\_ bisect each other.", a: "parallelogram", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-H-808",
+        title: "Unit 6: Analytical Geometry",
+        note: "Algebra meets Geometry.",
+        questions: [
+            { q: "Rise over run is \_\_\_.", a: "slope", d: "easy" },
+            { q: "Distance from (0,0) to (0,-10)?", a: "10", d: "easy" },
+            { q: "Midpoint of (2,4) and (2,8)?", a: "(2,6)", d: "easy" },
+            { q: "Radius of x^2 + y^2 = 64?", a: "8", d: "easy" },
+            { q: "Slope of y = x + 5?", a: "1", d: "easy" },
+            { q: "Slope perpendicular to 3?", a: "-1/3", d: "moderate" },
+            { q: "Slope parallel to y = -2x?", a: "-2", d: "moderate" },
+            { q: "Midpoint of (-4, 2) and (4, 6)?", a: "(0,4)", d: "moderate" },
+            { q: "Distance between (1,1) and (4,1)?", a: "3", d: "moderate" },
+            { q: "Equation: circle center (4,4), r=1.", a: "(x-4)^2+(y-4)^2=1", d: "moderate" },
+            { q: "Center of (x+10)^2 + (y-10)^2 = 100?", a: "(-10,10)", d: "moderate" },
+            { q: "Slope between (1,1) and (3,7)?", a: "3", d: "moderate" },
+            { q: "y = mx + b is \_\_\_ intercept form.", a: "slope", d: "moderate" },
+            { q: "Are lines with slopes 2 and 2 parallel?", a: "yes", d: "moderate" },
+            { q: "Distance between (0,0) and (7,24)?", a: "25", d: "moderate" },
+            { q: "Partition (0,0) to (10,10) in 3:2 ratio.", a: "(6,6)", d: "hard" },
+            { q: "Equation: circle center (-1,-1), r=sqrt(2).", a: "(x+1)^2+(y+1)^2=2", d: "hard" },
+            { q: "Find midpoint: (x, y) and (3x, 3y).", a: "(2x,2y)", d: "hard" },
+            { q: "Radius of x^2 + y^2 = 1?", a: "1", d: "hard" },
+            { q: "If slopes are m and -1/m, lines are \_\_\_.", a: "perpendicular", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-I-909",
+        title: "Unit 6: Analytical Geometry",
+        note: "Coordinate patterns.",
+        questions: [
+            { q: "Slope of a line with no steepness?", a: "0", d: "easy" },
+            { q: "Midpoint of (0,0) and (10,10)?", a: "(5,5)", d: "easy" },
+            { q: "Distance from (0,0) to (3,0)?", a: "3", d: "easy" },
+            { q: "Center of (x-2)^2 + (y-3)^2 = 4?", a: "(2,3)", d: "easy" },
+            { q: "Radius of x^2 + y^2 = 16?", a: "4", d: "easy" },
+            { q: "Slope perpendicular to 4/3?", a: "-3/4", d: "moderate" },
+            { q: "Slope parallel to y = 0.5x?", a: "0.5", d: "moderate" },
+            { q: "Midpoint of (-5, -5) and (5, 5)?", a: "(0,0)", d: "moderate" },
+            { q: "Distance between (2,2) and (2,10)?", a: "8", d: "moderate" },
+            { q: "Equation: circle center (0,0), r=7.", a: "x^2+y^2=49", d: "moderate" },
+            { q: "Find center: (x+1)^2 + y^2 = 25.", a: "(-1,0)", d: "moderate" },
+            { q: "Slope through (1,5) and (2,5)?", a: "0", d: "moderate" },
+            { q: "Are lines with slopes 1 and -1 perpendicular?", a: "yes", d: "moderate" },
+            { q: "Distance between (0,0) and (9,40)?", a: "41", d: "moderate" },
+            { q: "Midpoint of (a, 0) and (0, b)?", a: "(a/2,b/2)", d: "moderate" },
+            { q: "Partition (0,0) to (12,12) in 1:3 ratio.", a: "(3,3)", d: "hard" },
+            { q: "Find r for (x-5)^2 + (y-5)^2 = 36.", a: "6", d: "hard" },
+            { q: "Equation: circle center (3, -3), r=9.", a: "(x-3)^2+(y+3)^2=81", d: "hard" },
+            { q: "Distance from (1,1) to (4,5)?", a: "5", d: "hard" },
+            { q: "The y-coordinate of a point on the x-axis is \_\_\_.", a: "0", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-J-010",
+        title: "Unit 6: Analytical Geometry",
+        note: "The final review.",
+        questions: [
+            { q: "Formula for slope?", a: "m", d: "easy" },
+            { q: "Distance between (0,0) and (0,1)?", a: "1", d: "easy" },
+            { q: "Midpoint of (0,0) and (2,2)?", a: "(1,1)", d: "easy" },
+            { q: "Center of x^2 + y^2 = 100?", a: "(0,0)", d: "easy" },
+            { q: "Radius of x^2 + y^2 = 1?", a: "1", d: "easy" },
+            { q: "Slope perpendicular to 1/2?", a: "-2", d: "moderate" },
+            { q: "Slope parallel to y = -x?", a: "-1", d: "moderate" },
+            { q: "Midpoint of (1,1) and (5,5)?", a: "(3,3)", d: "moderate" },
+            { q: "Distance between (1,1) and (1,5)?", a: "4", d: "moderate" },
+            { q: "Equation: circle center (0,2), r=5.", a: "x^2+(y-2)^2=25", d: "moderate" },
+            { q: "Find center: (x-7)^2 + (y+7)^2 = 49.", a: "(7,-7)", d: "moderate" },
+            { q: "Slope through (2,2) and (4,4)?", a: "1", d: "moderate" },
+            { q: "Are y=x+2 and y=x-2 parallel?", a: "yes", d: "moderate" },
+            { q: "Distance between (0,0) and (12,5)?", a: "13", d: "moderate" },
+            { q: "Midpoint of (x1, y1) and (x2, y2) has \_\_\_ coordinates.", a: "2", d: "moderate" },
+            { q: "Partition (0,0) to (10,20) in 4:1 ratio.", a: "(8,16)", d: "hard" },
+            { q: "Radius of x^2 + y^2 = 121?", a: "11", d: "hard" },
+            { q: "Equation: circle center (-5, 0), r=10.", a: "(x+5)^2+y^2=100", d: "hard" },
+            { q: "Find slope perpendicular to a slope of 0.", a: "undefined", d: "hard" },
+            { q: "Standard form of circle uses \_\_\_ and radius.", a: "center", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U6-A-101",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "Is (1, 2) a solution to the system: x + y = 3 and 2x - y = 0?", a: "yes", d: "easy" },
+            { q: "If two lines in a system are parallel, how many solutions are there?", a: "0", d: "easy" },
+            { q: "Solve for y if x = 3 in the system: y = 2x + 1.", a: "7", d: "easy" },
+            { q: "What is the solution to a system where the lines intersect at (5, -2)?", a: "(5,-2)", d: "easy" },
+            { q: "True or False: A system with the same line twice has infinite solutions.", a: "true", d: "easy" },
+            { q: "Solve using substitution: y = 3x and x + y = 8.", a: "(2,6)", d: "moderate" },
+            { q: "Solve using elimination: x + y = 10 and x - y = 2.", a: "(6,4)", d: "moderate" },
+            { q: "If x + 2y = 8 and x = 2, find y.", a: "3", d: "moderate" },
+            { q: "What is the slope of a line parallel to y = -4x + 1?", a: "-4", d: "moderate" },
+            { q: "Solve: 2x + y = 7 and y = x + 1.", a: "(2,3)", d: "moderate" },
+            { q: "How many solutions for: y = 2x + 3 and y = 2x + 5?", a: "0", d: "moderate" },
+            { q: "Solve: x + y = 5 and 2x + 2y = 10.", a: "infinite", d: "moderate" },
+            { q: "Find x: 3x - y = 10 and y = 2.", a: "4", d: "moderate" },
+            { q: "Write 'none', 'one', or 'infinite' for: y = x and y = -x.", a: "one", d: "moderate" },
+            { q: "Solve: y = 5 and x + y = 12.", a: "(7,5)", d: "moderate" },
+            { q: "Solve using elimination: 2x + 3y = 13 and 2x - y = 1.", a: "(2,3)", d: "hard" },
+            { q: "Solve: 3x + 2y = 16 and 7x + y = 19.", a: "(2,5)", d: "hard" },
+            { q: "A system has one solution. Line 1: y = 2x + 4. Which cannot be Line 2: y = 2x + 1 or y = 3x?", a: "y=2x+1", d: "hard" },
+            { q: "Solve: 1/2x + y = 4 and x - 2y = 0.", a: "(4,2)", d: "hard" },
+            { q: "Two numbers sum to 20 and have a difference of 4. Find the larger number.", a: "12", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-B-202",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "Does (0, 0) solve y = x and y = -x?", a: "yes", d: "easy" },
+            { q: "Number of solutions if lines have different slopes.", a: "1", d: "easy" },
+            { q: "If y = 4 and x + y = 10, what is x?", a: "6", d: "easy" },
+            { q: "Parallel lines have the same slope but different \_\_\_.", a: "intercepts", d: "easy" },
+            { q: "True or False: (2, 3) solves x + y = 5 and x = 2.", a: "true", d: "easy" },
+            { q: "Solve: y = x + 2 and y = 2x.", a: "(2,4)", d: "moderate" },
+            { q: "Solve by elimination: 3x + y = 7 and x - y = 1.", a: "(2,1)", d: "moderate" },
+            { q: "If 2x - y = 4 and y = 2, find x.", a: "3", d: "moderate" },
+            { q: "How many solutions for y = 5x and y = 5x?", a: "infinite", d: "moderate" },
+            { q: "Solve: x + y = 0 and x - y = 4.", a: "(2,-2)", d: "moderate" },
+            { q: "Slope of a line perpendicular to y = 1/2x.", a: "-2", d: "moderate" },
+            { q: "Solve: y = 2x - 1 and y = -x + 5.", a: "(2,3)", d: "moderate" },
+            { q: "Solve: x = 10 and y = x - 3.", a: "(10,7)", d: "moderate" },
+            { q: "Find y: x + y = 15 and x = 2y.", a: "5", d: "moderate" },
+            { q: "Number of solutions: y = 3x + 1 and y = 3x - 1.", a: "0", d: "moderate" },
+            { q: "Solve: 4x + 2y = 14 and 3x - y = 3.", a: "(2,3)", d: "hard" },
+            { q: "Solve: 5x + 3y = 21 and 2x + 3y = 12.", a: "(3,2)", d: "hard" },
+            { q: "Find the point of intersection: y = 0.5x + 2 and y = x - 1.", a: "(6,5)", d: "hard" },
+            { q: "One number is 3 times another. Their sum is 16. Find the smaller number.", a: "4", d: "hard" },
+            { q: "Solve: 2x - 3y = -1 and x + y = 7.", a: "(4,3)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-C-303",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "Is (5, 5) a solution to x = y?", a: "yes", d: "easy" },
+            { q: "Solve for x if y = 1 in x + y = 10.", a: "9", d: "easy" },
+            { q: "What is the intersection of y = 2 and x = 3?", a: "(3,2)", d: "easy" },
+            { q: "Systems with no solutions are called \_\_\_.", a: "inconsistent", d: "easy" },
+            { q: "Solve: y = x and x = 4.", a: "(4,4)", d: "easy" },
+            { q: "Solve: y = 2x and x + y = 9.", a: "(3,6)", d: "moderate" },
+            { q: "Solve: x + y = 20 and x - y = 10.", a: "(15,5)", d: "moderate" },
+            { q: "Find y: 2x + y = 10 and x = 4.", a: "2", d: "moderate" },
+            { q: "Number of solutions: y = x + 4 and y = 2x + 4.", a: "1", d: "moderate" },
+            { q: "Solve: 3x = 12 and x + y = 10.", a: "(4,6)", d: "moderate" },
+            { q: "How many solutions: 2x + y = 5 and 4x + 2y = 10?", a: "infinite", d: "moderate" },
+            { q: "Solve: y = -x + 6 and y = x - 2.", a: "(4,2)", d: "moderate" },
+            { q: "Solve: x = -1 and y = 2x + 5.", a: "(-1,3)", d: "moderate" },
+            { q: "Find x: x - y = 7 and y = 3.", a: "10", d: "moderate" },
+            { q: "Number of solutions: y = 1/3x + 2 and y = 1/3x + 5.", a: "0", d: "moderate" },
+            { q: "Solve: 3x + 4y = 18 and x - 2y = -4.", a: "(2,3)", d: "hard" },
+            { q: "Solve: 6x - y = 11 and 2x + 3y = 7.", a: "(2,1)", d: "hard" },
+            { q: "The sum of two numbers is 30. One is twice the other. Find the larger.", a: "20", d: "hard" },
+            { q: "Solve: 0.2x + 0.5y = 2.1 and x + y = 6.", a: "(3,3)", d: "hard" },
+            { q: "Solve: 5x + 2y = 16 and 3x - 4y = 7.", a: "(3,0.5)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-D-404",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "Solve: x = 2 and y = 3.", a: "(2,3)", d: "easy" },
+            { q: "Is (1, 1) a solution to 2x + 2y = 4?", a: "yes", d: "easy" },
+            { q: "If y = x + 1 and x = 0, find y.", a: "1", d: "easy" },
+            { q: "Two lines that are the same have \_\_\_ solutions.", a: "infinite", d: "easy" },
+            { q: "Does (2, 2) solve x + y = 4 and x - y = 0?", a: "yes", d: "easy" },
+            { q: "Solve: y = 4x and x + y = 5.", a: "(1,4)", d: "moderate" },
+            { q: "Solve by elimination: 2x + y = 8 and x - y = 1.", a: "(3,2)", d: "moderate" },
+            { q: "Find x: x + 3y = 10 and y = 2.", a: "4", d: "moderate" },
+            { q: "Number of solutions: y = -2x + 3 and y = -2x - 3.", a: "0", d: "moderate" },
+            { q: "Solve: x + y = 12 and y = 2x.", a: "(4,8)", d: "moderate" },
+            { q: "Solve: y = 3x - 5 and y = x + 1.", a: "(3,4)", d: "moderate" },
+            { q: "Find y: 5x + y = 20 and x = 3.", a: "5", d: "moderate" },
+            { q: "How many solutions: x + y = 1 and x + y = 2?", a: "0", d: "moderate" },
+            { q: "Solve: x = 5 and y = 10 - x.", a: "(5,5)", d: "moderate" },
+            { q: "Number of solutions: y = x and y = x + 0.", a: "infinite", d: "moderate" },
+            { q: "Solve: 2x + 5y = 20 and 3x - 5y = 5.", a: "(5,2)", d: "hard" },
+            { q: "Solve: 4x + 3y = 25 and x - 3y = -10.", a: "(3,4.33)", d: "hard" },
+            { q: "Find x: 2x + 3y = 12 and 2x + y = 8.", a: "3", d: "hard" },
+            { q: "Tickets cost $5 for kids and $10 for adults. 100 people paid $800. How many kids?", a: "40", d: "hard" },
+            { q: "Solve: 3x + y = 13 and x + 2y = 11.", a: "(3,4)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-E-505",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "If x = y and x = 7, find y.", a: "7", d: "easy" },
+            { q: "Intersection of y = x and y = 2.", a: "(2,2)", d: "easy" },
+            { q: "Is (3, 1) a solution to x - y = 2?", a: "yes", d: "easy" },
+            { q: "Number of solutions for crossing lines.", a: "1", d: "easy" },
+            { q: "True or False: (0, 5) solves y = 5.", a: "true", d: "easy" },
+            { q: "Solve: y = 10x and x + y = 11.", a: "(1,10)", d: "moderate" },
+            { q: "Solve by elimination: x + y = 6 and x - y = 4.", a: "(5,1)", d: "moderate" },
+            { q: "Find y: 3x - y = 5 and x = 2.", a: "1", d: "moderate" },
+            { q: "Number of solutions: y = 4x + 2 and y = 4x + 2.", a: "infinite", d: "moderate" },
+            { q: "Solve: x + 2y = 10 and x = 4.", a: "(4,3)", d: "moderate" },
+            { q: "Solve: y = x + 5 and y = -2x - 1.", a: "(-2,3)", d: "moderate" },
+            { q: "Find x: 2x + 2y = 12 and y = x.", a: "3", d: "moderate" },
+            { q: "How many solutions: y = x + 1 and y = x - 1?", a: "0", d: "moderate" },
+            { q: "Solve: x = -2 and y = 10.", a: "(-2,10)", d: "moderate" },
+            { q: "Find y: x + y = 100 and x = 99.", a: "1", d: "moderate" },
+            { q: "Solve: 5x + 4y = 22 and 3x + 4y = 14.", a: "(4,0.5)", d: "hard" },
+            { q: "Solve: 2x - y = 8 and 3x + 2y = 5.", a: "(3,-2)", d: "hard" },
+            { q: "Find intersection: y = 3x - 1 and y = -2x + 9.", a: "(2,5)", d: "hard" },
+            { q: "The sum of two numbers is 50. Their difference is 10. Find the smaller number.", a: "20", d: "hard" },
+            { q: "Solve: 4x + 3y = 18 and x + y = 5.", a: "(3,2)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-F-606",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "Is (2, 4) a solution to y = 2x?", a: "yes", d: "easy" },
+            { q: "Intersection of x = 5 and y = 5.", a: "(5,5)", d: "easy" },
+            { q: "If y = 3x and x = 1, find y.", a: "3", d: "easy" },
+            { q: "Parallel lines have how many solutions?", a: "0", d: "easy" },
+            { q: "True or False: y = x + 1 and y = x + 1 have infinite solutions.", a: "true", d: "easy" },
+            { q: "Solve: y = 2x + 2 and y = 4x.", a: "(1,4)", d: "moderate" },
+            { q: "Solve: x + y = 8 and x - y = 0.", a: "(4,4)", d: "moderate" },
+            { q: "Find x: 2x + y = 10 and y = 2x.", a: "2.5", d: "moderate" },
+            { q: "How many solutions: y = -x + 4 and y = x + 4?", a: "1", d: "moderate" },
+            { q: "Solve: x = 3 and y = 2x + 1.", a: "(3,7)", d: "moderate" },
+            { q: "Solve: y = 3x and x + y = 12.", a: "(3,9)", d: "moderate" },
+            { q: "Find y: x + y = 7 and x = 3.", a: "4", d: "moderate" },
+            { q: "How many solutions: 2x + 2y = 4 and x + y = 2?", a: "infinite", d: "moderate" },
+            { q: "Solve: y = 6 and x + y = 10.", a: "(4,6)", d: "moderate" },
+            { q: "Solve: y = x - 2 and y = -x + 2.", a: "(2,0)", d: "moderate" },
+            { q: "Solve: 3x + 2y = 12 and 4x - 2y = 2.", a: "(2,3)", d: "hard" },
+            { q: "Solve: 5x + 2y = 20 and x + y = 7.", a: "(2,5)", d: "hard" },
+            { q: "Find the intersection of y = 4x - 7 and y = 2x + 1.", a: "(4,9)", d: "hard" },
+            { q: "Sum is 15, difference is 3. Find the larger number.", a: "9", d: "hard" },
+            { q: "Solve: x - 2y = -1 and 2x + y = 8.", a: "(3,2)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-G-707",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "Does (1, 3) solve y = 3x?", a: "yes", d: "easy" },
+            { q: "Intersection of y = 1 and x = -1.", a: "(-1,1)", d: "easy" },
+            { q: "If x + y = 10 and x = 5, find y.", a: "5", d: "easy" },
+            { q: "Slopes are different. How many solutions?", a: "1", d: "easy" },
+            { q: "True or False: y = 2x + 1 and y = 2x - 1 have no solution.", a: "true", d: "easy" },
+            { q: "Solve: y = x and x + y = 10.", a: "(5,5)", d: "moderate" },
+            { q: "Solve: x + y = 15 and x - y = 5.", a: "(10,5)", d: "moderate" },
+            { q: "Find x: y = 4 and x + y = 9.", a: "5", d: "moderate" },
+            { q: "How many solutions: y = 0.5x + 3 and y = 0.5x + 3?", a: "infinite", d: "moderate" },
+            { q: "Solve: x = 2 and y = 4x - 3.", a: "(2,5)", d: "moderate" },
+            { q: "Solve: y = 2x and x + y = 6.", a: "(2,4)", d: "moderate" },
+            { q: "Find y: 2x - y = 6 and x = 4.", a: "2", d: "moderate" },
+            { q: "How many solutions: x + y = 10 and x + y = 11?", a: "0", d: "moderate" },
+            { q: "Solve: y = -2 and x + y = 5.", a: "(7,-2)", d: "moderate" },
+            { q: "Solve: y = 2x + 1 and y = 3x - 2.", a: "(3,7)", d: "moderate" },
+            { q: "Solve: 4x + y = 13 and x + y = 4.", a: "(3,1)", d: "hard" },
+            { q: "Solve: 3x + 2y = 16 and 2x + y = 9.", a: "(2,5)", d: "hard" },
+            { q: "Sum is 25, difference is 5. Find smaller number.", a: "10", d: "hard" },
+            { q: "Find intersection: y = -x + 10 and y = 2x + 1.", a: "(3,7)", d: "hard" },
+            { q: "Solve: 2x + 3y = 18 and 5x - y = 11.", a: "(3,4)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-H-808",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "If x = 0 and y = x + 5, find y.", a: "5", d: "easy" },
+            { q: "Is (2, 2) a solution to x + y = 4?", a: "yes", d: "easy" },
+            { q: "Intersection of y = 10 and x = 0.", a: "(0,10)", d: "easy" },
+            { q: "Lines with same slope and same intercept have \_\_\_ solutions.", a: "infinite", d: "easy" },
+            { q: "True or False: (1, 1) solves y = x and y = 2x.", a: "false", d: "easy" },
+            { q: "Solve: y = 5x and x + y = 6.", a: "(1,5)", d: "moderate" },
+            { q: "Solve: x + y = 12 and x - y = 2.", a: "(7,5)", d: "moderate" },
+            { q: "Find x: 2x + y = 10 and y = 4.", a: "3", d: "moderate" },
+            { q: "How many solutions: y = 3x + 5 and y = 3x + 6?", a: "0", d: "moderate" },
+            { q: "Solve: x = 1 and y = x + 9.", a: "(1,10)", d: "moderate" },
+            { q: "Solve: y = 4x and x + y = 10.", a: "(2,8)", d: "moderate" },
+            { q: "Find y: x + y = 20 and x = 15.", a: "5", d: "moderate" },
+            { q: "How many solutions: x - y = 4 and x - y = 4?", a: "infinite", d: "moderate" },
+            { q: "Solve: y = 3 and x - y = 7.", a: "(10,3)", d: "moderate" },
+            { q: "Solve: y = x + 1 and y = -x + 7.", a: "(3,4)", d: "moderate" },
+            { q: "Solve: 6x + y = 20 and 2x + y = 8.", a: "(3,2)", d: "hard" },
+            { q: "Solve: 4x + 2y = 10 and 3x + y = 7.", a: "(2,1)", d: "hard" },
+            { q: "One number is 4 more than another. Sum is 20. Find larger.", a: "12", d: "hard" },
+            { q: "Find intersection: y = 2x + 4 and y = 5x - 5.", a: "(3,10)", d: "hard" },
+            { q: "Solve: 3x - 4y = 1 and x + y = 5.", a: "(3,2)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-I-909",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "Does (4, 1) solve x + y = 5?", a: "yes", d: "easy" },
+            { q: "Intersection of y = -3 and x = 4.", a: "(4,-3)", d: "easy" },
+            { q: "If y = x and x = 2.5, find y.", a: "2.5", d: "easy" },
+            { q: "Lines that never touch have how many solutions?", a: "0", d: "easy" },
+            { q: "True or False: y = x and y = x + 1 are parallel.", a: "true", d: "easy" },
+            { q: "Solve: y = 3x and x + y = 4.", a: "(1,3)", d: "moderate" },
+            { q: "Solve: x + y = 10 and x - y = 6.", a: "(8,2)", d: "moderate" },
+            { q: "Find x: 3x + y = 13 and y = 4.", a: "3", d: "moderate" },
+            { q: "How many solutions: y = 10x and y = 11x?", a: "1", d: "moderate" },
+            { q: "Solve: x = 5 and y = 2x - 5.", a: "(5,5)", d: "moderate" },
+            { q: "Solve: y = x + 4 and y = 2x.", a: "(4,8)", d: "moderate" },
+            { q: "Find y: 2x + 2y = 10 and x = 1.", a: "4", d: "moderate" },
+            { q: "How many solutions: 3x + y = 5 and 6x + 2y = 10?", a: "infinite", d: "moderate" },
+            { q: "Solve: y = 0 and x + y = 7.", a: "(7,0)", d: "moderate" },
+            { q: "Solve: y = 2x and y = x + 3.", a: "(3,6)", d: "moderate" },
+            { q: "Solve: 5x + 3y = 17 and x + 3y = 5.", a: "(3,0.67)", d: "hard" },
+            { q: "Solve: 2x + y = 11 and x + 2y = 7.", a: "(5,1)", d: "hard" },
+            { q: "Sum is 40, difference is 10. Find smaller number.", a: "15", d: "hard" },
+            { q: "Find intersection: y = -2x + 8 and y = x - 1.", a: "(3,2)", d: "hard" },
+            { q: "Solve: 4x - y = 7 and 2x + y = 11.", a: "(3,5)", d: "hard" }
+        ]
+    },
+    {
+        id: "U6-J-010",
+        title: "Unit 6: Systems of Equations",
+        questions: [
+            { q: "Is (0, 2) a solution to x + y = 2?", a: "yes", d: "easy" },
+            { q: "Intersection of y = 7 and x = 7.", a: "(7,7)", d: "easy" },
+            { q: "If y = 2x and x = 10, find y.", a: "20", d: "easy" },
+            { q: "Number of solutions if lines are identical.", a: "infinite", d: "easy" },
+            { q: "True or False: (1, 2) solves y = 2x and x + y = 3.", a: "true", d: "easy" },
+            { q: "Solve: y = x + 1 and x + y = 3.", a: "(1,2)", d: "moderate" },
+            { q: "Solve: x + y = 5 and x - y = 1.", a: "(3,2)", d: "moderate" },
+            { q: "Find x: x + y = 10 and y = 2x + 1.", a: "3", d: "moderate" },
+            { q: "How many solutions: y = x + 5 and y = x - 5?", a: "0", d: "moderate" },
+            { q: "Solve: x = 4 and y = 10.", a: "(4,10)", d: "moderate" },
+            { q: "Solve: y = 5x and y = x + 4.", a: "(1,5)", d: "moderate" },
+            { q: "Find y: 3x + y = 15 and x = 4.", a: "3", d: "moderate" },
+            { q: "How many solutions: x + y = 0 and x + y = 0?", a: "infinite", d: "moderate" },
+            { q: "Solve: y = 1 and x + y = 5.", a: "(4,1)", d: "moderate" },
+            { q: "Solve: y = x - 5 and y = -x + 5.", a: "(5,0)", d: "moderate" },
+            { q: "Solve: 2x + y = 10 and 2x - y = 2.", a: "(3,4)", d: "hard" },
+            { q: "Solve: 3x + 4y = 25 and x + y = 7.", a: "(3,4)", d: "hard" },
+            { q: "Sum is 100, difference is 20. Find larger number.", a: "60", d: "hard" },
+            { q: "Find intersection: y = 0.5x and y = -x + 6.", a: "(4,2)", d: "hard" },
+            { q: "Solve: 5x + 2y = 21 and x + y = 6.", a: "(3,3)", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

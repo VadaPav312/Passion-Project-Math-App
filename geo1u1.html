@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U1-A-101",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "What is the rule for translating a point 3 units right and 2 units down?", a: "(x+3, y-2)", d: "easy" },
+            { q: "Reflect (4, 5) over the x-axis.", a: "(4, -5)", d: "easy" },
+            { q: "What transformation is a 'slide'?", a: "translation", d: "easy" },
+            { q: "Rotate (1, 2) 180 degrees about the origin.", a: "(-1, -2)", d: "easy" },
+            { q: "Does a dilation with k=2 preserve congruence?", a: "no", d: "easy" },
+            { q: "What is the rule for reflecting over the y-axis?", a: "(-x, y)", d: "moderate" },
+            { q: "Rotate (3, -4) 90 degrees CCW about the origin.", a: "(4, 3)", d: "moderate" },
+            { q: "Dilation: (2, 4) with k=0.5 centered at origin.", a: "(1, 2)", d: "moderate" },
+            { q: "Reflect (6, 2) over the line y=x.", a: "(2, 6)", d: "moderate" },
+            { q: "Is a reflection a rigid motion?", a: "yes", d: "moderate" },
+            { q: "A translation moves (0,0) to (-5, 2). What is the rule?", a: "(x-5, y+2)", d: "moderate" },
+            { q: "Find the scale factor if (4, 8) maps to (1, 2).", a: "0.25", d: "moderate" },
+            { q: "How many degrees is a turn that maps (x, y) to (y, -x)?", a: "270", d: "moderate" },
+            { q: "Reflect (-3, -7) over the x-axis.", a: "(-3, 7)", d: "moderate" },
+            { q: "What is the only transformation that is NOT an isometry?", a: "dilation", d: "moderate" },
+            { q: "Rotate (5, 0) 90 degrees CCW.", a: "(0, 5)", d: "hard" },
+            { q: "Reflect (1, 4) over y=x, then translate (x+1, y).", a: "(5, 1)", d: "hard" },
+            { q: "Rule for reflection over the line y = -x?", a: "(-y, -x)", d: "hard" },
+            { q: "A point is at (2, 3). Rotate 180, then reflect over y-axis.", a: "(2, -3)", d: "hard" },
+            { q: "If k=3 and the area is 5, what is the new area?", a: "45", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-B-202",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Reflect (2, -8) over the y-axis.", a: "(-2, -8)", d: "easy" },
+            { q: "Translate (5, 5) by (x-1, y+10).", a: "(4, 15)", d: "easy" },
+            { q: "Is a rotation a rigid motion?", a: "yes", d: "easy" },
+            { q: "What transformation is a 'flip'?", a: "reflection", d: "easy" },
+            { q: "Dilation: (10, 20) with k=0.1.", a: "(1, 2)", d: "easy" },
+            { q: "Rotate (-2, 5) 180 degrees.", a: "(2, -5)", d: "moderate" },
+            { q: "Reflect (0, 4) over the x-axis.", a: "(0, -4)", d: "moderate" },
+            { q: "Rule for reflection over y=x?", a: "(y, x)", d: "moderate" },
+            { q: "Rotate (1, 3) 90 degrees CCW.", a: "(-3, 1)", d: "moderate" },
+            { q: "Find k if (2, 2) maps to (10, 10).", a: "5", d: "moderate" },
+            { q: "Translate (-4, -4) 4 units right.", a: "(0, -4)", d: "moderate" },
+            { q: "Is orientation preserved in a reflection?", a: "no", d: "moderate" },
+            { q: "What is the rule for a 270 degree CCW rotation?", a: "(y, -x)", d: "moderate" },
+            { q: "Reflect (5, -2) over y-axis.", a: "(-5, -2)", d: "moderate" },
+            { q: "Does translation preserve angle measures?", a: "yes", d: "moderate" },
+            { q: "Rotate (-4, -1) 90 degrees CCW.", a: "(1, -4)", d: "hard" },
+            { q: "Reflect (2, 3) over x-axis, then reflect over y-axis.", a: "(-2, -3)", d: "hard" },
+            { q: "If k=0.5 and perimeter is 20, new perimeter?", a: "10", d: "hard" },
+            { q: "Rule for rotating 90 degrees Clockwise?", a: "(y, -x)", d: "hard" },
+            { q: "What single transformation is a reflection over x then y?", a: "rotation 180", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-C-303",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Reflect (3, 3) over y=x.", a: "(3, 3)", d: "easy" },
+            { q: "What transformation is a 'turn'?", a: "rotation", d: "easy" },
+            { q: "Dilation with k=1.5 is an enlargement or reduction?", a: "enlargement", d: "easy" },
+            { q: "Translate (0, -2) by (x+4, y+4).", a: "(4, 2)", d: "easy" },
+            { q: "Rule for reflecting over x-axis.", a: "(x, -y)", d: "easy" },
+            { q: "Rotate (7, 2) 180 degrees.", a: "(-7, -2)", d: "moderate" },
+            { q: "Reflect (-1, -1) over the y-axis.", a: "(1, -1)", d: "moderate" },
+            { q: "Dilation k=3 maps (x, y) to \_\_\_.", a: "(3x, 3y)", d: "moderate" },
+            { q: "Rotate (0, 5) 270 degrees CCW.", a: "(5, 0)", d: "moderate" },
+            { q: "Does dilation preserve parallel lines?", a: "yes", d: "moderate" },
+            { q: "Translate (10, 10) to (8, 12). Rule?", a: "(x-2, y+2)", d: "moderate" },
+            { q: "Reflect (4, -9) over y=x.", a: "(-9, 4)", d: "moderate" },
+            { q: "Is a dilation an isometry?", a: "no", d: "moderate" },
+            { q: "Rotate (x, y) 90 CCW: (-y, x). True or False?", a: "true", d: "moderate" },
+            { q: "Reflect (2, 2) over x-axis.", a: "(2, -2)", d: "moderate" },
+            { q: "Rotate (-3, 2) 90 degrees CCW.", a: "(-2, -3)", d: "hard" },
+            { q: "Reflect (1, 1) over y-axis then translate (x, y-2).", a: "(-1, -1)", d: "hard" },
+            { q: "A k=4 dilation increases area by a factor of \_\_\_.", a: "16", d: "hard" },
+            { q: "Point (2, 5) rotated 90 CCW maps to \_\_\_.", a: "(-5, 2)", d: "hard" },
+            { q: "Reflection over x then y-axis is same as rotate \_\_\_.", a: "180", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-D-404",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Reflect (0,0) over y=x.", a: "(0, 0)", d: "easy" },
+            { q: "Translate (-1, 6) by (x+2, y-3).", a: "(1, 3)", d: "easy" },
+            { q: "Is translation an isometry?", a: "yes", d: "easy" },
+            { q: "Enlargement scale factor: k > \_\_\_?", a: "1", d: "easy" },
+            { q: "Rule for 180 rotation.", a: "(-x, -y)", d: "easy" },
+            { q: "Reflect (5, 2) over y-axis.", a: "(-5, 2)", d: "moderate" },
+            { q: "Rotate (-3, -3) 90 degrees CCW.", a: "(3, -3)", d: "moderate" },
+            { q: "Dilation k=2 maps (1, 1) to \_\_\_.", a: "(2, 2)", d: "moderate" },
+            { q: "Reflect (-4, 1) over y=x.", a: "(1, -4)", d: "moderate" },
+            { q: "Is orientation preserved in a rotation?", a: "yes", d: "moderate" },
+            { q: "Translate (2, 3) 5 units left.", a: "(-3, 3)", d: "moderate" },
+            { q: "Rotate (1, 0) 180 degrees.", a: "(-1, 0)", d: "moderate" },
+            { q: "Find k if (5, 10) maps to (1, 2).", a: "0.2", d: "moderate" },
+            { q: "Rule: (x, y) to (x, -y) is reflection over \_\_\_.", a: "x-axis", d: "moderate" },
+            { q: "Does a 90 CCW rotation swap x and y?", a: "yes", d: "moderate" },
+            { q: "Reflect (3, 4) over y-axis then x-axis.", a: "(-3, -4)", d: "hard" },
+            { q: "Rotate (2, -6) 270 CCW.", a: "(-6, -2)", d: "hard" },
+            { q: "Dilation k=0.5: New area is what fraction of old?", a: "1/4", d: "hard" },
+            { q: "Translate (x+2, y-1) then reflect over y-axis. Start (0,0).", a: "(-2, -1)", d: "hard" },
+            { q: "A 90 CW rotation is the same as a \_\_\_ CCW rotation.", a: "270", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-E-505",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Reflect (10, 0) over y-axis.", a: "(-10, 0)", d: "easy" },
+            { q: "Scale factor for reduction: 0 < k < \_\_\_?", a: "1", d: "easy" },
+            { q: "Rule for (x,y) moved 5 up.", a: "(x, y+5)", d: "easy" },
+            { q: "Is reflection a 'rigid motion'?", a: "yes", d: "easy" },
+            { q: "Rotate (4, 4) 180 degrees.", a: "(-4, -4)", d: "easy" },
+            { q: "Reflect (2, 7) over y=x.", a: "(7, 2)", d: "moderate" },
+            { q: "Dilation k=4 maps (2, 2) to \_\_\_.", a: "(8, 8)", d: "moderate" },
+            { q: "Rotate (0, -3) 90 CCW.", a: "(3, 0)", d: "moderate" },
+            { q: "Reflect (-5, -5) over x-axis.", a: "(-5, 5)", d: "moderate" },
+            { q: "Does translation preserve distance?", a: "yes", d: "moderate" },
+            { q: "Translate (1, 1) by (x-4, y-4).", a: "(-3, -3)", d: "moderate" },
+            { q: "Is (x, y) to (2x, 2y) an isometry?", a: "no", d: "moderate" },
+            { q: "Rule for 270 CCW rotation.", a: "(y, -x)", d: "moderate" },
+            { q: "Reflect (8, 1) over y-axis.", a: "(-8, 1)", d: "moderate" },
+            { q: "Rotate (x, y) to (-x, -y) is \_\_\_ degrees.", a: "180", d: "moderate" },
+            { q: "Reflect (3, 2) over x-axis then y=x.", a: "(-2, 3)", d: "hard" },
+            { q: "Rotate (-1, 5) 270 CCW.", a: "(5, 1)", d: "hard" },
+            { q: "Scale factor to map (6, 9) to (2, 3).", a: "1/3", d: "hard" },
+            { q: "Translate (x+1, y) then rotate 180. Start (0,0).", a: "(-1, 0)", d: "hard" },
+            { q: "If k=2, how many times larger is the volume?", a: "8", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-F-606",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Reflect (-2, 2) over x-axis.", a: "(-2, -2)", d: "easy" },
+            { q: "Rotate (1, 1) 90 CCW.", a: "(-1, 1)", d: "easy" },
+            { q: "Is dilation an isometry?", a: "no", d: "easy" },
+            { q: "Rule for move 2 left.", a: "(x-2, y)", d: "easy" },
+            { q: "Reflect (4, 4) over y=x.", a: "(4, 4)", d: "easy" },
+            { q: "Translate (3, -2) by (x+1, y+1).", a: "(4, -1)", d: "moderate" },
+            { q: "Dilation k=0.25 maps (8, 4) to \_\_\_.", a: "(2, 1)", d: "moderate" },
+            { q: "Rotate (5, -2) 180.", a: "(-5, 2)", d: "moderate" },
+            { q: "Reflect (0, -6) over y-axis.", a: "(0, -6)", d: "moderate" },
+            { q: "Does rotation preserve orientation?", a: "yes", d: "moderate" },
+            { q: "Rule for reflection over y-axis.", a: "(-x, y)", d: "moderate" },
+            { q: "Rotate (2, 2) 270 CCW.", a: "(2, -2)", d: "moderate" },
+            { q: "Is distance preserved in reflection?", a: "yes", d: "moderate" },
+            { q: "Reflect (-1, 8) over y=x.", a: "(8, -1)", d: "moderate" },
+            { q: "Translate (0,0) 10 units down.", a: "(0, -10)", d: "moderate" },
+            { q: "Reflect (1, 2) over x then rotate 90 CCW.", a: "(2, 1)", d: "hard" },
+            { q: "Rotate (3, 3) 270 CCW then translate (x+1, y).", a: "(4, -3)", d: "hard" },
+            { q: "Find k if area goes from 4 to 100.", a: "5", d: "hard" },
+            { q: "Rule for reflection over y = -x?", a: "(-y, -x)", d: "hard" },
+            { q: "A 180 rotation is the same as reflecting over \_\_\_ then \_\_\_.", a: "x then y", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-G-707",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Translate (0,0) by (x-5, y).", a: "(-5, 0)", d: "easy" },
+            { q: "Rotate (2, 3) 180.", a: "(-2, -3)", d: "easy" },
+            { q: "Reflect (1, 1) over y-axis.", a: "(-1, 1)", d: "easy" },
+            { q: "Is translation a rigid motion?", a: "yes", d: "easy" },
+            { q: "Dilation k=10 maps (1, 1) to \_\_\_.", a: "(10, 10)", d: "easy" },
+            { q: "Reflect (3, -3) over y=x.", a: "(-3, 3)", d: "moderate" },
+            { q: "Rotate (-4, 0) 90 CCW.", a: "(0, -4)", d: "moderate" },
+            { q: "Dilation k=0.5 maps (2, 10) to \_\_\_.", a: "(1, 5)", d: "moderate" },
+            { q: "Rule for reflection over x-axis.", a: "(x, -y)", d: "moderate" },
+            { q: "Does dilation preserve angle measure?", a: "yes", d: "moderate" },
+            { q: "Translate (5, 5) 2 units up and 2 left.", a: "(3, 7)", d: "moderate" },
+            { q: "Rotate (1, 5) 270 CCW.", a: "(5, -1)", d: "moderate" },
+            { q: "Reflect (0, 0) over y-axis.", a: "(0, 0)", d: "moderate" },
+            { q: "Is orientation reversed in reflection?", a: "yes", d: "moderate" },
+            { q: "Translate (x,y) to (x+h, y+k). Is this an isometry?", a: "yes", d: "moderate" },
+            { q: "Reflect (4, 1) over y=x then rotate 180.", a: "(-1, -4)", d: "hard" },
+            { q: "Rotate (0, 2) 90 CCW then translate (x-2, y).", a: "(-4, 0)", d: "hard" },
+            { q: "Find k if perimeter goes from 10 to 5.", a: "0.5", d: "hard" },
+            { q: "Rule for (x,y) rotated 90 CW.", a: "(y, -x)", d: "hard" },
+            { q: "Composition of two reflections over parallel lines is a \_\_\_.", a: "translation", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-H-808",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Reflect (5, 5) over x-axis.", a: "(5, -5)", d: "easy" },
+            { q: "Dilation k=2 maps (x, y) to \_\_\_.", a: "(2x, 2y)", d: "easy" },
+            { q: "Rotate (0, 1) 180.", a: "(0, -1)", d: "easy" },
+            { q: "What transformation uses a vector?", a: "translation", d: "easy" },
+            { q: "Reflect (1, 2) over y-axis.", a: "(-1, 2)", d: "easy" },
+            { q: "Translate (4, 4) by (x-4, y-4).", a: "(0, 0)", d: "moderate" },
+            { q: "Rotate (3, 0) 90 CCW.", a: "(0, 3)", d: "moderate" },
+            { q: "Reflect (-2, -5) over y=x.", a: "(-5, -2)", d: "moderate" },
+            { q: "Dilation k=1/3 maps (9, 3) to \_\_\_.", a: "(3, 1)", d: "moderate" },
+            { q: "Does rotation preserve distance?", a: "yes", d: "moderate" },
+            { q: "Rule: (x, y) to (-y, x) is rotation \_\_\_ CCW.", a: "90", d: "moderate" },
+            { q: "Reflect (7, 7) over y-axis.", a: "(-7, 7)", d: "moderate" },
+            { q: "Is dilation a similarity transformation?", a: "yes", d: "moderate" },
+            { q: "Rotate (-1, -1) 270 CCW.", a: "(-1, 1)", d: "moderate" },
+            { q: "Translate (2, 2) 3 units right.", a: "(5, 2)", d: "moderate" },
+            { q: "Reflect (1, 1) over x-axis then y-axis.", a: "(-1, -1)", d: "hard" },
+            { q: "Rotate (2, 5) 90 CCW then reflect over y=x.", a: "(2, -5)", d: "hard" },
+            { q: "If k=3, how much larger is the area?", a: "9", d: "hard" },
+            { q: "Composition of two reflections over intersecting lines is a \_\_\_.", a: "rotation", d: "hard" },
+            { q: "What rule maps (1, 2) to (-2, -1)?", a: "(-y, -x)", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-I-909",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Reflect (4, -1) over y-axis.", a: "(-4, -1)", d: "easy" },
+            { q: "Rotate (5, 5) 180.", a: "(-5, -5)", d: "easy" },
+            { q: "Dilation k=5 maps (0, 2) to \_\_\_.", a: "(0, 10)", d: "easy" },
+            { q: "Translate (1, 2) by (x, y+1).", a: "(1, 3)", d: "easy" },
+            { q: "Reflect (0, 3) over x-axis.", a: "(0, -3)", d: "easy" },
+            { q: "Rotate (1, 4) 90 CCW.", a: "(-4, 1)", d: "moderate" },
+            { q: "Reflect (10, 2) over y=x.", a: "(2, 10)", d: "moderate" },
+            { q: "Is translation an isometry?", a: "yes", d: "moderate" },
+            { q: "Rule for reflection over y-axis.", a: "(-x, y)", d: "moderate" },
+            { q: "Dilation k=0.5 maps (4, 4) to \_\_\_.", a: "(2, 2)", d: "moderate" },
+            { q: "Rotate (x, y) 270 CCW.", a: "(y, -x)", d: "moderate" },
+            { q: "Reflect (-6, 0) over x-axis.", a: "(-6, 0)", d: "moderate" },
+            { q: "Translate (3, 3) 4 units down.", a: "(3, -1)", d: "moderate" },
+            { q: "Does reflection preserve angle measure?", a: "yes", d: "moderate" },
+            { q: "Rotate (-2, 2) 180.", a: "(2, -2)", d: "moderate" },
+            { q: "Reflect (2, 3) over y=x then translate (x+1, y).", a: "(4, 2)", d: "hard" },
+            { q: "Rotate (1, 1) 90 CCW then reflect over x-axis.", a: "(-1, -1)", d: "hard" },
+            { q: "Find k if area goes from 2 to 18.", a: "3", d: "hard" },
+            { q: "Rule for reflection over y = -x.", a: "(-y, -x)", d: "hard" },
+            { q: "Which transformation does not preserve orientation?", a: "reflection", d: "hard" }
+        ]
+    },
+    {
+        id: "U1-J-010",
+        title: "Unit 1: Performing Transformations",
+        questions: [
+            { q: "Reflect (0, 5) over x-axis.", a: "(0, -5)", d: "easy" },
+            { q: "Translate (2, 2) by (x-2, y-2).", a: "(0, 0)", d: "easy" },
+            { q: "Rotate (7, 7) 180.", a: "(-7, -7)", d: "easy" },
+            { q: "Is rotation an isometry?", a: "yes", d: "easy" },
+            { q: "Dilation k=2 maps (3, 1) to \_\_\_.", a: "(6, 2)", d: "easy" },
+            { q: "Reflect (1, 9) over y=x.", a: "(9, 1)", d: "moderate" },
+            { q: "Rotate (0, -4) 90 CCW.", a: "(4, 0)", d: "moderate" },
+            { q: "Dilation k=0.1 maps (50, 10) to \_\_\_.", a: "(5, 1)", d: "moderate" },
+            { q: "Rule for reflection over y-axis.", a: "(-x, y)", d: "moderate" },
+            { q: "Does translation preserve parallel lines?", a: "yes", d: "moderate" },
+            { q: "Translate (-1, -1) 5 units right and 5 up.", a: "(4, 4)", d: "moderate" },
+            { q: "Rotate (3, 1) 270 CCW.", a: "(1, -3)", d: "moderate" },
+            { q: "Reflect (2, -2) over x-axis.", a: "(2, 2)", d: "moderate" },
+            { q: "Is a dilation of k=1 an isometry?", a: "yes", d: "moderate" },
+            { q: "Rotate (x, y) 180 maps to \_\_\_.", a: "(-x, -y)", d: "moderate" },
+            { q: "Reflect (1, 1) over y-axis then rotate 90 CCW.", a: "(-1, -1)", d: "hard" },
+            { q: "Rotate (4, 0) 270 CCW then translate (x, y+2).", a: "(0, -2)", d: "hard" },
+            { q: "Find k if (1, 1) maps to (0.5, 0.5).", a: "0.5", d: "hard" },
+            { q: "Rule for 90 CW rotation.", a: "(y, -x)", d: "hard" },
+            { q: "A glide reflection is a combination of \_\_\_ and \_\_\_.", a: "translation and reflection", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

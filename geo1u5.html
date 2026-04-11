@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+    {
+        id: "U5-A-101",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "What is the formula for the volume of a rectangular prism?", a: "l*w*h", d: "easy" },
+            { q: "How many faces does a cube have?", a: "6", d: "easy" },
+            { q: "The volume of a cylinder is pi * r^2 * \_\_\_.", a: "h", d: "easy" },
+            { q: "What is the shape of the base of a cone?", a: "circle", d: "easy" },
+            { q: "Find the volume of a cube with side length 3.", a: "27", d: "easy" },
+            { q: "A 2D shape that results from cutting a 3D solid is a \_\_\_.", a: "cross-section", d: "moderate" },
+            { q: "Volume of a pyramid is \_\_\_ times the volume of a prism with the same base.", a: "1/3", d: "moderate" },
+            { q: "What is the surface area of a sphere with radius r?", a: "4*pi*r^2", d: "moderate" },
+            { q: "Rotating a rectangle around one of its sides creates a \_\_\_.", a: "cylinder", d: "moderate" },
+            { q: "Rotating a right triangle around one of its legs creates a \_\_\_.", a: "cone", d: "moderate" },
+            { q: "Find the volume of a cylinder with r=2 and h=5.", a: "20*pi", d: "moderate" },
+            { q: "Cavalieri's Principle states that solids with the same height and cross-sectional \_\_\_ have the same volume.", a: "area", d: "moderate" },
+            { q: "What is the volume of a sphere?", a: "4/3*pi*r^3", d: "moderate" },
+            { q: "The 'slant height' is used to find the area of which solid?", a: "cone", d: "moderate" },
+            { q: "A cylinder has a radius of 3 and height of 4. Lateral area?", a: "24*pi", d: "moderate" },
+            { q: "If the scale factor of two solids is 2, the volume ratio is \_\_\_.", a: "8", d: "hard" },
+            { q: "A sphere is inscribed in a cube of side 6. Radius of sphere?", a: "3", d: "hard" },
+            { q: "What is the cross-section of a sphere cut through the center?", a: "great circle", d: "hard" },
+            { q: "Density equals Mass divided by \_\_\_.", a: "volume", d: "hard" },
+            { q: "Find the volume of a cone with r=3 and h=4.", a: "12*pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-B-202",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "Volume of a cone is 1/3 * pi * r^2 * \_\_\_.", a: "h", d: "easy" },
+            { q: "A prism with 6 square faces is a \_\_\_.", a: "cube", d: "easy" },
+            { q: "Total surface area of a cube with side s?", a: "6*s^2", d: "easy" },
+            { q: "Is a sphere a polyhedron?", a: "no", d: "easy" },
+            { q: "Area of the base (B) times height (h) is the volume of a \_\_\_.", a: "prism", d: "easy" },
+            { q: "What 2D shape is the cross-section of a cylinder cut parallel to the base?", a: "circle", d: "moderate" },
+            { q: "What 2D shape is the cross-section of a cylinder cut perpendicular to the base?", a: "rectangle", d: "moderate" },
+            { q: "Find the volume of a sphere with r=3.", a: "36*pi", d: "moderate" },
+            { q: "If the radius of a cylinder doubles, the volume is multiplied by \_\_\_.", a: "4", d: "moderate" },
+            { q: "The distance from the apex of a pyramid to the base midpoint is \_\_\_ height.", a: "slant", d: "moderate" },
+            { q: "Volume of a rectangular prism with sides 2, 4, 10?", a: "80", d: "moderate" },
+            { q: "How many vertices does a triangular prism have?", a: "6", d: "moderate" },
+            { q: "A soda can is an example of which geometric solid?", a: "cylinder", d: "moderate" },
+            { q: "If volume is 100 and density is 5, what is the mass?", a: "500", d: "moderate" },
+            { q: "Rotating a circle around its diameter creates a \_\_\_.", a: "sphere", d: "moderate" },
+            { q: "The ratio of surface areas of similar solids with scale factor k is \_\_\_.", a: "k^2", d: "hard" },
+            { q: "Find the volume of a square pyramid with base side 6 and height 5.", a: "60", d: "hard" },
+            { q: "Surface area of a sphere with diameter 10?", a: "100*pi", d: "hard" },
+            { q: "A cone has r=5 and slant height l=13. What is the height h?", a: "12", d: "hard" },
+            { q: "What is the volume of a hemisphere with r=3?", a: "18*pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-C-303",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "Volume of a cylinder: V = \_\_\_ * h.", a: "B", d: "easy" },
+            { q: "Surface area of a sphere: 4 * \_\_\_ * r^2.", a: "pi", d: "easy" },
+            { q: "A pyramid has only one \_\_\_.", a: "base", d: "easy" },
+            { q: "The point at the top of a cone is the \_\_\_.", a: "apex", d: "easy" },
+            { q: "Units for volume are always \_\_\_.", a: "cubic", d: "easy" },
+            { q: "Find the volume of a prism with B=15 and h=4.", a: "60", d: "moderate" },
+            { q: "What is the volume of a sphere with r=6?", a: "288*pi", d: "moderate" },
+            { q: "A cross-section of a cone cut through the apex and base is a \_\_\_.", a: "triangle", d: "moderate" },
+            { q: "If height of a prism triples, volume is multiplied by \_\_\_.", a: "3", d: "moderate" },
+            { q: "The set of all points in space equidistant from a center is a \_\_\_.", a: "sphere", d: "moderate" },
+            { q: "A tent in the shape of a triangular prism has how many faces?", a: "5", d: "moderate" },
+            { q: "Mass / Volume = \_\_\_.", a: "density", d: "moderate" },
+            { q: "Lateral area of a cylinder: 2 * pi * r * \_\_\_.", a: "h", d: "moderate" },
+            { q: "Does a sphere have any edges?", a: "no", d: "moderate" },
+            { q: "Is a cone a polyhedron?", a: "no", d: "moderate" },
+            { q: "Side ratio of two cubes is 3:4. Volume ratio?", a: "27:64", d: "hard" },
+            { q: "Find the volume of a cone with d=10 and h=12.", a: "100*pi", d: "hard" },
+            { q: "An oblique prism has the same volume as a right prism if they have the same B and h. True/False?", a: "true", d: "hard" },
+            { q: "Volume of a cylinder with r=1 and h=1.", a: "pi", d: "hard" },
+            { q: "The surface area of a cube is 150. What is the side length?", a: "5", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-D-404",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "What is the volume of a cube with side 10?", a: "1000", d: "easy" },
+            { q: "Is a pyramid a polyhedron?", a: "yes", d: "easy" },
+            { q: "The top and bottom of a prism are called \_\_\_.", a: "bases", d: "easy" },
+            { q: "Formula for area of a circle?", a: "pi*r^2", d: "easy" },
+            { q: "Volume is measured in units \_\_\_.", a: "cubed", d: "easy" },
+            { q: "What 2D shape rotates to create a sphere?", a: "semicircle", d: "moderate" },
+            { q: "Volume of a cone with r=1 and h=3?", a: "pi", d: "moderate" },
+            { q: "What is the cross-section of a cube cut parallel to a face?", a: "square", d: "moderate" },
+            { q: "Surface area of a sphere with r=2?", a: "16*pi", d: "moderate" },
+            { q: "If the scale factor is 1/2, the volume is multiplied by \_\_\_.", a: "1/8", d: "moderate" },
+            { q: "Find volume of rectangular prism: 3 by 5 by 2.", a: "30", d: "moderate" },
+            { q: "How many edges does a cube have?", a: "12", d: "moderate" },
+            { q: "Pyramid volume: (1/3) * \_\_\_ * h.", a: "B", d: "moderate" },
+            { q: "Density of water is approximately \_\_\_ g/cm^3.", a: "1", d: "moderate" },
+            { q: "Can a cone have a slant height shorter than its height?", a: "no", d: "moderate" },
+            { q: "Side ratio of 1:5. Surface area ratio?", a: "1:25", d: "hard" },
+            { q: "Find volume of a sphere with diameter 12.", a: "288*pi", d: "hard" },
+            { q: "A cylinder's volume is 50*pi. If h=2, find r.", a: "5", d: "hard" },
+            { q: "Cross-section of a pentagonal prism parallel to the base?", a: "pentagon", d: "hard" },
+            { q: "Volume of a cone with r=6 and h=10.", a: "120*pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-E-505",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "Formula for Volume of a sphere?", a: "4/3*pi*r^3", d: "easy" },
+            { q: "Radius is half of the \_\_\_.", a: "diameter", d: "easy" },
+            { q: "A cube has how many vertices?", a: "8", d: "easy" },
+            { q: "Is a cylinder a polyhedron?", a: "no", d: "easy" },
+            { q: "A 3D object with two parallel circular bases is a \_\_\_.", a: "cylinder", d: "easy" },
+            { q: "Volume of a cylinder with r=10 and h=2.", a: "200*pi", d: "moderate" },
+            { q: "What 2D shape rotates to create a cylinder?", a: "rectangle", d: "moderate" },
+            { q: "Volume of a pyramid with B=30 and h=10.", a: "100", d: "moderate" },
+            { q: "Surface area of a sphere with r=1?", a: "4*pi", d: "moderate" },
+            { q: "If k=3, the volume is \_\_\_ times larger.", a: "27", d: "moderate" },
+            { q: "A cross-section of a cylinder cut at an angle is an \_\_\_.", a: "ellipse", d: "moderate" },
+            { q: "Lateral area of a cone: pi * r * \_\_\_.", a: "l", d: "moderate" },
+            { q: "Find Mass if Density=2 and Volume=50.", a: "100", d: "moderate" },
+            { q: "What is the volume of a cube with side 1?", a: "1", d: "moderate" },
+            { q: "A sphere cut in half is a \_\_\_.", a: "hemisphere", d: "moderate" },
+            { q: "Volume of a sphere with radius 3.", a: "36*pi", d: "hard" },
+            { q: "Scale factor is 2:3. Volume ratio?", a: "8:27", d: "hard" },
+            { q: "A cone has volume 30*pi and r=3. Find h.", a: "10", d: "hard" },
+            { q: "How many faces on a square pyramid?", a: "5", d: "hard" },
+            { q: "Volume of a prism with a right triangle base (legs 3,4) and h=10.", a: "60", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-F-606",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "A box shape is a rectangular \_\_\_.", a: "prism", d: "easy" },
+            { q: "Surface area uses units \_\_\_.", a: "squared", d: "easy" },
+            { q: "Does a cylinder have vertices?", a: "no", d: "easy" },
+            { q: "pi is approximately \_\_\_.", a: "3.14", d: "easy" },
+            { q: "A pyramid's base can be any \_\_\_.", a: "polygon", d: "easy" },
+            { q: "Rotating a semicircle 360 degrees creates a \_\_\_.", a: "sphere", d: "moderate" },
+            { q: "Volume of a cylinder with r=4 and h=3.", a: "48*pi", d: "moderate" },
+            { q: "A cross-section of a cube through 3 vertices is a \_\_\_.", a: "triangle", d: "moderate" },
+            { q: "Surface area of a sphere with diameter 2.", a: "4*pi", d: "moderate" },
+            { q: "Volume of a cone with r=3 and h=3.", a: "9*pi", d: "moderate" },
+            { q: "If k=10, the surface area is multiplied by \_\_\_.", a: "100", d: "moderate" },
+            { q: "The height of a pyramid is \_\_\_ to the base.", a: "perpendicular", d: "moderate" },
+            { q: "Find Volume if Mass=20 and Density=5.", a: "4", d: "moderate" },
+            { q: "Volume of a cube with side 5.", a: "125", d: "moderate" },
+            { q: "Which has more volume: r=2 cylinder (h=2) or r=2 sphere?", a: "sphere", d: "moderate" },
+            { q: "Volume of a sphere with r=1.5.", a: "4.5*pi", d: "hard" },
+            { q: "Side ratio is 2:1. Volume ratio?", a: "8:1", d: "hard" },
+            { q: "A prism has a base area of 25 and volume 250. Find h.", a: "10", d: "hard" },
+            { q: "Cross-section of a cone cut parallel to the base?", a: "circle", d: "hard" },
+            { q: "Total surface area of a cylinder with r=1 and h=1.", a: "4*pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-G-707",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "Volume of a pyramid is 1/3 * \_\_\_ * h.", a: "B", d: "easy" },
+            { q: "How many bases does a cylinder have?", a: "2", d: "easy" },
+            { q: "A solid with 4 triangular faces is a triangular \_\_\_.", a: "pyramid", d: "easy" },
+            { q: "Base of a cylinder is a \_\_\_.", a: "circle", d: "easy" },
+            { q: "Is a cube a prism?", a: "yes", d: "easy" },
+            { q: "Volume of a sphere with r=0.5?", a: "pi/6", d: "moderate" },
+            { q: "What is the cross-section of a pyramid cut parallel to the base?", a: "polygon", d: "moderate" },
+            { q: "Find volume of rectangular prism with sides 1, 2, 3.", a: "6", d: "moderate" },
+            { q: "Surface area of a sphere with r=10.", a: "400*pi", d: "moderate" },
+            { q: "If the scale factor is k, volume ratio is \_\_\_.", a: "k^3", d: "moderate" },
+            { q: "A cone has volume 100 and a cylinder has same r and h. Cylinder volume?", a: "300", d: "moderate" },
+            { q: "Find Mass if Density=10 and Volume=2.", a: "20", d: "moderate" },
+            { q: "Slant height is denoted by the letter \_\_\_.", a: "l", d: "moderate" },
+            { q: "Can a cylinder be oblique?", a: "yes", d: "moderate" },
+            { q: "A sphere has a volume of 4/3*pi. Find r.", a: "1", d: "moderate" },
+            { q: "Volume of a cylinder with d=8 and h=10.", a: "160*pi", d: "hard" },
+            { q: "Volume of a square pyramid with base side 4 and h=6.", a: "32", d: "hard" },
+            { q: "Ratio of volumes is 1:27. Scale factor?", a: "1:3", d: "hard" },
+            { q: "A hemisphere has r=6. Total surface area?", a: "108*pi", d: "hard" },
+            { q: "Volume of a cone with r=2 and h=6.", a: "8*pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-H-808",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "Formula for volume of a prism?", a: "B*h", d: "easy" },
+            { q: "Formula for volume of a cone?", a: "1/3*pi*r^2*h", d: "easy" },
+            { q: "A sphere's cross-section through the center is a \_\_\_ circle.", a: "great", d: "easy" },
+            { q: "Volume of a cube with side 2.", a: "8", d: "easy" },
+            { q: "Does a cone have edges?", a: "no", d: "easy" },
+            { q: "Rotating a square around its side creates a \_\_\_.", a: "cylinder", d: "moderate" },
+            { q: "Volume of a cylinder with r=3 and h=10.", a: "90*pi", d: "moderate" },
+            { q: "What 2D shape is a vertical cross-section of a cone?", a: "triangle", d: "moderate" },
+            { q: "Surface area of a sphere with r=5.", a: "100*pi", d: "moderate" },
+            { q: "If k=0.1, the volume is multiplied by \_\_\_.", a: "0.001", d: "moderate" },
+            { q: "Find Density if Mass=100 and Volume=50.", a: "2", d: "moderate" },
+            { q: "Volume of a prism with B=10 and h=10.", a: "100", d: "moderate" },
+            { q: "Is a cone a solid of revolution?", a: "yes", d: "moderate" },
+            { q: "Volume of a sphere with r=9.", a: "972*pi", d: "moderate" },
+            { q: "Height of a cone is 4, radius is 3. Slant height?", a: "5", d: "moderate" },
+            { q: "Volume of a cylinder with r=5 and h=4.", a: "100*pi", d: "hard" },
+            { q: "Volume of a square pyramid with side 10 and h=3.", a: "100", d: "hard" },
+            { q: "Ratio of volumes is 8:125. Scale factor?", a: "2:5", d: "hard" },
+            { q: "A hemisphere's volume is \_\_\_ the volume of a sphere.", a: "half", d: "hard" },
+            { q: "Surface area of a cube is 24. Volume?", a: "8", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-I-909",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "What is B in V=Bh?", a: "base area", d: "easy" },
+            { q: "Volume of a sphere with r=1?", a: "4/3*pi", d: "easy" },
+            { q: "Does a pyramid have a slant height?", a: "yes", d: "easy" },
+            { q: "Volume of a rectangular prism: 1x1x5?", a: "5", d: "easy" },
+            { q: "Surface area is measured in units \_\_\_.", a: "squared", d: "easy" },
+            { q: "What shape is created by rotating a rectangle?", a: "cylinder", d: "moderate" },
+            { q: "Volume of a cylinder with r=2 and h=2.", a: "8*pi", d: "moderate" },
+            { q: "Cross-section of a cylinder parallel to base?", a: "circle", d: "moderate" },
+            { q: "Surface area of a sphere with r=4.", a: "64*pi", d: "moderate" },
+            { q: "If k=4, volume ratio is \_\_\_.", a: "64", d: "moderate" },
+            { q: "Density = Mass / \_\_\_.", a: "volume", d: "moderate" },
+            { q: "How many faces does a triangular pyramid have?", a: "4", d: "moderate" },
+            { q: "A cone has r=3 and h=1. Volume?", a: "3*pi", d: "moderate" },
+            { q: "Can Cavalieri's Principle be used for cylinders?", a: "yes", d: "moderate" },
+            { q: "Volume of a cube with side 4.", a: "64", d: "moderate" },
+            { q: "Find Volume of sphere with d=2.", a: "4/3*pi", d: "hard" },
+            { q: "Scale factor is 1:10. Volume ratio?", a: "1:1000", d: "hard" },
+            { q: "Surface area of a sphere is 36*pi. Radius?", a: "3", d: "hard" },
+            { q: "Volume of a square pyramid: side=3, h=4.", a: "12", d: "hard" },
+            { q: "Total surface area of a sphere with r=0.5.", a: "pi", d: "hard" }
+        ]
+    },
+    {
+        id: "U5-J-010",
+        title: "Unit 2: Solid Geometry",
+        note: "For answers involving pi, type the word 'pi' (e.g., 25*pi). Use '/' for fractions.",
+        questions: [
+            { q: "Is a sphere a 3D figure?", a: "yes", d: "easy" },
+            { q: "A cylinder has \_\_\_ circular bases.", a: "2", d: "easy" },
+            { q: "A cube is a special type of \_\_\_.", a: "prism", d: "easy" },
+            { q: "Formula for area of a rectangle?", a: "l*w", d: "easy" },
+            { q: "Does a pyramid have a peak?", a: "yes", d: "easy" },
+            { q: "Rotating a right triangle creates a \_\_\_.", a: "cone", d: "moderate" },
+            { q: "Volume of a cylinder with r=1 and h=10.", a: "10*pi", d: "moderate" },
+            { q: "Vertical cross-section of a sphere?", a: "circle", d: "moderate" },
+            { q: "Surface area of a sphere with r=3.", a: "36*pi", d: "moderate" },
+            { q: "If k=0.5, the volume is \_\_\_ of original.", a: "1/8", d: "moderate" },
+            { q: "Mass if density=1 and volume=100.", a: "100", d: "moderate" },
+            { q: "Apex is the top of a \_\_\_.", a: "pyramid", d: "moderate" },
+            { q: "Volume of a prism with B=20 and h=5.", a: "100", d: "moderate" },
+            { q: "Does a cylinder have lateral area?", a: "yes", d: "moderate" },
+            { q: "Volume of a sphere with r=2.", a: "32/3*pi", d: "moderate" },
+            { q: "Volume of a cone with r=5 and h=3.", a: "25*pi", d: "hard" },
+            { q: "Volume ratio is 1:8. Surface area ratio?", a: "1:4", d: "hard" },
+            { q: "Find the volume of a cube with surface area 54.", a: "27", d: "hard" },
+            { q: "A sphere is cut such that the cross-section has area 9*pi. Radius?", a: "3", d: "hard" },
+            { q: "Volume of a triangular prism: base legs 6,8 and h=5.", a: "120", d: "hard" }
+        ]
+    }
+];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

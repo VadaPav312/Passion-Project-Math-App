@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra 1 | Professional Assessment Template</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(30, 41, 59, 0.4);
+            --accent: #2dd4bf;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+            background-image: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.1), transparent 50%);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .test-info { text-align: center; margin-bottom: 3rem; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin: 0; }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .difficulty {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .easy { background: rgba(45, 212, 191, 0.15); color: var(--accent); }
+        .moderate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .hard { background: rgba(244, 63, 94, 0.15); color: var(--error); }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3); }
+
+        /* --- FEEDBACK & ANIMATION AREA --- */
+        #animation-zone {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .score-display { font-size: 4rem; font-weight: 800; font-family: 'Space Grotesk'; margin-bottom: 10px; }
+        
+        .feedback-text { font-size: 1.2rem; font-weight: 600; opacity: 0; transform: translateY(20px); transition: 0.5s forwards; }
+        .show-feedback { opacity: 1; transform: translateY(0); }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out 0s 2; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">MathAssist</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tests.html">All Tests</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="test-info">
+        <h1 id="unit-title">Assessment Template</h1>
+        <p id="test-id" style="color: #94a3b8; font-weight: 600; margin-top: 10px;"></p>
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <button id="submit-btn" onclick="gradeTest()">Finish & Grade</button>
+
+    <div id="animation-zone">
+        <div id="score-val" class="score-display"></div>
+        <div id="feedback-msg" class="feedback-text"></div>
+    </div>
+</div>
+
+<script>
+    /** * DATA STRUCTURE
+     * Paste your 10 test objects inside this array.
+     */
+    const testBank = [
+        {
+            id: "Test Version A-101",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $5 + (-3)$", a: "2", d: "easy" },
+                { q: "Evaluate: $10 - (-4)$", a: "14", d: "easy" },
+                { q: "Evaluate: $-6 \\times 2$", a: "-12", d: "easy" },
+                { q: "What is the absolute value of $-15$?", a: "15", d: "easy" },
+                { q: "Evaluate: $0 \\times (-100)$", a: "0", d: "easy" },
+                { q: "Evaluate: $2^3 - 4 \\times 2$", a: "0", d: "moderate" },
+                { q: "Evaluate: $\\frac{-20}{-4} + 5$", a: "10", d: "moderate" },
+                { q: "Evaluate: $3(4 - 6) + 10$", a: "4", d: "moderate" },
+                { q: "Evaluate: $|-5| + |3| - 2$", a: "6", d: "moderate" },
+                { q: "Simplify: $2x + 5x - 3x$", a: "4x", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{49} - 10$", a: "-3", d: "moderate" },
+                { q: "Evaluate: $15 \\div (3 + 2) \\times 4$", a: "12", d: "moderate" },
+                { q: "Evaluate: $-2^2$", a: "-4", d: "moderate" },
+                { q: "Evaluate: $(-2)^2$", a: "4", d: "moderate" },
+                { q: "Simplify: $4(x + 2) - 8$", a: "4x", d: "moderate" },
+                { q: "Evaluate: $\\frac{4(5-2)^2}{6} + 1$", a: "7", d: "hard" },
+                { q: "Evaluate: $\\sqrt{100 - 64} \\div 3$", a: "2", d: "hard" },
+                { q: "Simplify: $2[3(x-1) + 5]$ when $x=2$", a: "16", d: "hard" },
+                { q: "Find the value of $b^2 - 4ac$ if $a=1, b=5, c=6$", a: "1", d: "hard" },
+                { q: "Evaluate: $-| -10 + 2 | \\times (-3)$", a: "24", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version B-202",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $-8 + 5$", a: "-3", d: "easy" },
+                { q: "Evaluate: $-2 \\times (-7)$", a: "14", d: "easy" },
+                { q: "Evaluate: $12 \\div (-3)$", a: "-4", d: "easy" },
+                { q: "Absolute value of $25$?", a: "25", d: "easy" },
+                { q: "Evaluate: $-1 + 1$", a: "0", d: "easy" },
+                { q: "Evaluate: $10 - 2^2$", a: "6", d: "moderate" },
+                { q: "Evaluate: $5 + 2(3)$ ", a: "11", d: "moderate" },
+                { q: "Evaluate: $20 \\div 5 - 10$", a: "-6", d: "moderate" },
+                { q: "Simplify: $10a - 4a + a$", a: "7a", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{81} + \\sqrt{9}$", a: "12", d: "moderate" },
+                { q: "Evaluate: $-(3+5) \\times 2$", a: "-16", d: "moderate" },
+                { q: "Evaluate: $|-12| \\div 4$", a: "3", d: "moderate" },
+                { q: "Simplify: $3x + 2 - x$", a: "2x+2", d: "moderate" },
+                { q: "Evaluate: $4^2 \\div 2$", a: "8", d: "moderate" },
+                { q: "Evaluate: $-10 - (-10)$", a: "0", d: "moderate" },
+                { q: "Evaluate: $\\frac{|-20|}{2} - 5^2$", a: "-15", d: "hard" },
+                { q: "Simplify: $x^2 - 5x$ when $x=-2$", a: "14", d: "hard" },
+                { q: "Evaluate: $2(3^2 - 4) + 1$", a: "11", d: "hard" },
+                { q: "Evaluate: $\\sqrt{25} \\times \\sqrt{4} - 15$", a: "-5", d: "hard" },
+                { q: "Simplify: $5 - 3[2(4-1)]$", a: "-13", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version C-303",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $15 + (-7)$", a: "8", d: "easy" },
+                { q: "Evaluate: $-9 - 3$", a: "-12", d: "easy" },
+                { q: "Evaluate: $-4 \\times (-5)$", a: "20", d: "easy" },
+                { q: "What is the opposite of $-22$?", a: "22", d: "easy" },
+                { q: "Evaluate: $14 \\div (-2)$", a: "-7", d: "easy" },
+                { q: "Evaluate: $5^2 - 10$", a: "15", d: "moderate" },
+                { q: "Evaluate: $24 \\div (6 - 2)$", a: "6", d: "moderate" },
+                { q: "Simplify: $7x - 2x + 8x$", a: "13x", d: "moderate" },
+                { q: "Evaluate: $3(5) + 2(4)$", a: "23", d: "moderate" },
+                { q: "Evaluate: $|-10| + | -2 |$", a: "12", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{64} + 2^3$", a: "16", d: "moderate" },
+                { q: "Evaluate: $100 \\div 5 \\div 2$", a: "10", d: "moderate" },
+                { q: "Simplify: $5(y + 3) - 15$", a: "5y", d: "moderate" },
+                { q: "Evaluate: $2 + 3 \\times 4$", a: "14", d: "moderate" },
+                { q: "Evaluate: $-(-(-5))$", a: "-5", d: "moderate" },
+                { q: "Evaluate: $\\frac{10 + 2^3}{3} + 4$", a: "10", d: "hard" },
+                { q: "Evaluate: $\\sqrt{25 + 144}$", a: "13", d: "hard" },
+                { q: "Simplify: $3x^2 - 4$ when $x=-3$", a: "23", d: "hard" },
+                { q: "Evaluate: $10 - [2(5-3) + 1]$", a: "5", d: "hard" },
+                { q: "Evaluate: $\\frac{-12 + 4}{-2}$", a: "4", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version D-404",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $-20 + 20$", a: "0", d: "easy" },
+                { q: "Evaluate: $6 \\times (-3)$", a: "-18", d: "easy" },
+                { q: "Evaluate: $-50 \\div 10$", a: "-5", d: "easy" },
+                { q: "Absolute value of $-100$?", a: "100", d: "easy" },
+                { q: "Evaluate: $1 - 10$", a: "-9", d: "easy" },
+                { q: "Evaluate: $4^2 + 3^2$", a: "25", d: "moderate" },
+                { q: "Evaluate: $30 \\div 5 \\times 2$", a: "12", d: "moderate" },
+                { q: "Simplify: $12b - b$", a: "11b", d: "moderate" },
+                { q: "Evaluate: $2(10 - 15)$", a: "-10", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{121} - 1$", a: "10", d: "moderate" },
+                { q: "Evaluate: $-3 + 5 - 2 + 8$", a: "8", d: "moderate" },
+                { q: "Evaluate: $|-8| \\times 2$", a: "16", d: "moderate" },
+                { q: "Simplify: $2(x+1) + 3x$", a: "5x+2", d: "moderate" },
+                { q: "Evaluate: $25 - 5 \\times 4$", a: "5", d: "moderate" },
+                { q: "Evaluate: $(-1)^4$", a: "1", d: "moderate" },
+                { q: "Evaluate: $5^2 - (4 \\times 3) + 2$", a: "15", d: "hard" },
+                { q: "Simplify: $2a + 3b$ if $a=5, b=-2$", a: "4", d: "hard" },
+                { q: "Evaluate: $\\frac{|-30|}{5} + \\sqrt{16}$", a: "10", d: "hard" },
+                { q: "Evaluate: $4[10 \\div (2+3)]$", a: "8", d: "hard" },
+                { q: "Evaluate: $-(4^2)$", a: "-16", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version E-505",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $-15 - (-5)$", a: "-10", d: "easy" },
+                { q: "Evaluate: $0 \\div (-5)$", a: "0", d: "easy" },
+                { q: "Evaluate: $-1 \\times (-1)$", a: "1", d: "easy" },
+                { q: "Evaluate: $7 + (-10)$", a: "-3", d: "easy" },
+                { q: "Absolute value of $0$?", a: "0", d: "easy" },
+                { q: "Evaluate: $10^2 \\div 4$", a: "25", d: "moderate" },
+                { q: "Evaluate: $5(2) - 12$", a: "-2", d: "moderate" },
+                { q: "Evaluate: $18 \\div 3 + 4$", a: "10", d: "moderate" },
+                { q: "Simplify: $3x + y - x$", a: "2x+y", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{36} \\times 2$", a: "12", d: "moderate" },
+                { q: "Evaluate: $20 - 5 - 5 - 5$", a: "5", d: "moderate" },
+                { q: "Evaluate: $|-25| - 5$", a: "20", d: "moderate" },
+                { q: "Simplify: $3(2x - 1)$", a: "6x-3", d: "moderate" },
+                { q: "Evaluate: $2^3 + 1$", a: "9", d: "moderate" },
+                { q: "Evaluate: $-4 + (-6)$", a: "-10", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{100} - 2(3) + 5$", a: "9", d: "hard" },
+                { q: "Simplify: $5x - 2(x+4)$", a: "3x-8", d: "hard" },
+                { q: "Evaluate: $\\frac{50}{2(5)}$", a: "5", d: "hard" },
+                { q: "Evaluate: $(-3)^2 + (-2)^3$", a: "1", d: "hard" },
+                { q: "Evaluate: $|-3 \\times 4| + (-2)$", a: "10", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version F-606",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $12 + (-12)$", a: "0", d: "easy" },
+                { q: "Evaluate: $-3 \\times 4$", a: "-12", d: "easy" },
+                { q: "Evaluate: $-10 - 10$", a: "-20", d: "easy" },
+                { q: "Absolute value of $-7$?", a: "7", d: "easy" },
+                { q: "Evaluate: $100 \\div (-10)$", a: "-10", d: "easy" },
+                { q: "Evaluate: $3^3 - 7$", a: "20", d: "moderate" },
+                { q: "Evaluate: $2(5 + 3)$", a: "16", d: "moderate" },
+                { q: "Evaluate: $15 - 3 \\times 2$", a: "9", d: "moderate" },
+                { q: "Simplify: $5a + 2a - 7a$", a: "0", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{144} \\div 3$", a: "4", d: "moderate" },
+                { q: "Evaluate: $-2 - 2 - 2$", a: "-6", d: "moderate" },
+                { q: "Evaluate: $|-5| \\times |-2|$", a: "10", d: "moderate" },
+                { q: "Simplify: $4x + 10 - 2x$", a: "2x+10", d: "moderate" },
+                { q: "Evaluate: $10 \\div 2 + 5$", a: "10", d: "moderate" },
+                { q: "Evaluate: $(-2) \\times (-2) \\times (-2)$", a: "-8", d: "moderate" },
+                { q: "Evaluate: $2[15 - (2 \\times 3)]$", a: "18", d: "hard" },
+                { q: "Simplify: $ab + c$ if $a=2, b=4, c=-1$", a: "7", d: "hard" },
+                { q: "Evaluate: $\\frac{4^2 - 6}{2}$", a: "5", d: "hard" },
+                { q: "Evaluate: $\\sqrt{81} - \\sqrt{16} + 1$", a: "6", d: "hard" },
+                { q: "Evaluate: $-( -| -4 | )$", a: "4", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version G-707",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $-5 + (-5)$", a: "-10", d: "easy" },
+                { q: "Evaluate: $8 \\times (-2)$", a: "-16", d: "easy" },
+                { q: "Evaluate: $10 - 15$", a: "-5", d: "easy" },
+                { q: "Opposite of $14$?", a: "-14", d: "easy" },
+                { q: "Evaluate: $-8 \\div (-8)$", a: "1", d: "easy" },
+                { q: "Evaluate: $2^4 - 6$", a: "10", d: "moderate" },
+                { q: "Evaluate: $12 \\div (2+1)$", a: "4", d: "moderate" },
+                { q: "Evaluate: $3(4) - 2(5)$", a: "2", d: "moderate" },
+                { q: "Simplify: $x + 2x + 3x$", a: "6x", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{100} - 10$", a: "0", d: "moderate" },
+                { q: "Evaluate: $-10 + 2 - 3$", a: "-11", d: "moderate" },
+                { q: "Evaluate: $|-15| \\div 3$", a: "5", d: "moderate" },
+                { q: "Simplify: $10(x - 2)$", a: "10x-20", d: "moderate" },
+                { q: "Evaluate: $5^2 - 5$", a: "20", d: "moderate" },
+                { q: "Evaluate: $-1 \\times 50$", a: "-50", d: "moderate" },
+                { q: "Evaluate: $3^2 + 4^2 - 5^2$", a: "0", d: "hard" },
+                { q: "Simplify: $2(x-3) + 6$", a: "2x", d: "hard" },
+                { q: "Evaluate: $\\frac{100}{5^2}$", a: "4", d: "hard" },
+                { q: "Evaluate: $\\sqrt{4} + \\sqrt{9} + \\sqrt{16}$", a: "9", d: "hard" },
+                { q: "Evaluate: $|-2|^3 - 1$", a: "7", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version H-808",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $-6 + 10$", a: "4", d: "easy" },
+                { q: "Evaluate: $4 \\times (-4)$", a: "-16", d: "easy" },
+                { q: "Evaluate: $-12 \\div 3$", a: "-4", d: "easy" },
+                { q: "Evaluate: $5 - 5$", a: "0", d: "easy" },
+                { q: "Absolute value of $-1$?", a: "1", d: "easy" },
+                { q: "Evaluate: $5^2 + 1$", a: "26", d: "moderate" },
+                { q: "Evaluate: $20 \\div (2 \\times 5)$", a: "2", d: "moderate" },
+                { q: "Evaluate: $10 - 2(3)$", a: "4", d: "moderate" },
+                { q: "Simplify: $8y - 3y$", a: "5y", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{49} + 3$", a: "10", d: "moderate" },
+                { q: "Evaluate: $-5 - 5 - 5$", a: "-15", d: "moderate" },
+                { q: "Evaluate: $|-2| + |-3|$", a: "5", d: "moderate" },
+                { q: "Simplify: $5x + 2 - x + 1$", a: "4x+3", d: "moderate" },
+                { q: "Evaluate: $14 \\div 2 \\times 7$", a: "49", d: "moderate" },
+                { q: "Evaluate: $(-1)^{10}$", a: "1", d: "moderate" },
+                { q: "Evaluate: $\\frac{3(4+2)}{9}$", a: "2", d: "hard" },
+                { q: "Simplify: $x^2 + 10$ when $x=-5$", a: "35", d: "hard" },
+                { q: "Evaluate: $\\sqrt{64} - \\sqrt{25}$", a: "3", d: "hard" },
+                { q: "Evaluate: $2[3(4-2)]$", a: "12", d: "hard" },
+                { q: "Evaluate: $-| -20 | + 5$", a: "-15", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version I-909",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $7 - (-7)$", a: "14", d: "easy" },
+                { q: "Evaluate: $-5 \\times 2$", a: "-10", d: "easy" },
+                { q: "Evaluate: $-20 \\div (-2)$", a: "10", d: "easy" },
+                { q: "Evaluate: $-3 + 8$", a: "5", d: "easy" },
+                { q: "Absolute value of $15$?", a: "15", d: "easy" },
+                { q: "Evaluate: $2^5 - 30$", a: "2", d: "moderate" },
+                { q: "Evaluate: $100 \\div (10+10)$", a: "5", d: "moderate" },
+                { q: "Evaluate: $5(4-2)$", a: "10", d: "moderate" },
+                { q: "Simplify: $3a + 4a + a$", a: "8a", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{16} + \\sqrt{16}$", a: "8", d: "moderate" },
+                { q: "Evaluate: $-1 - 2 - 3 - 4$", a: "-10", d: "moderate" },
+                { q: "Evaluate: $|-4| \\times |3|$", a: "12", d: "moderate" },
+                { q: "Simplify: $2(x+5) - 10$", a: "2x", d: "moderate" },
+                { q: "Evaluate: $30 - 10 \\div 2$", a: "25", d: "moderate" },
+                { q: "Evaluate: $(-1)^3$", a: "-1", d: "moderate" },
+                { q: "Evaluate: $\\frac{4^2 + 4}{5}$", a: "4", d: "hard" },
+                { q: "Simplify: $x^2 - y^2$ if $x=5, y=3$", a: "16", d: "hard" },
+                { q: "Evaluate: $\\sqrt{100 - 36}$", a: "8", d: "hard" },
+                { q: "Evaluate: $5[2(10-8)]$", a: "20", d: "hard" },
+                { q: "Evaluate: $- ( -| -10 | )$", a: "10", d: "hard" }
+            ]
+        },
+        {
+            id: "Test Version J-010",
+            title: "Unit 1: Algebra Foundations",
+            questions: [
+                { q: "Evaluate: $-100 + 1$", a: "-99", d: "easy" },
+                { q: "Evaluate: $10 \\times (-5)$", a: "-50", d: "easy" },
+                { q: "Evaluate: $-36 \\div 6$", a: "-6", d: "easy" },
+                { q: "Opposite of $0$?", a: "0", d: "easy" },
+                { q: "Evaluate: $12 - 20$", a: "-8", d: "easy" },
+                { q: "Evaluate: $6^2 \\div 4$", a: "9", d: "moderate" },
+                { q: "Evaluate: $3(10) - 25$", a: "5", d: "moderate" },
+                { q: "Evaluate: $40 \\div 5 + 2$", a: "10", d: "moderate" },
+                { q: "Simplify: $10x - 5x - x$", a: "4x", d: "moderate" },
+                { q: "Evaluate: $\\sqrt{4} \\times \\sqrt{4}$", a: "4", d: "moderate" },
+                { q: "Evaluate: $5 - 10 + 15$", a: "10", d: "moderate" },
+                { q: "Evaluate: $|-50| \\div 2$", a: "25", d: "moderate" },
+                { q: "Simplify: $5x$ from $x(2+3)$", a: "5x", d: "moderate" },
+                { q: "Evaluate: $10^2 - 99$", a: "1", d: "moderate" },
+                { q: "Evaluate: $-2 + (-2) + (-2)$", a: "-6", d: "moderate" },
+                { q: "Evaluate: $2^3 + 2^2 + 2^1$", a: "14", d: "hard" },
+                { q: "Simplify: $3(x+4) - 12$ when $x=5$", a: "15", d: "hard" },
+                { q: "Evaluate: $\\frac{\\sqrt{100}}{2} + 5$", a: "10", d: "hard" },
+                { q: "Evaluate: $100 - [5(10-2)]$", a: "60", d: "hard" },
+                { q: "Evaluate: $|-4|^2 - 16$", a: "0", d: "hard" }
+            ]
+        }
+    ];
+
+    let currentTest;
+
+    function init() {
+        if (testBank.length === 0) {
+            document.getElementById('quiz-container').innerHTML = "<p style='text-align:center; color:#94a3b8;'>No tests found. Please populate the testBank array in the code.</p>";
+            return;
+        }
+
+        // 1. Randomly Select Test
+        currentTest = testBank[Math.floor(Math.random() * testBank.length)];
+        
+        // 2. Set Metadata
+        document.getElementById('unit-title').innerText = currentTest.title || "Algebra Assessment";
+        
+        // 3. Render Questions
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = currentTest.questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <span class="difficulty ${q.d}">${q.d}</span>
+                <div class="q-text"><b>${i+1}.</b> ${q.q}</div>
+                <input type="text" id="ans-${i}" autocomplete="off" placeholder="Answer...">
+            </div>
+        `).join('');
+        
+        if(window.MathJax) MathJax.typeset();
+    }
+
+    function gradeTest() {
+        let score = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = document.getElementById(`ans-${i}`).value.trim().toLowerCase();
+            const correctAns = q.a.toLowerCase();
+            const card = document.getElementById(`card-${i}`);
+
+            if(userAns === correctAns) {
+                score++;
+                card.style.borderColor = "var(--accent)";
+            } else {
+                card.style.borderColor = "var(--error)";
+            }
+        });
+
+        const percentage = Math.round((score / total) * 100);
+        handleAnimations(percentage);
+    }
+
+    function handleAnimations(score) {
+        const scoreVal = document.getElementById('score-val');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        submitBtn.style.display = "none";
+        scoreVal.innerText = `${score}%`;
+        feedbackMsg.classList.add('show-feedback');
+
+        // Logic-based Animations
+        if (score === 100) {
+            // PERFECT SCORE: Confetti Storm
+            feedbackMsg.innerText = "PERFECT! You've mastered this unit! 🏆";
+            feedbackMsg.style.color = "var(--accent)";
+            
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2dd4bf', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2dd4bf', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+        } else if (score >= 80) {
+            // GREAT SCORE: Standard Confetti Burst
+            feedbackMsg.innerText = "Awesome job! You're nearly there. 🌟";
+            feedbackMsg.style.color = "var(--accent)";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        } else if (score >= 60) {
+            // PASSING: Pulse effect
+            feedbackMsg.innerText = "Good effort. Review the marked red questions! 👍";
+            feedbackMsg.style.color = "var(--warning)";
+
+        } else {
+            // NEEDS WORK: Shake animation
+            feedbackMsg.innerText = "Don't give up! Review the foundations and try again. 💪";
+            feedbackMsg.style.color = "var(--error)";
+            document.getElementById('animation-zone').classList.add('shake');
+        }
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>
