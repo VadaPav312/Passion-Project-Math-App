@@ -10,7 +10,11 @@
   
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      tex: { 
+        inlineMath: [['$', '$'], ['\\(', '\\)']], 
+        displayMath: [['$$', '$$']],
+        processEscapes: true
+      },
       svg: { fontCache: 'global' }
     };
   </script>
@@ -108,19 +112,33 @@
 
     #generateBtn { background: var(--accent); color: #020617; border: none; }
 
-    .problems-stack { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; padding-bottom: 50px; }
+    .problems-stack { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 24px; 
+      padding-bottom: 50px; 
+      align-items: stretch;
+    }
     
     .problem-card {
       background: var(--card); border: 1px solid var(--glass-border);
       border-radius: 20px; padding: 24px;
-      display: flex; flex-direction: column; height: fit-content;
+      display: flex; flex-direction: column;
+      height: 520px; /* FIXED HEIGHT: The box stays this size regardless of content */
+      overflow-y: auto; /* Internal scroll if question/explanation is long */
+      transition: transform 0.2s ease;
     }
 
-    .question-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; color: #f1f5f9; min-height: 60px; }
+    /* Scrollbar styling for a cleaner look */
+    .problem-card::-webkit-scrollbar { width: 6px; }
+    .problem-card::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+    .question-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; color: #f1f5f9; flex-shrink: 0; }
 
     .answer-zone { 
       background: rgba(15, 23, 42, 0.3); padding: 18px; border-radius: 16px;
-      border: 1px solid var(--border); width: 100%; display: block;
+      border: 1px solid var(--border); width: 100%; margin-top: auto;
+      flex-shrink: 0;
     }
 
     .main-input {
@@ -145,7 +163,7 @@
 
     .status-msg { margin-top: 15px; text-align: center; font-size: 0.85rem; color: var(--accent); font-weight: 600; min-height: 20px; }
 
-    @media (max-width: 850px) { .problems-stack { grid-template-columns: 1fr; } .controls { grid-template-columns: 1fr; } }
+    @media (max-width: 850px) { .problems-stack { grid-template-columns: 1fr; } .controls { grid-template-columns: 1fr; } .problem-card { height: 480px; } }
   </style>
 </head>
 <body>
@@ -196,47 +214,32 @@
 
     let problems = [];
 
-    /**
-     * Updated Robust Parser:
-     * Focuses on keeping characters basic and preventing double-escaping 
-     * common in AI LaTeX JSON outputs.
-     */
     function robustParse(raw) {
       try {
         let clean = raw.replace(/```json/gi, "").replace(/```/g, "").trim();
-        const start = Math.min(clean.indexOf('[') === -1 ? Infinity : clean.indexOf('['), clean.indexOf('{') === -1 ? Infinity : clean.indexOf('{'));
+        const start = Math.min(
+          clean.indexOf('[') === -1 ? Infinity : clean.indexOf('['), 
+          clean.indexOf('{') === -1 ? Infinity : clean.indexOf('{')
+        );
         const end = Math.max(clean.lastIndexOf(']'), clean.lastIndexOf('}'));
         clean = clean.substring(start, end + 1);
-        
-        // Remove common "random character" glitches like excessive backslashes or weird Unicode escapes
         return JSON.parse(clean);
       } catch (e) {
-        // If JSON.parse fails, we try a softer approach for backslashes
         try {
-            let softClean = raw.replace(/\\/g, "\\\\").replace(/\\\\"/g, "\\\"");
-            return JSON.parse(softClean);
+          let softClean = raw.replace(/\\/g, "\\\\").replace(/\\\\"/g, "\\\"");
+          return JSON.parse(softClean);
         } catch (e2) {
-            console.error("Parse error:", e);
-            throw new Error("Formatting error. Please try generating again.");
+          console.error("Parse error:", e);
+          throw new Error("Formatting error. Please try generating again.");
         }
       }
-    }
-
-    async function callAI(messages) {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages })
-      });
-      const data = await res.json();
-      return data.content;
     }
 
     function render() {
       problemsGrid.innerHTML = problems.map((p, i) => `
         <div class="problem-card">
           <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-            <span style="font-weight:900; font-size:0.6rem; color:var(--muted); letter-spacing:1px;">PROBLEM 0${i+1}</span>
+            <span style="font-weight:900; font-size:0.6rem; color:var(--muted); letter-spacing:1px;">PROBLEM 0${i + 1}</span>
             <span id="badge-${i}" style="font-size:0.6rem; font-weight:800; color:var(--muted);">WAITING</span>
           </div>
           <div class="question-text">${p.question}</div>
@@ -252,22 +255,34 @@
           </div>
         </div>
       `).join('');
-      MathJax.typesetPromise();
+      
+      if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    async function callAI(messages) {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages })
+      });
+      const data = await res.json();
+      return data.content;
     }
 
     async function generate() {
       const topic = document.getElementById('topic').value || 'Math';
-      setBusy("Generating unique problems...");
-      // PROMPT UPDATED: Added "Use basic characters" and strict formatting rules.
-      const system = `Create math problems. Return ONLY JSON: {"problems": [{"question": "...", "answer": "..."}]}. 
-      RULES:
-      1. Use basic, readable text.
-      2. Use simple $...$ for LaTeX. 
-      3. Avoid extra escaping or non-standard characters. 
-      4. Never repeat numbers.`;
+      const difficulty = document.getElementById('difficulty').value;
+      setBusy(`Generating ${difficulty} problems...`);
+      
+      const system = `You are a math expert. Generate problems for the ${difficulty} level.
+      Return ONLY JSON: {"problems": [{"question": "...", "answer": "..."}]}. 
+      Use $...$ for LaTeX. Escape backslashes as \\\\ (e.g. \\\\frac).`;
       
       try {
-        const content = await callAI([{role:'system', content:system}, {role:'user', content:`Topic: ${topic}, Count: ${document.getElementById('count').value}`}]);
+        const content = await callAI([
+          {role: 'system', content: system}, 
+          {role: 'user', content: `Topic: ${topic}, Count: ${document.getElementById('count').value}`}
+        ]);
         problems = robustParse(content).problems;
         render();
         clearBusy("Ready.");
@@ -284,105 +299,66 @@
       }));
 
       setBusy("Grading...");
-      
-      const system = `Grade these. Evaluate for mathematical equivalence (e.g., 0.5 is the same as 1/2). 
-      Return ONLY a JSON array: [{"index": number, "status": "ok"|"no", "feedback": "..."}]. 
-      Keep feedback basic and direct.`;
+      const system = "Grade these answers. If equivalent, status is 'ok'. Return ONLY JSON: [{\"index\": number, \"status\": \"ok\"|\"no\", \"feedback\": \"...\"}].";
 
       try {
         const content = await callAI([
-          {role:'system', content:system}, 
-          {role:'user', content: JSON.stringify(payload)}
+          {role: 'system', content: system}, 
+          {role: 'user', content: JSON.stringify(payload)}
         ]);
         
         const results = robustParse(content);
-        // Normalize: ensures we get an array even if the AI wraps it in an object
-        const finalResults = Array.isArray(results) ? results : (results.results || results.grading || results.problems || []);
-
-        finalResults.forEach(r => {
-          // Robust index check: handles 'index', 'idx', or 'i'
-          const idx = r.index !== undefined ? r.index : (r.idx !== undefined ? r.idx : r.i);
+        (Array.isArray(results) ? results : []).forEach(r => {
+          const idx = r.index;
+          const badge = document.getElementById(`badge-${idx}`);
+          const feedbackEl = document.getElementById(`feedback-${idx}`);
           
-          if (idx !== undefined && idx < problems.length) {
-            const badge = document.getElementById(`badge-${idx}`);
-            const feedbackEl = document.getElementById(`feedback-${idx}`);
-            const expArea = document.getElementById(`exp-${idx}`);
-
-            // Update Badge (Correct/Incorrect)
-            const isCorrect = r.status === 'ok' || r.status === 'correct' || r.status === 'YES';
-            badge.textContent = isCorrect ? 'CORRECT' : 'INCORRECT';
-            badge.style.color = isCorrect ? 'var(--accent)' : 'var(--accent-2)';
-
-            // Update Feedback text
-            if (feedbackEl) {
-              feedbackEl.innerHTML = `<b>Feedback:</b> ${r.feedback}`;
-            }
-
-            // Reveal the explanation area
-            if (expArea) {
-              expArea.classList.add('active');
-            }
-          }
+          const isCorrect = r.status === 'ok';
+          badge.textContent = isCorrect ? 'CORRECT' : 'INCORRECT';
+          badge.style.color = isCorrect ? 'var(--accent)' : 'var(--accent-2)';
+          
+          if (feedbackEl) feedbackEl.innerHTML = `<b>Feedback:</b> ${r.feedback}`;
         });
 
-        MathJax.typesetPromise();
+        if (window.MathJax) MathJax.typesetPromise();
         clearBusy("Grading finished.");
-      } catch (e) { 
-        console.error("Grading Error:", e);
-        clearBusy("Error grading. Check console for details."); 
-      }
+      } catch (e) { clearBusy("Error grading."); }
     }
 
     async function explain() {
       const selected = [];
       problems.forEach((p, i) => {
-        // Check if the specific checkbox for problem 'i' is checked
         if (problemsGrid.children[i].querySelector('[data-select]').checked) {
-          // We pass the ORIGINAL index 'i' so the AI can return it to us
           selected.push({ index: i, question: p.question, answer: p.answer });
         }
       });
 
-      if (!selected.length) return alert("Select at least one problem using the 'Include in Analysis' checkbox.");
+      if (!selected.length) return alert("Please check the 'Include in Analysis' box for the problems you want explained.");
 
-      setBusy("Thinking...");
-      
-      const system = `Provide step-by-step derivations. Return ONLY a JSON array: [{"index": number, "explanation": "..."}]. 
-      RULES:
-      1. IMPORTANT: The "index" in your response MUST match the "index" provided in the request.
-      2. Use clear, basic characters and simple $...$ LaTeX. 
-      3. No messy symbols or excessive slashes. 
-      4. Explain step-by-step plainly and make it easy to read.`;
+      setBusy("Generating explanations...");
+      const system = "Provide step-by-step derivations. Use $...$ for all math. Return ONLY JSON array: [{\"index\": number, \"explanation\": \"...\"}].";
 
       try {
         const content = await callAI([
-          {role:'system', content:system}, 
-          {role:'user', content: JSON.stringify(selected)}
+          {role: 'system', content: system}, 
+          {role: 'user', content: JSON.stringify(selected)}
         ]);
         
         const results = robustParse(content);
-        // Normalize results to handle different AI JSON structures
-        const finalResults = Array.isArray(results) ? results : (results.explanations || results.results || []);
-
-        finalResults.forEach(r => {
-          // We use the index 'r.index' returned by the AI to find the EXACT box
-          const idx = r.index !== undefined ? r.index : r.i;
-          
-          const feedbackEl = document.getElementById(`feedback-${idx}`);
-          const expArea = document.getElementById(`exp-${idx}`);
+        (Array.isArray(results) ? results : []).forEach(r => {
+          const feedbackEl = document.getElementById(`feedback-${r.index}`);
+          const expArea = document.getElementById(`exp-${r.index}`);
           
           if (feedbackEl && expArea) {
-            feedbackEl.innerHTML = `<b>Derivation:</b><br>${r.explanation}`;
-            expArea.classList.add('active');
+            const currentFeedback = feedbackEl.innerHTML.includes("Feedback") ? feedbackEl.innerHTML + "<br><br>" : "";
+            feedbackEl.innerHTML = `${currentFeedback}<b>Step-by-Step:</b><br>${r.explanation}`;
+            expArea.classList.add('active'); 
           }
         });
 
-        MathJax.typesetPromise();
+        if (window.MathJax) MathJax.typesetPromise();
         clearBusy("Explanations ready.");
-      } catch (e) { 
-        console.error(e);
-        clearBusy("Error generating steps. Try again."); 
-      }
+      } catch (e) { clearBusy("Error generating steps."); }
     }
 
     function setBusy(text) {
