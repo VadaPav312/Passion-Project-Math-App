@@ -22,15 +22,14 @@
 
   <style>
     :root {
-      --bg: #020617;
-      --card: rgba(30, 41, 59, 0.4);
+      --bg: #0f172a;
+      --card: #111a32;
       --accent: #2dd4bf;
-      --accent-glow: rgba(45, 212, 191, 0.3);
       --accent-2: #f59e0b;
-      --text: #f8fafc;
+      --text: #e2e8f0;
       --muted: #94a3b8;
       --border: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.12);
+      --nav-bg: rgba(15, 23, 42, 0.7);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,54 +38,89 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg);
       background-image: 
-        radial-gradient(circle at 0% 0%, rgba(45, 212, 191, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.1) 0%, transparent 40%);
+        radial-gradient(circle at 20% 20%, rgba(45, 212, 191, 0.12), transparent 35%),
+        radial-gradient(circle at 80% 10%, rgba(245, 158, 11, 0.12), transparent 32%),
+        linear-gradient(180deg, #0b1223 0%, #0f172a 100%);
       color: var(--text);
       min-height: 100vh;
     }
 
+    /* --- HEADER & LOGO MATCHED TO HOMEPAGE --- */
     header {
-      position: sticky; top: 0; z-index: 100;
+      position: sticky; top: 0; z-index: 1000;
       backdrop-filter: blur(20px);
-      background: rgba(2, 6, 23, 0.7);
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 6vw;
+      -webkit-backdrop-filter: blur(20px);
+      background: var(--nav-bg);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 14px 6vw;
       display: flex; align-items: center; justify-content: space-between;
     }
 
     .logo {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700; font-size: 1.3rem;
-      display: flex; gap: 10px; align-items: center;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
     }
 
-    .logo-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 6px; }
-
-    nav { display: flex; gap: 12px; }
-    nav a {
-      color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600;
-      padding: 8px 14px; border-radius: 8px; transition: 0.2s;
+    .logo-icon { 
+      width: 28px; 
+      height: 28px; 
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); 
+      border-radius: 6px; 
+      flex-shrink: 0;
     }
-    nav a:hover { color: #fff; background: rgba(255,255,255,0.05); }
 
-    main { max-width: 1100px; margin: 0 auto; padding: 2rem 6vw; }
-
-    .hero { text-align: center; padding: 2rem 0; }
-    
-    .hero h1 { 
+    .logo-text {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2rem, 5vw, 3rem); 
-      background: linear-gradient(to bottom, #ffffff, #94a3b8);
+      font-weight: 700;
+      font-size: 1.3rem;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      display: block;
+      color: transparent;
+    }
+
+    nav { display: flex; gap: 12px; }
+
+    nav a {
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 220ms ease;
+    }
+
+    nav a:hover {
+      border-color: rgba(45, 212, 191, 0.6);
+      background: rgba(45, 212, 191, 0.08);
+      color: var(--accent);
+    }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 6vw; }
+
+    .hero { text-align: center; padding: 4rem 0 3rem; }
+    
+    .hero h1 { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 3.5rem); 
+      background: linear-gradient(to bottom, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
       margin-bottom: 0.5rem;
     }
 
     .builder-card {
-      background: var(--card); backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
+      background: var(--card); 
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
       border-radius: 24px; padding: 25px; margin-bottom: 2.5rem;
     }
 
@@ -107,7 +141,10 @@
       background: rgba(255,255,255,0.03); color: #fff;
       transition: 0.3s;
     }
-    .pill-btn:hover:not(:disabled) { background: rgba(255,255,255,0.08); }
+    .pill-btn:hover:not(:disabled) { 
+        background: rgba(45, 212, 191, 0.08);
+        border-color: var(--accent); 
+    }
     .pill-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
     #generateBtn { background: var(--accent); color: #020617; border: none; }
@@ -121,15 +158,14 @@
     }
     
     .problem-card {
-      background: var(--card); border: 1px solid var(--glass-border);
+      background: var(--card); border: 1px solid var(--border);
       border-radius: 20px; padding: 24px;
       display: flex; flex-direction: column;
-      height: 520px; /* FIXED HEIGHT: The box stays this size regardless of content */
-      overflow-y: auto; /* Internal scroll if question/explanation is long */
+      height: 520px;
+      overflow-y: auto;
       transition: transform 0.2s ease;
     }
 
-    /* Scrollbar styling for a cleaner look */
     .problem-card::-webkit-scrollbar { width: 6px; }
     .problem-card::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
@@ -168,7 +204,10 @@
 </head>
 <body>
   <header>
-    <div class="logo"><div class="logo-icon"></div>MathAssist</div>
+    <a href="index.html" class="logo">
+        <div class="logo-icon"></div>
+        <span class="logo-text">MathAssist</span>
+    </a>
     <nav>
       <a href="index.html">Homepage</a>
       <a href="tests.html">Practice Tests</a>
@@ -179,7 +218,7 @@
   <main>
     <section class="hero">
       <h1>Practice Lab</h1>
-      <p>Solve problems and get instant step-by-step verification.</p>
+      <p style="color: var(--muted)">Solve problems and get instant step-by-step verification.</p>
     </section>
 
     <section class="builder-card">
@@ -206,6 +245,7 @@
   </main>
 
   <script>
+    // JS Logic remains the same to handle the Practice Lab functionality
     const statusEl = document.getElementById('status');
     const generateBtn = document.getElementById('generateBtn');
     const gradeBtn = document.getElementById('gradeBtn');
@@ -225,13 +265,8 @@
         clean = clean.substring(start, end + 1);
         return JSON.parse(clean);
       } catch (e) {
-        try {
-          let softClean = raw.replace(/\\/g, "\\\\").replace(/\\\\"/g, "\\\"");
-          return JSON.parse(softClean);
-        } catch (e2) {
-          console.error("Parse error:", e);
-          throw new Error("Formatting error. Please try generating again.");
-        }
+        console.error("Parse error:", e);
+        throw new Error("Formatting error. Please try generating again.");
       }
     }
 

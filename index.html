@@ -118,23 +118,26 @@
     }
 
     .logo {
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      font-size: 1.2rem;
-      display: flex;
-      gap: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; 
+      font-size: 1.3rem; /* Matches your original size */
+      display: flex; 
+      gap: 10px; 
       align-items: center;
     }
 
-    .logo::before {
-      content: '';
-      width: 12px;
-      height: 12px;
-      border-radius: 4px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      box-shadow: 0 0 0 8px rgba(45, 212, 191, 0.1);
+    /* The colored box icon */
+    .logo-icon { 
+      width: 28px; 
+      height: 28px; 
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); 
+      border-radius: 6px; 
+      flex-shrink: 0;
     }
 
+    .logo-text {
+      color: var(--text);
+    }
     nav {
       display: flex;
       gap: 12px;
@@ -459,7 +462,10 @@
   </div>
 
   <header>
-    <div class="logo">MathAssist</div>
+    <div class="logo">
+      <div class="logo-icon"></div>
+      <span class="logo-text">MathAssist</span>
+    </div>
     <nav>
       <a href="tests.html">Practice Tests</a>
       <a href="library.html">Resource Library</a>
